@@ -73,3 +73,7 @@ body{
 .key.pressed{
     transform: translateY(12px)
 }
+
+.key.active{
+    transform: translateY(12px);
+}
