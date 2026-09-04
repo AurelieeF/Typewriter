@@ -31,6 +31,12 @@ body{
     margin-bottom: 0px;
     text-align: right;
 }
+#paper-info{
+    font-size: 12px;
+    color: #a18873;
+    margin-top: 10px;
+    text-align: right;
+}
 .keyboard{
     margin-top: 20px;
     display: flex;
@@ -49,8 +55,8 @@ body{
 .key{
     width:55px;
     height: 55px;
-    border-radius: 50%;
-    border: 2px solid #3d342d;
+    border-radius: 46%;
+    border: 2px solid #c0a28c;
     background-color: #eee3cf;
     font-family: "Courier New", monospace;
     font-size:20px;
@@ -82,4 +88,18 @@ body{
 }
 .backspace-key{
     min-width: 140px;
+}
+#done-button{
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #3d342d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#done-button.disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
 }

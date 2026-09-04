@@ -1,8 +1,11 @@
 const paperText = document.getElementById("paper-text");
 const paperDate = document.getElementById("paper-date");
+const doneButton = document.getElementById("done-button");
+const paperInfo = document.getElementById("paper-info");
 
 let text = "";
 let capsLockActive = false;
+let isFinished= false;
 
 const startTime = new Date();
 paperDate.textContent = startTime.toLocaleString();
@@ -13,6 +16,10 @@ const MAX_CHARACTERS = 200;
 
 
 function handleKey(key) {
+
+    if(isFinished){
+        return;
+    }
 
     if (key.length === 1 && text.length < MAX_CHARACTERS) {
         text += key;
@@ -146,3 +153,24 @@ keys.forEach((key) => {
 
 });
 
+doneButton.addEventListener("click", () => {
+
+    if(isFinished){
+        return;
+    }
+
+    const endTime = new Date();
+
+    const durationMilliseconds = endTime - startTime;
+
+    const durationMinutes = Math.floor(durationMilliseconds / 60000);
+
+    console.log("Started:", startTime);
+    console.log("Finished:", endTime);
+    console.log("Duration:", durationMinutes, "minutes");
+
+    paperInfo.textContent= 'Written in ' + durationMinutes + ' minutes.';
+
+    isFinished= true;
+    doneButton.disabled= true;
+});
