@@ -1,0 +1,51 @@
+body{
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    font-family: "Courier New", monospace;
+}
+
+.typewriter-app{
+    text-align: center;
+
+}
+
+.paper{
+    width: 500px;
+    height: 300px;
+    padding: 30px;
+    background-color: #f5ecd8;
+    border-radius: 5px;
+    text-align: left;
+}
+
+#paper-text{
+    white-space: pre-wrap;
+}
+
+.keyboard{
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.key{
+    width:55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 2px solid #3d342d;
+    background-color: #eee3cf;
+    font-family: "Courier New", monospace;
+    font-size:20px;
+    cursor: pointer;
+    transition: transform 0.88s;
+}
+    
+
+.key.pressed{
+    transform: translateY(6px)
+}
