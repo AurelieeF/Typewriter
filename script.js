@@ -4,8 +4,8 @@ let text = "";
 const MAX_CHARACTERS = 200;
 
 
-function handleKey(key){
-     if (key.length === 1 && text.length < MAX_CHARACTERS) {
+function handleKey(key) {
+    if (key.length === 1 && text.length < MAX_CHARACTERS) {
         text += key;
     }
 
@@ -21,47 +21,56 @@ function handleKey(key){
 }
 
 
-
-
-window.addEventListener("keydown", (event) => {
-
-    const pressedKey = event.key;
-
-    const keyElement = document.querySelector(`.key[data-key="${pressedKey.toLowerCase()}"]`);
-
-    if(keyElement) {
-        keyElement.classList.add("pressed");
+function getDataKey(key) {
+    if (key === 1) {
+        return key.toLowerCase();
+    }
+    if (key === "CapsLock" || key === "Shift" || key === "Control" || key === "Alt" || key === "Meta") {
+        return "Shift";
     }
 
-    handleKey(pressedKey);
+    return key;
 
 
-
-});
-
-window.addEventListener("keyup", (event) => {
-
-    const releasedKey = event.key;
-    
-    const keyElement = document.querySelector(`.key[data-key="${releasedKey.toLowerCase()}"]`);
-
-    if(keyElement) {
-        keyElement.classList.remove("pressed");
     }
+    window.addEventListener("keydown", (event) => {
 
-});
+        const pressedKey = event.key;
+
+        const keyElement = document.querySelector(`.key[data-key="${getDataKey(pressedKey)}"]`);
+
+        if (keyElement) {
+            keyElement.classList.add("pressed");
+        }
+
+        handleKey(pressedKey);
 
 
-const keys = document.querySelectorAll(".key");
 
-keys.forEach((key) => {
-    key.addEventListener("mousedown", () => {
-        key.classList.add("pressed");
-        handleKey(key.dataset.key);
     });
-    key.addEventListener("mouseup", () => {
-        key.classList.remove("pressed");
-    });
-});
 
+    window.addEventListener("keyup", (event) => {
+
+        const releasedKey = event.key;
+
+        const keyElement = document.querySelector(`.key[data-key="${getDataKey(releasedKey)}"]`);
+
+        if (keyElement) {
+            keyElement.classList.remove("pressed");
+        }
+
+    });
+
+
+    const keys = document.querySelectorAll(".key");
+
+    keys.forEach((key) => {
+        key.addEventListener("mousedown", () => {
+            key.classList.add("pressed");
+            handleKey(key.dataset.key);
+        });
+        key.addEventListener("mouseup", () => {
+            key.classList.remove("pressed");
+        });
+    });
 
