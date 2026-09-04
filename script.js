@@ -2,6 +2,27 @@ const paperText = document.getElementById("paper-text");
 let text = "";
 
 const MAX_CHARACTERS = 200;
+
+
+function handleKey(key){
+     if (key.length === 1 && text.length < MAX_CHARACTERS) {
+        text += key;
+    }
+
+    else if (key === "Backspace") {
+        text = text.slice(0, -1);
+    }
+
+    else if (key === "Enter" && text.length < MAX_CHARACTERS) {
+        text += "\n";
+    }
+
+    paperText.textContent = text;
+}
+
+
+
+
 window.addEventListener("keydown", (event) => {
 
     const pressedKey = event.key;
@@ -12,19 +33,9 @@ window.addEventListener("keydown", (event) => {
         keyElement.classList.add("pressed");
     }
 
-    if (pressedKey.length === 1 && text.length < MAX_CHARACTERS) {
-        text += pressedKey;
-    }
+    handleKey(pressedKey);
 
-    else if (pressedKey === "Backspace") {
-        text = text.slice(0, -1);
-    }
 
-    else if (pressedKey === "Enter" && text.length < MAX_CHARACTERS) {
-        text += "\n";
-    }
-
-    paperText.textContent = text;
 
 });
 
@@ -41,6 +52,16 @@ window.addEventListener("keyup", (event) => {
 });
 
 
+const keys = document.querySelectorAll(".key");
 
+keys.forEach((key) => {
+    key.addEventListener("mousedown", () => {
+        key.classList.add("pressed");
+        handleKey(key.dataset.key);
+    });
+    key.addEventListener("mouseup", () => {
+        key.classList.remove("pressed");
+    });
+});
 
 
