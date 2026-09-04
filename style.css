@@ -13,17 +13,22 @@ body{
 
 }
 
-.paper{
-    width: 500px;
-    height: 300px;
-    padding: 30px;
-    background-color: #f5ecd8;
-    border-radius: 5px;
-    text-align: left;
+.paper,
+.paper-slot{
+box-sizing: border-box;
 }
-
+.paper-slot{
+    width: 500px;
+}
+.paper{
+    width:100%;
+    background-color: #eee3cf;
+}
 #paper-text{
     white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
 }
 #paper-date{
     font-size: 12px;
@@ -37,6 +42,7 @@ body{
     margin-top: 10px;
     text-align: right;
 }
+
 .keyboard{
     margin-top: 20px;
     display: flex;

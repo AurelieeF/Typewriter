@@ -1,11 +1,12 @@
 const paperText = document.getElementById("paper-text");
 const paperDate = document.getElementById("paper-date");
-const doneButton = document.getElementById("done-button");
 const paperInfo = document.getElementById("paper-info");
+const doneButton = document.getElementById("done-button");
+const paper = document.querySelector(".paper");
 
 let text = "";
 let capsLockActive = false;
-let isFinished= false;
+let isFinished = false;
 
 const startTime = new Date();
 paperDate.textContent = startTime.toLocaleString();
@@ -17,7 +18,7 @@ const MAX_CHARACTERS = 200;
 
 function handleKey(key) {
 
-    if(isFinished){
+    if (isFinished) {
         return;
     }
 
@@ -34,6 +35,7 @@ function handleKey(key) {
     }
 
     paperText.textContent = text;
+    UpdatePaperHeight();
 }
 
 
@@ -155,7 +157,7 @@ keys.forEach((key) => {
 
 doneButton.addEventListener("click", () => {
 
-    if(isFinished){
+    if (isFinished) {
         return;
     }
 
@@ -169,8 +171,19 @@ doneButton.addEventListener("click", () => {
     console.log("Finished:", endTime);
     console.log("Duration:", durationMinutes, "minutes");
 
-    paperInfo.textContent= 'Written in ' + durationMinutes + ' minutes.';
+    paperInfo.textContent = 'Written in ' + durationMinutes + ' minutes.';
 
-    isFinished= true;
-    doneButton.disabled= true;
+    isFinished = true;
+    doneButton.disabled = true;
 });
+
+function updatePaperHeight() {
+
+    const baseHeight = 50;
+
+    const textHeight = paperText.scrollHeight;
+
+    const newHeight = baseHeight + textHeight;
+
+    paper.style.height = `${newHeight}px`;
+}
