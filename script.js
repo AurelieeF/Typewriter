@@ -1,7 +1,13 @@
 const paperText = document.getElementById("paper-text");
+const paperDate = document.getElementById("paper-date");
 
 let text = "";
 let capsLockActive = false;
+
+const startTime = new Date();
+paperDate.textContent = startTime.toLocaleString();
+
+
 
 const MAX_CHARACTERS = 200;
 
@@ -139,3 +145,4 @@ keys.forEach((key) => {
     });
 
 });
+
