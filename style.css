@@ -39,24 +39,7 @@ body{
     gap: 10px;
 }
 
-.special-key{
-    border-radius: 12px;
-    padding: 0px 20px;
-    width: auto;
-}
 
-.shift-key{
-    min-width: 90px;
-}
-.space-key{
-    min-width: 120px;
-}
-.enter-key{
-    min-width: 100px;
-}
-.backspace-key{
-    min-width: 140px;
-}
 
 .key{
     width:55px;
@@ -71,9 +54,27 @@ body{
 }
     
 .key.pressed{
-    transform: translateY(12px)
+    transform: translateY(12px);
 }
 
 .key.active{
     transform: translateY(12px);
+}
+.special-key{
+    border-radius: 12px;
+    padding: 0px 20px;
+    width: auto;
+}
+
+.caps-key{
+    min-width: 90px;
+}
+.space-key{
+    min-width: 120px;
+}
+.enter-key{
+    min-width: 100px;
+}
+.backspace-key{
+    min-width: 140px;
 }

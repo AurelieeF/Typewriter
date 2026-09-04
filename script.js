@@ -1,12 +1,13 @@
 const paperText = document.getElementById("paper-text");
-let text = "";
-let shiftActive = false;
 
+let text = "";
+let capsLockActive = false;
 
 const MAX_CHARACTERS = 200;
 
 
 function handleKey(key) {
+
     if (key.length === 1 && text.length < MAX_CHARACTERS) {
         text += key;
     }
@@ -24,46 +25,62 @@ function handleKey(key) {
 
 
 function getDataKey(key) {
+
     if (key.length === 1) {
         return key.toLowerCase();
     }
-    if (key === "CapsLock") {
-        return "Shift";
-    }
 
     return key;
-
-
 }
+
+
+// CLAVIER PHYSIQUE
 window.addEventListener("keydown", (event) => {
 
     const pressedKey = event.key;
 
-    const keyElement = document.querySelector(`.key[data-key="${getDataKey(pressedKey)}"]`);
+    const keyElement = document.querySelector(
+        `.key[data-key="${getDataKey(pressedKey)}"]`
+    );
+
 
     if (keyElement) {
         keyElement.classList.add("pressed");
     }
 
-    if(pressedKey === "CapsLock") {
-        shiftActive = event.getModifierState("CapsLock");
 
-        if(shiftActive) {
-            keyElement.classList.add("active");
-        } else {
-            keyElement.classList.remove("active");
+    // Caps Lock physique
+    if (pressedKey === "CapsLock") {
+
+        capsLockActive = event.getModifierState("CapsLock");
+
+        if (keyElement) {
+
+            if (capsLockActive) {
+                keyElement.classList.add("active");
+            }
+            else {
+                keyElement.classList.remove("active");
+            }
+
         }
+
         return;
     }
-    handleKey(pressedKey);
 
+
+    handleKey(pressedKey);
 });
 
+
+// QUAND ON RELÂCHE UNE TOUCHE PHYSIQUE
 window.addEventListener("keyup", (event) => {
 
     const releasedKey = event.key;
 
-    const keyElement = document.querySelector(`.key[data-key="${getDataKey(releasedKey)}"]`);
+    const keyElement = document.querySelector(
+        `.key[data-key="${getDataKey(releasedKey)}"]`
+    );
 
     if (keyElement) {
         keyElement.classList.remove("pressed");
@@ -72,37 +89,53 @@ window.addEventListener("keyup", (event) => {
 });
 
 
+// CLAVIER À LA SOURIS
 const keys = document.querySelectorAll(".key");
 
 keys.forEach((key) => {
+
     key.addEventListener("mousedown", () => {
+
         key.classList.add("pressed");
 
         const clickedKey = key.dataset.key;
 
-        if (clickedKey === "Shift") {
-            shiftActive = !shiftActive;
 
-            if(shiftActive) {
+        // Clic sur Caps Lock
+        if (clickedKey === "CapsLock") {
+
+            capsLockActive = !capsLockActive;
+
+            if (capsLockActive) {
                 key.classList.add("active");
-
-            } else {
+            }
+            else {
                 key.classList.remove("active");
             }
-            
+
             return;
         }
 
-        if (shiftActive && clickedKey.length === 1) {
+
+        // Lettre avec Caps Lock activé
+        if (capsLockActive && clickedKey.length === 1) {
+
             handleKey(clickedKey.toUpperCase());
+
         }
         else {
+
             handleKey(clickedKey);
+
         }
 
     });
-    key.addEventListener("mouseup", () => {
-        key.classList.remove("pressed");
-    });
-});
 
+
+    key.addEventListener("mouseup", () => {
+
+        key.classList.remove("pressed");
+
+    });
+
+});
