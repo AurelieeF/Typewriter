@@ -42,10 +42,10 @@ body{
     font-family: "Courier New", monospace;
     font-size:20px;
     cursor: pointer;
-    transition: transform 0.88s;
+    transition: transform 0.8s;
 }
     
 
 .key.pressed{
-    transform: translateY(6px)
+    transform: translateY(12px)
 }
