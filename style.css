@@ -27,10 +27,16 @@ body{
 }
 
 .keyboard{
-    margin-top: 30px;
+    margin-top: 20px;
     display: flex;
     gap: 10px;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.keyboard-row{
+    display: flex;
+    gap: 10px;
 }
 
 .key{
@@ -45,7 +51,6 @@ body{
     transition: transform 0.8s;
 }
     
-
 .key.pressed{
     transform: translateY(12px)
 }
