@@ -22,7 +22,7 @@ function handleKey(key) {
 
 
 function getDataKey(key) {
-    if (key === 1) {
+    if (key.length === 1) {
         return key.toLowerCase();
     }
     if (key === "CapsLock" || key === "Shift" || key === "Control" || key === "Alt" || key === "Meta") {
