@@ -27,7 +27,7 @@ window.addEventListener("keydown", (event) => {
 
     const pressedKey = event.key;
 
-    const keyElement = document.querySelector(`.key[data-key="${pressedKey}"]`);
+    const keyElement = document.querySelector(`.key[data-key="${pressedKey.toLowerCase()}"]`);
 
     if(keyElement) {
         keyElement.classList.add("pressed");
@@ -43,7 +43,7 @@ window.addEventListener("keyup", (event) => {
 
     const releasedKey = event.key;
     
-    const keyElement = document.querySelector(`.key[data-key="${releasedKey}"]`);
+    const keyElement = document.querySelector(`.key[data-key="${releasedKey.toLowerCase()}"]`);
 
     if(keyElement) {
         keyElement.classList.remove("pressed");
