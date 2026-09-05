@@ -39,3 +39,29 @@ def db_test():
         "message": "Database connected!",
         "result": result[0]
     })
+
+#test temporaire
+@app.route("/api/create-table", methods=["GET"])
+def create_table():
+
+    with psycopg.connect(DATABASE_URL) as connection:
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS notes (
+                    id SERIAL PRIMARY KEY,
+                    text TEXT NOT NULL,
+                    character_count INTEGER NOT NULL,
+                    note_date DATE NOT NULL,
+                    started_at TIMESTAMPTZ NOT NULL,
+                    finished_at TIMESTAMPTZ NOT NULL,
+                    duration_minutes INTEGER NOT NULL,
+                    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+        connection.commit()
+
+    return jsonify({
+        "message": "Notes table created!"
+    })
