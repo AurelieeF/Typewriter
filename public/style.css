@@ -427,6 +427,114 @@ body {
     cursor: not-allowed;
 }
 
+/* ==========================================================
+   SECTION 14B - BOUTONS DU NOTE READER (de la barre de droite)
+   ========================================================== */
+
+/* ---------- BACK ---------- */
+
+#back-to-list-button {
+    padding: 8px 14px;
+
+    border: 1px solid #c0a28c;
+    border-radius: 8px;
+
+    background-color: transparent;
+    color: #6f5b4d;
+
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+#back-to-list-button:hover {
+    background-color: #eee3cf;
+    transform: translateX(-2px);
+}
+
+
+/* ---------- FLÈCHES ---------- */
+
+.note-reader-navigation button {
+    width: 46px;
+    height: 46px;
+
+    border: 1px solid #c0a28c;
+    border-radius: 50%;
+
+    background-color: #eee3cf;
+    color: #3d342d;
+
+    font-family: "Courier New", monospace;
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+/* Petite animation au hover */
+
+#previous-note-button:hover:not(:disabled) {
+    transform: translateX(-3px);
+    background-color: #e5d5bb;
+}
+
+#next-note-button:hover:not(:disabled) {
+    transform: translateX(3px);
+    background-color: #e5d5bb;
+}
+
+
+/* Flèche impossible à utiliser */
+
+.note-reader-navigation button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* ---------- DELETE ---------- */
+
+#delete-note-button {
+    width: 100%;
+
+    margin-top: 25px;
+    padding: 10px 16px;
+
+    border: 1px solid #a96f61;
+    border-radius: 8px;
+
+    background-color: transparent;
+    color: #8c554a;
+
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+#delete-note-button:hover {
+    background-color: #8c554a;
+    color: #fff;
+
+    transform: translateY(-1px);
+}
+
 
 /* ==========================================================
    SECTION 15 - CLASSES UTILITAIRES
