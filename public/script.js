@@ -178,7 +178,7 @@ doneButton.addEventListener("click", () => {
     const noteData = {
         text: text,
         characterCount: text.length,
-        date: startTime.toLocaleDateString(),
+        date: startTime.toISOString().split("T")[0],
         startedAt: startTime.toISOString(),
         finishedAt: endTime.toISOString(),
         durationMinutes: durationMinutes
