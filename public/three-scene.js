@@ -189,7 +189,7 @@ loader.load(
 
         camera.position.set(
             0,
-            maxDimension * 0.65,
+            maxDimension * 1.65,
             maxDimension * -0.85
         );
 
