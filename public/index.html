@@ -11,6 +11,7 @@
 
 <body>
     <main class="typewriter-app">
+        <div id="typewriter-3d"></div>
         <div class="typewriter">
             <h1>Welcome to the Typewriter Effect!</h1>
         </div>
@@ -92,9 +93,9 @@
         </section>
     </main>
     <button id="saved-notes-button">
-    Notes
-    <span id="notes-count">0</span>
-</button>
+        Notes
+        <span id="notes-count">0</span>
+    </button>
 
     <aside id="saved-notes-panel">
         <div class="saved-notes-header">
@@ -135,9 +136,20 @@
         <p>© 2026 AurelieeF. All rights reserved.</p>
 
     </footer>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+    }
+    </script>
+
     <script src="script.js"></script>
+    <script type="module" src="three-scene.js"></script>
 
 </body>
 
-
 </html>
+
