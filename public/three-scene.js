@@ -267,7 +267,7 @@ function press3DKey(objectName) {
 
     // Descend la touche
     key.position.y =
-        key.userData.originalY - 0.08;
+        key.userData.originalY - 0.025;
 
 
     // Puis la remet
