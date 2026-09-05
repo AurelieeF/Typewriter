@@ -14,7 +14,7 @@ paperDate.textContent = startTime.toLocaleString();
 const savedNotesButton = document.getElementById("saved-notes-button");
 const savedNotesPanel = document.getElementById("saved-notes-panel");
 const closeNotesButton = document.getElementById("close-notes-button");
-
+const savedNotesList = document.getElementById("saved-notes-list");
 
 
 const MAX_CHARACTERS = 200;
@@ -236,9 +236,38 @@ function updatePaperHeight() {
 savedNotesButton.addEventListener("click", () => {
     savedNotesPanel.classList.add("open");
     savedNotesButton.classList.add("hidden");
+    loadSavedNotes();
 });
 
 closeNotesButton.addEventListener("click", () => {
     savedNotesPanel.classList.remove("open");
     savedNotesButton.classList.remove("hidden");
 });
+
+function loadSavedNotes() {
+
+    fetch("/api/notes")
+        .then(response => response.json())
+        .then(data => {
+
+            savedNotesList.innerHTML = "";
+
+            data.notes.forEach((note) => {
+
+                const noteElement = document.createElement("div");
+
+                noteElement.classList.add("saved-note");
+
+                noteElement.innerHTML = `
+                    <p class="saved-note-date">${note.date}</p>
+                    <p class="saved-note-text">${note.text}</p>
+                    <p class="saved-note-info">
+                        ${note.characterCount} characters · ${note.durationMinutes} min
+                    </p>
+                `;
+
+                savedNotesList.appendChild(noteElement);
+            });
+
+        });
+}

@@ -202,3 +202,29 @@ body {
 #saved-notes-button.hidden {
     display: none;
 }
+
+.saved-note {
+    padding: 12px;
+
+    background-color: #eee3cf;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.saved-note-date {
+    font-size: 12px;
+    color: #a18873;
+    margin: 0 0 6px 0;
+}
+
+.saved-note-text {
+    margin: 0 0 8px 0;
+}
+
+.saved-note-info {
+    font-size: 11px;
+    color: #a18873;
+    margin: 0;
+}
