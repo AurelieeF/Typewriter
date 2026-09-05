@@ -86,8 +86,8 @@ function handleKey(key) {
     paperText.textContent = text;
     //update pour la connexion a three.js
     if (window.update3DPaperText) {
-    window.update3DPaperText(text);
-}
+        window.update3DPaperText(text);
+    }
 
     // Ajuste la hauteur de la feuille
     updatePaperHeight();
@@ -294,19 +294,19 @@ doneButton.addEventListener("click", () => {
         .then(response => response.json())
         .then(data => {
 
-    console.log("Saved note:", data);
+            console.log("Saved note:", data);
 
-    isFinished = true;
-    doneButton.disabled = true;
+            isFinished = true;
+            doneButton.disabled = true;
 
-    // Recharge immédiatement les notes depuis Neon
-    // Donc si le drawer est ouvert, la nouvelle note apparaît tout de suite
-    loadSavedNotes();
+            // Recharge immédiatement les notes depuis Neon
+            // Donc si le drawer est ouvert, la nouvelle note apparaît tout de suite
+            loadSavedNotes();
 
-    animatePaperToNotes();
-});
+            animatePaperToNotes();
+        });
 
- 
+
 });
 
 function animatePaperToNotes() {
@@ -517,6 +517,11 @@ function resetNote() {
     paperText.textContent = "";
     paperInfo.textContent = "";
     paperDate.textContent = startTime.toLocaleString();
+
+
+    if (window.clear3DPaper) {
+        window.clear3DPaper();
+    }
 
     // Remet la hauteur du papier à zéro
     paper.style.height = "";

@@ -26,7 +26,7 @@ body {
 }
 
 .paper-slot {
-    width: 500px;
+    display: none;
 }
 
 .paper {

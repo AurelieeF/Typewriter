@@ -1,20 +1,9 @@
 import * as THREE from "three";
-
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-
-
-// ==========================================================
-// SECTION 1 - SCENE
-// ==========================================================
 
 const container = document.getElementById("typewriter-3d");
 
 const scene = new THREE.Scene();
-
-
-// ==========================================================
-// SECTION 2 - CAMERA
-// ==========================================================
 
 const camera = new THREE.PerspectiveCamera(
     35,
@@ -22,11 +11,6 @@ const camera = new THREE.PerspectiveCamera(
     0.01,
     100
 );
-
-
-// ==========================================================
-// SECTION 3 - RENDERER
-// ==========================================================
 
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -42,12 +26,9 @@ renderer.setSize(
     container.clientHeight
 );
 
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
 container.appendChild(renderer.domElement);
-
-
-// ==========================================================
-// SECTION 4 - LIGHTS
-// ==========================================================
 
 const ambientLight = new THREE.AmbientLight(
     0xffffff,
@@ -55,7 +36,6 @@ const ambientLight = new THREE.AmbientLight(
 );
 
 scene.add(ambientLight);
-
 
 const mainLight = new THREE.DirectionalLight(
     0xffffff,
@@ -70,46 +50,33 @@ mainLight.position.set(
 
 scene.add(mainLight);
 
-
-// ==========================================================
-// SECTION 5 - LOAD TYPEWRITER
-// ==========================================================
-
 const loader = new GLTFLoader();
 
 let typewriterModel = null;
 let paperObject = null;
-let paperTextSurface = null;
+let paperTextSprite = null;
 
 const paperCanvas = document.createElement("canvas");
 
 paperCanvas.width = 1024;
 paperCanvas.height = 1024;
 
-const paperContext = paperCanvas.getContext("2d");
+const paperContext =
+    paperCanvas.getContext("2d");
 
-const paperTexture = new THREE.CanvasTexture(paperCanvas);
+const paperTexture =
+    new THREE.CanvasTexture(paperCanvas);
 
-paperTexture.colorSpace = THREE.SRGBColorSpace;
+paperTexture.colorSpace =
+    THREE.SRGBColorSpace;
 
+paperTexture.minFilter =
+    THREE.LinearFilter;
 
-// Fond initial du canvas
-paperContext.fillStyle = "#f5f0e6";
-paperContext.fillRect(
-    0,
-    0,
-    paperCanvas.width,
-    paperCanvas.height
-);
-
-paperTexture.needsUpdate = true;
-// ==========================================================
-// KEYBOARD → OBJETS BLENDER
-// ==========================================================
+paperTexture.magFilter =
+    THREE.LinearFilter;
 
 const key3DMap = {
-
-    // Chiffres
     "1": "Key_1",
     "2": "Key_2",
     "3": "Key_3",
@@ -121,7 +88,6 @@ const key3DMap = {
     "9": "Key_9",
     "0": "Key_0",
 
-    // Lettres
     "a": "Key_A",
     "b": "Key_B",
     "c": "Key_C",
@@ -149,7 +115,6 @@ const key3DMap = {
     "y": "Key_Y",
     "z": "Key_Z",
 
-    // Ponctuation
     ",": "Key_Comma",
     ".": "Key_Period",
     "?": "Key_Question",
@@ -161,129 +126,58 @@ const key3DMap = {
     "-": "Key_Minus",
     "/": "Key_Slash",
 
-    // Touches spéciales
     " ": "Key_Space",
     "Enter": "Key_Enter",
     "Backspace": "Key_Backspace",
     "CapsLock": "Key_CapsLock"
 };
 
-
 loader.load(
-
     "./models/typewriter.glb",
 
     (gltf) => {
 
-        typewriterModel = gltf.scene;
+        typewriterModel =
+            gltf.scene;
 
-        scene.add(typewriterModel);
-        paperObject = typewriterModel.getObjectByName("Paper");
-
-if (!paperObject) {
-
-    console.warn("Paper not found");
-
-}
-else {
-
-    console.log("Paper found!");
-
-
-    // --------------------------------------------------
-    // CRÉE UNE SURFACE TEXTE DEVANT LE PAPIER
-    // --------------------------------------------------
-
-    const paperBox = new THREE.Box3().setFromObject(
-        paperObject
-    );
-
-    const paperSize = paperBox.getSize(
-        new THREE.Vector3()
-    );
-
-
-    /*
-        Le papier est beaucoup plus large et haut
-        que profond.
-
-        On utilise donc X = largeur
-        et Y = hauteur visuelle du modèle.
-    */
-
-    const textGeometry = new THREE.PlaneGeometry(
-        paperSize.x * 0.92,
-        paperSize.y * 0.92
-    );
-
-
-    const textMaterial = new THREE.MeshBasicMaterial({
-        map: paperTexture,
-        transparent: true,
-        side: THREE.DoubleSide
-    });
-
-
-    paperTextSurface = new THREE.Mesh(
-        textGeometry,
-        textMaterial
-    );
-
-
-    paperTextSurface.position.copy(
-        paperObject.position
-    );
-
-    paperTextSurface.rotation.copy(
-        paperObject.rotation
-    );
-
-    paperTextSurface.position.z -= 0.003;
-
-
-    // Même parent que Paper
-    paperObject.parent.add(
-        paperTextSurface
-    );
-
-
-    console.log(
-        "3D paper text surface created!"
-    );
-}
-        
-
-        // --------------------------------------------------
-        // CENTRE AUTOMATIQUEMENT LE MODELE
-        // --------------------------------------------------
-
-        const box = new THREE.Box3().setFromObject(
+        scene.add(
             typewriterModel
         );
 
-        const center = box.getCenter(
-            new THREE.Vector3()
+        const box =
+            new THREE.Box3().setFromObject(
+                typewriterModel
+            );
+
+        const center =
+            box.getCenter(
+                new THREE.Vector3()
+            );
+
+        const size =
+            box.getSize(
+                new THREE.Vector3()
+            );
+
+        typewriterModel.position.x -=
+            center.x;
+
+        typewriterModel.position.y -=
+            center.y;
+
+        typewriterModel.position.z -=
+            center.z;
+
+        typewriterModel.updateMatrixWorld(
+            true
         );
 
-        const size = box.getSize(
-            new THREE.Vector3()
-        );
-
-
-        typewriterModel.position.x -= center.x;
-        typewriterModel.position.y -= center.y;
-        typewriterModel.position.z -= center.z;
-
-
-        // --------------------------------------------------
-        // PLACE LA CAMERA
-        // --------------------------------------------------
-
-        const maxDimension = Math.max(
-            size.x,
-            size.y,
-            size.z
-        );
+        const maxDimension =
+            Math.max(
+                size.x,
+                size.y,
+                size.z
+            );
 
         camera.position.set(
             0,
@@ -297,20 +191,38 @@ else {
             0
         );
 
+        paperObject =
+            typewriterModel.getObjectByName(
+                "Paper"
+            );
+
+        if (!paperObject) {
+
+            console.warn(
+                "Paper not found"
+            );
+
+        } else {
+
+            createPaperTextSprite();
+
+        }
 
         console.log(
             "Typewriter loaded!"
         );
 
+        typewriterModel.traverse(
+            (object) => {
 
-        // Affiche tous les noms Blender dans la console
-        typewriterModel.traverse((object) => {
+                if (object.name) {
+                    console.log(
+                        object.name
+                    );
+                }
 
-            if (object.name) {
-                console.log(object.name);
             }
-
-        });
+        );
 
     },
 
@@ -324,204 +236,392 @@ else {
         );
 
     }
-
 );
 
+function createPaperTextSprite() {
 
-// ==========================================================
-// SECTION 6 - TEST ANIMATION KEY_A
-// ==========================================================
+    const paperBox =
+        new THREE.Box3().setFromObject(
+            paperObject
+        );
 
-function press3DKey(objectName) {
+    const paperSize =
+        paperBox.getSize(
+            new THREE.Vector3()
+        );
+
+    const paperCenter =
+        paperBox.getCenter(
+            new THREE.Vector3()
+        );
+
+    const spriteMaterial =
+        new THREE.SpriteMaterial({
+            map: paperTexture,
+            transparent: true,
+            depthTest: false,
+            depthWrite: false
+        });
+
+    paperTextSprite =
+        new THREE.Sprite(
+            spriteMaterial
+        );
+
+    paperTextSprite.position.copy(
+        paperCenter
+    );
+
+    paperTextSprite.position.z -=
+        0.01;
+
+    paperTextSprite.scale.set(
+        paperSize.x * 0.9,
+        paperSize.y * 0.9,
+        1
+    );
+
+    paperTextSprite.renderOrder =
+        1000;
+
+    scene.add(
+        paperTextSprite
+    );
+
+    update3DPaperText("");
+
+    console.log(
+        "Paper text ready!"
+    );
+}
+
+function press3DKey(
+    objectName
+) {
 
     if (!typewriterModel) {
         return;
     }
 
-
-    const key = typewriterModel.getObjectByName(
-        objectName
-    );
-
+    const key =
+        typewriterModel.getObjectByName(
+            objectName
+        );
 
     if (!key) {
 
         console.warn(
-            objectName + " not found"
+            objectName +
+            " not found"
         );
 
         return;
     }
 
-
-    // Sauvegarde position originale une seule fois
-    if (key.userData.originalY === undefined) {
+    if (
+        key.userData.originalY ===
+        undefined
+    ) {
 
         key.userData.originalY =
             key.position.y;
 
     }
 
-
-    // Descend la touche
     key.position.y =
-        key.userData.originalY - 0.025;
+        key.userData.originalY -
+        0.015;
 
+    setTimeout(
+        () => {
 
-    // Puis la remet
-    setTimeout(() => {
+            key.position.y =
+                key.userData.originalY;
 
-        key.position.y =
-            key.userData.originalY;
-
-    }, 120);
-
+        },
+        100
+    );
 }
 
+window.addEventListener(
+    "keydown",
+    (event) => {
 
+        let pressedKey =
+            event.key;
 
+        if (
+            pressedKey.length === 1
+        ) {
 
-// ==========================================================
-// SECTION 7 - CLAVIER PHYSIQUE → ANIMATION 3D
-// ==========================================================
+            pressedKey =
+                pressedKey.toLowerCase();
 
-window.addEventListener("keydown", (event) => {
-
-    let pressedKey = event.key;
-
-    // Les lettres doivent chercher "a", "b", etc.
-    if (pressedKey.length === 1) {
-        pressedKey = pressedKey.toLowerCase();
-    }
-
-    const objectName = key3DMap[pressedKey];
-
-    if (!objectName) {
-        return;
-    }
-
-    press3DKey(objectName);
-});
-
-// ==========================================================
-// CONVERTIT UN OBJET 3D EN TOUCHE
-// ==========================================================
-
-function getKeyValueFrom3DObject(objectName) {
-
-    for (const [keyValue, mappedObject] of Object.entries(key3DMap)) {
-
-        if (mappedObject === objectName) {
-            return keyValue;
         }
+
+        const objectName =
+            key3DMap[
+                pressedKey
+            ];
+
+        if (!objectName) {
+            return;
+        }
+
+        press3DKey(
+            objectName
+        );
+
+    }
+);
+
+function getKeyValueFrom3DObject(
+    objectName
+) {
+
+    for (
+        const [
+            keyValue,
+            mappedObject
+        ]
+        of Object.entries(
+            key3DMap
+        )
+    ) {
+
+        if (
+            mappedObject ===
+            objectName
+        ) {
+
+            return keyValue;
+
+        }
+
     }
 
     return null;
 }
 
+const raycaster =
+    new THREE.Raycaster();
 
+const mouse =
+    new THREE.Vector2();
 
-// ==========================================================
-// SECTION 7B - CLIC SUR LES TOUCHES 3D
-// ==========================================================
+renderer.domElement.addEventListener(
+    "pointerdown",
+    (event) => {
 
-const raycaster = new THREE.Raycaster();
+        if (!typewriterModel) {
+            return;
+        }
 
-const mouse = new THREE.Vector2();
+        const rect =
+            renderer.domElement
+                .getBoundingClientRect();
 
+        mouse.x =
+            (
+                (
+                    event.clientX -
+                    rect.left
+                )
+                /
+                rect.width
+            )
+            * 2 - 1;
 
-renderer.domElement.addEventListener("pointerdown", (event) => {
+        mouse.y =
+            -(
+                (
+                    event.clientY -
+                    rect.top
+                )
+                /
+                rect.height
+            )
+            * 2 + 1;
 
-    if (!typewriterModel) {
-        return;
-    }
+        raycaster.setFromCamera(
+            mouse,
+            camera
+        );
 
+        const intersections =
+            raycaster.intersectObject(
+                typewriterModel,
+                true
+            );
 
-    // Position de la souris dans le canvas
-    const rect = renderer.domElement.getBoundingClientRect();
+        if (
+            intersections.length === 0
+        ) {
+            return;
+        }
 
-    mouse.x =
-        ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        let clickedObject =
+            intersections[0].object;
 
-    mouse.y =
-        -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        while (
+            clickedObject &&
+            !clickedObject.name.startsWith(
+                "Key_"
+            )
+        ) {
 
+            clickedObject =
+                clickedObject.parent;
 
-    // Lance le rayon depuis la caméra
-    raycaster.setFromCamera(
-        mouse,
-        camera
-    );
+        }
 
+        if (!clickedObject) {
+            return;
+        }
 
-    const intersections = raycaster.intersectObject(
-        typewriterModel,
-        true
-    );
+        const objectName =
+            clickedObject.name;
 
-
-    if (intersections.length === 0) {
-        return;
-    }
-
-
-    // Objet réellement touché
-    let clickedObject =
-        intersections[0].object;
-
-
-    // Si on clique sur le texte ou un enfant de la touche,
-    // remonte jusqu'à l'objet Key_...
-    while (
-        clickedObject &&
-        !clickedObject.name.startsWith("Key_")
-    ) {
-
-        clickedObject =
-            clickedObject.parent;
-
-    }
-
-
-    if (!clickedObject) {
-        return;
-    }
-
-
-    const objectName =
-        clickedObject.name;
-
-
-    // Animation de la touche
-    press3DKey(
-        objectName
-    );
-
-
-    // Transforme le nom Blender
-    // en caractère utilisé par ton app
-    const keyValue =
-        getKeyValueFrom3DObject(
+        press3DKey(
             objectName
         );
 
+        const keyValue =
+            getKeyValueFrom3DObject(
+                objectName
+            );
 
-    if (
-        keyValue !== null &&
-        window.handleKey
+        if (
+            keyValue !== null &&
+            window.handleKey
+        ) {
+
+            window.handleKey(
+                keyValue
+            );
+
+        }
+
+    }
+);
+
+function update3DPaperText(
+    text
+) {
+
+    paperContext.clearRect(
+        0,
+        0,
+        paperCanvas.width,
+        paperCanvas.height
+    );
+
+    paperContext.fillStyle =
+        "#241f1b";
+
+    paperContext.font =
+        "36px Courier New";
+
+    paperContext.textBaseline =
+        "top";
+
+    const leftMargin =
+        100;
+
+    const topMargin =
+        110;
+
+    const lineHeight =
+        48;
+
+    const maxWidth =
+        paperCanvas.width -
+        200;
+
+    const paragraphs =
+        text.split("\n");
+
+    let currentY =
+        topMargin;
+
+    for (
+        const paragraph
+        of paragraphs
     ) {
 
-        window.handleKey(
-            keyValue
+        const words =
+            paragraph.split(" ");
+
+        let line = "";
+
+        for (
+            const word
+            of words
+        ) {
+
+            const testLine =
+                line.length === 0
+                    ? word
+                    : line + " " + word;
+
+            const width =
+                paperContext
+                    .measureText(
+                        testLine
+                    )
+                    .width;
+
+            if (
+                width >
+                maxWidth &&
+                line !== ""
+            ) {
+
+                paperContext.fillText(
+                    line,
+                    leftMargin,
+                    currentY
+                );
+
+                line =
+                    word;
+
+                currentY +=
+                    lineHeight;
+
+            } else {
+
+                line =
+                    testLine;
+
+            }
+
+        }
+
+        paperContext.fillText(
+            line,
+            leftMargin,
+            currentY
         );
+
+        currentY +=
+            lineHeight;
 
     }
 
-});
+    paperTexture.needsUpdate =
+        true;
+}
 
-// ==========================================================
-// SECTION 8 - RESIZE
-// ==========================================================
+window.update3DPaperText =
+    update3DPaperText;
+
+window.clear3DPaper =
+    function () {
+
+        update3DPaperText("");
+
+    };
 
 window.addEventListener(
     "resize",
@@ -533,7 +633,6 @@ window.addEventListener(
 
         camera.updateProjectionMatrix();
 
-
         renderer.setSize(
             container.clientWidth,
             container.clientHeight
@@ -541,85 +640,6 @@ window.addEventListener(
 
     }
 );
-
-function update3DPaperText(text) {
-
-    console.log(
-        "Updating 3D paper:",
-        text
-    );
-
-
-    // --------------------------------------------------
-    // EFFACE LE CANVAS
-    // --------------------------------------------------
-
-    paperContext.fillStyle = "#f5f0e6";
-
-    paperContext.fillRect(
-        0,
-        0,
-        paperCanvas.width,
-        paperCanvas.height
-    );
-
-
-    // --------------------------------------------------
-    // STYLE TEXTE
-    // --------------------------------------------------
-
-    paperContext.fillStyle = "#2f2924";
-
-    paperContext.font =
-        "38px Courier New";
-
-    paperContext.textBaseline =
-        "top";
-
-
-    // --------------------------------------------------
-    // POSITION
-    // --------------------------------------------------
-
-    const startX = 100;
-    const startY = 120;
-
-    const lineHeight = 52;
-
-
-    // --------------------------------------------------
-    // LIGNES
-    // --------------------------------------------------
-
-    const lines = text.split("\n");
-
-
-    lines.forEach((line, index) => {
-
-        paperContext.fillText(
-            line,
-            startX,
-            startY + index * lineHeight
-        );
-
-    });
-
-
-    // --------------------------------------------------
-    // RAFRAÎCHIT THREE.JS
-    // --------------------------------------------------
-
-    paperTexture.needsUpdate = true;
-}
-
-
-window.update3DPaperText =
-    update3DPaperText;
-
-
-// ==========================================================
-// SECTION 9 - RENDER LOOP
-// ==========================================================
 
 function animate() {
 
@@ -631,7 +651,6 @@ function animate() {
         scene,
         camera
     );
-
 }
 
 animate();
