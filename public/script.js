@@ -277,6 +277,11 @@ function loadSavedNotes() {
                         ${note.characterCount} characters · ${note.durationMinutes} min
                     </p>
                 `;
+                
+                noteElement.addEventListener("click", () => {
+                    openNoteReader(note, data.notes);
+                });
+
 
                 savedNotesList.appendChild(noteElement);
             });
