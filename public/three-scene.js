@@ -250,48 +250,56 @@ function createPaperTextSprite() {
             new THREE.Vector3()
         );
 
-    const paperCenter =
-        paperBox.getCenter(
-            new THREE.Vector3()
-        );
-
-    const spriteMaterial =
-        new THREE.SpriteMaterial({
+    const textMaterial =
+        new THREE.MeshBasicMaterial({
             map: paperTexture,
             transparent: true,
             depthTest: false,
-            depthWrite: false
+            depthWrite: false,
+            side: THREE.DoubleSide
         });
 
-    paperTextSprite =
-        new THREE.Sprite(
-            spriteMaterial
+    const textGeometry =
+        new THREE.PlaneGeometry(
+            1,
+            1
         );
 
-    paperTextSprite.position.copy(
-        paperCenter
+    paperTextSprite =
+        new THREE.Mesh(
+            textGeometry,
+            textMaterial
+        );
+
+    paperObject.add(
+        paperTextSprite
     );
 
-    paperTextSprite.position.z -=
-        0.01;
+    paperTextSprite.position.set(
+        0,
+        0,
+        -0.01
+    );
+
+    paperTextSprite.rotation.set(
+        0,
+        0,
+        0
+    );
 
     paperTextSprite.scale.set(
-        paperSize.x * 0.9,
-        paperSize.y * 0.9,
+        0.9,
+        0.9,
         1
     );
 
     paperTextSprite.renderOrder =
         1000;
 
-    scene.add(
-        paperTextSprite
-    );
-
     update3DPaperText("");
 
     console.log(
-        "Paper text ready!"
+        "Paper text attached directly to Paper!"
     );
 }
 
