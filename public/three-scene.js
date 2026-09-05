@@ -181,8 +181,8 @@ loader.load(
 
         camera.position.set(
             0,
-            maxDimension * -1.4,
-            maxDimension * 1.8
+            maxDimension * 1.4,
+            maxDimension * -1.8
         );
 
         camera.lookAt(
@@ -263,30 +263,25 @@ function createPaperTextSprite() {
         paperTextSprite
     );
 
-    // Même orientation locale que la feuille
     paperTextSprite.rotation.set(
-        THREE.MathUtils.degToRad(90),
+        0,
         0,
         0
     );
 
-    // Position locale légèrement devant la feuille
     paperTextSprite.position.set(
         0,
-        -0.01,
-        0
+        0,
+        -0.01
     );
 
-    // Taille du texte par rapport à la feuille
     paperTextSprite.scale.set(
         0.85,
         0.65,
         1
     );
 
-    // Corrige le miroir horizontal
     paperTextSprite.scale.x *= -1;
-
     paperTextSprite.renderOrder = 1000;
 
     update3DPaperText("");
