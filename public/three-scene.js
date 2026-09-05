@@ -181,7 +181,7 @@ loader.load(
 
         camera.position.set(
             0,
-            maxDimension * -1.4,
+            maxDimension * 1.4,
             maxDimension * 1.8
         );
 
@@ -265,7 +265,7 @@ function createPaperTextSprite() {
 
     // Même orientation locale que la feuille
     paperTextSprite.rotation.set(
-        0,
+        THREE.MathUtils.degToRad(90),
         0,
         0
     );
@@ -362,7 +362,7 @@ window.addEventListener(
 
         const objectName =
             key3DMap[
-                pressedKey
+            pressedKey
             ];
 
         if (!objectName) {
