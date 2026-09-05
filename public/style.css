@@ -142,7 +142,7 @@ body {
 
 
 /* ==========================================================
-   SECTION 6 - BOUTON DONE
+   SECTION 6A - BOUTON DONE
    ========================================================== */
 
 #done-button {
@@ -164,6 +164,32 @@ body {
 #done-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* ==========================================================
+   SECTION 6B - BOUTON NEW NOTE
+   ========================================================== */
+
+#new-note-button {
+    margin-top: 20px;
+    margin-left: 10px;
+
+    padding: 10px 20px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #c0a28c;
+    color: #3d342d;
+
+    font-size: 16px;
+    font-family: "Courier New", monospace;
+
+    cursor: pointer;
+}
+
+#new-note-button:hover {
+    opacity: 0.85;
 }
 
 
