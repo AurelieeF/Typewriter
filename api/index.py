@@ -29,7 +29,45 @@ def db_test():
         "result": result[0]
     })
 
+@app.route("/api/notes", methods=["GET"])
+def get_notes():
 
+    with psycopg.connect(DATABASE_URL) as connection:
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT
+                    id,
+                    text,
+                    character_count,
+                    note_date,
+                    started_at,
+                    finished_at,
+                    duration_minutes,
+                    created_at
+                FROM notes
+                ORDER BY created_at DESC
+            """)
+
+            rows = cursor.fetchall()
+
+    notes = []
+
+    for row in rows:
+        notes.append({
+            "id": row[0],
+            "text": row[1],
+            "characterCount": row[2],
+            "date": row[3].isoformat(),
+            "startedAt": row[4].isoformat(),
+            "finishedAt": row[5].isoformat(),
+            "durationMinutes": row[6],
+            "createdAt": row[7].isoformat()
+        })
+
+    return jsonify({
+        "notes": notes
+    })
 @app.route("/api/notes", methods=["POST"])
 def save_note():
 
