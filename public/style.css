@@ -198,3 +198,7 @@ body {
     flex-direction: column;
     gap: 12px;
 }
+
+#saved-notes-button.hidden {
+    display: none;
+}

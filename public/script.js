@@ -11,6 +11,10 @@ let isFinished = false;
 const startTime = new Date();
 paperDate.textContent = startTime.toLocaleString();
 
+const savedNotesButton = document.getElementById("saved-notes-button");
+const savedNotesPanel = document.getElementById("saved-notes-panel");
+const closeNotesButton = document.getElementById("close-notes-button");
+
 
 
 const MAX_CHARACTERS = 200;
@@ -227,5 +231,14 @@ function updatePaperHeight() {
     paper.style.height = `${newHeight}px`;
 }
 
-//faire en sorte que js appelle mon python tout seule (test -local)
 
+//partie notes sauvegarde:
+savedNotesButton.addEventListener("click", () => {
+    savedNotesPanel.classList.add("open");
+    savedNotesButton.classList.add("hidden");
+});
+
+closeNotesButton.addEventListener("click", () => {
+    savedNotesPanel.classList.remove("open");
+    savedNotesButton.classList.remove("hidden");
+});
