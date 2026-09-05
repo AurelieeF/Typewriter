@@ -293,8 +293,9 @@ doneButton.addEventListener("click", () => {
     isFinished = true;
     doneButton.disabled = true;
 
-    notesCount.textContent =
-        Number(notesCount.textContent) + 1;
+    // Recharge immédiatement les notes depuis Neon
+    // Donc si le drawer est ouvert, la nouvelle note apparaît tout de suite
+    loadSavedNotes();
 
     animatePaperToNotes();
 });
@@ -491,7 +492,6 @@ notesDateFilter.addEventListener("change", () => {
     displayNotes(filteredNotes);
 });
 
-
 // ==========================================================
 // SECTION 15 - CRÉER UNE NOUVELLE NOTE
 // ==========================================================
@@ -522,18 +522,21 @@ function resetNote() {
     doneButton.disabled = false;
 }
 
+// Quand on clique sur New Note
+newNoteButton.addEventListener("click", () => {
+    resetNote();
+});
+
 
 // ==========================================================
-// SECTION 15 - SUPPRIMER UNE NOTE
+// SECTION 16 - SUPPRIMER UNE NOTE
 // ==========================================================
-
-
 
 deleteNoteButton.addEventListener("click", () => {
 
-      if (!confirm("Delete this note?")) {
-    return;
-}
+    if (!confirm("Delete this note?")) {
+        return;
+    }
 
     const note = currentDayNotes[currentNoteIndex];
 
@@ -545,13 +548,9 @@ deleteNoteButton.addEventListener("click", () => {
 
             console.log("Deleted:", data);
 
-            // recharge les notes
             loadSavedNotes();
 
-            // revient à la liste
             noteReader.classList.add("hidden");
             savedNotesList.classList.remove("hidden");
         });
-
-  
 });
