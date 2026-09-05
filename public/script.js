@@ -89,6 +89,8 @@ function handleKey(key) {
     updatePaperHeight();
 }
 
+window.handleKey = handleKey;
+
 
 
 // ==========================================================

@@ -78,6 +78,70 @@ scene.add(mainLight);
 const loader = new GLTFLoader();
 
 let typewriterModel = null;
+// ==========================================================
+// KEYBOARD → OBJETS BLENDER
+// ==========================================================
+
+const key3DMap = {
+
+    // Chiffres
+    "1": "Key_1",
+    "2": "Key_2",
+    "3": "Key_3",
+    "4": "Key_4",
+    "5": "Key_5",
+    "6": "Key_6",
+    "7": "Key_7",
+    "8": "Key_8",
+    "9": "Key_9",
+    "0": "Key_0",
+
+    // Lettres
+    "a": "Key_A",
+    "b": "Key_B",
+    "c": "Key_C",
+    "d": "Key_D",
+    "e": "Key_E",
+    "f": "Key_F",
+    "g": "Key_G",
+    "h": "Key_H",
+    "i": "Key_I",
+    "j": "Key_J",
+    "k": "Key_K",
+    "l": "Key_L",
+    "m": "Key_M",
+    "n": "Key_N",
+    "o": "Key_O",
+    "p": "Key_P",
+    "q": "Key_Q",
+    "r": "Key_R",
+    "s": "Key_S",
+    "t": "Key_T",
+    "u": "Key_U",
+    "v": "Key_V",
+    "w": "Key_W",
+    "x": "Key_X",
+    "y": "Key_Y",
+    "z": "Key_Z",
+
+    // Ponctuation
+    ",": "Key_Comma",
+    ".": "Key_Period",
+    "?": "Key_Question",
+    "!": "Key_Exclamation",
+    ";": "Key_Semicolon",
+    ":": "Key_Colon",
+    "'": "Key_Apostrophe",
+    '"': "Key_Quote",
+    "-": "Key_Minus",
+    "/": "Key_Slash",
+
+    // Touches spéciales
+    " ": "Key_Space",
+    "Enter": "Key_Enter",
+    "Backspace": "Key_Backspace",
+    "CapsLock": "Key_CapsLock"
+};
 
 
 loader.load(
@@ -217,27 +281,145 @@ function press3DKey(objectName) {
 }
 
 
+
+
 // ==========================================================
-// SECTION 7 - TEST CLAVIER PHYSIQUE
+// SECTION 7 - CLAVIER PHYSIQUE → ANIMATION 3D
 // ==========================================================
 
-window.addEventListener(
-    "keydown",
-    (event) => {
+window.addEventListener("keydown", (event) => {
 
-        if (
-            event.key.toLowerCase() === "a"
-        ) {
+    let pressedKey = event.key;
 
-            press3DKey(
-                "Key_A"
-            );
+    // Les lettres doivent chercher "a", "b", etc.
+    if (pressedKey.length === 1) {
+        pressedKey = pressedKey.toLowerCase();
+    }
 
+    const objectName = key3DMap[pressedKey];
+
+    if (!objectName) {
+        return;
+    }
+
+    press3DKey(objectName);
+});
+
+// ==========================================================
+// CONVERTIT UN OBJET 3D EN TOUCHE
+// ==========================================================
+
+function getKeyValueFrom3DObject(objectName) {
+
+    for (const [keyValue, mappedObject] of Object.entries(key3DMap)) {
+
+        if (mappedObject === objectName) {
+            return keyValue;
         }
+    }
+
+    return null;
+}
+
+
+
+// ==========================================================
+// SECTION 7B - CLIC SUR LES TOUCHES 3D
+// ==========================================================
+
+const raycaster = new THREE.Raycaster();
+
+const mouse = new THREE.Vector2();
+
+
+renderer.domElement.addEventListener("pointerdown", (event) => {
+
+    if (!typewriterModel) {
+        return;
+    }
+
+
+    // Position de la souris dans le canvas
+    const rect = renderer.domElement.getBoundingClientRect();
+
+    mouse.x =
+        ((event.clientX - rect.left) / rect.width) * 2 - 1;
+
+    mouse.y =
+        -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+
+    // Lance le rayon depuis la caméra
+    raycaster.setFromCamera(
+        mouse,
+        camera
+    );
+
+
+    const intersections = raycaster.intersectObject(
+        typewriterModel,
+        true
+    );
+
+
+    if (intersections.length === 0) {
+        return;
+    }
+
+
+    // Objet réellement touché
+    let clickedObject =
+        intersections[0].object;
+
+
+    // Si on clique sur le texte ou un enfant de la touche,
+    // remonte jusqu'à l'objet Key_...
+    while (
+        clickedObject &&
+        !clickedObject.name.startsWith("Key_")
+    ) {
+
+        clickedObject =
+            clickedObject.parent;
 
     }
-);
 
+
+    if (!clickedObject) {
+        return;
+    }
+
+
+    const objectName =
+        clickedObject.name;
+
+
+    // Animation de la touche
+    press3DKey(
+        objectName
+    );
+
+
+    // Transforme le nom Blender
+    // en caractère utilisé par ton app
+    const keyValue =
+        getKeyValueFrom3DObject(
+            objectName
+        );
+
+
+    if (
+        keyValue !== null &&
+        window.handleKey
+    ) {
+
+        window.handleKey(
+            keyValue
+        );
+
+    }
+
+});
 
 // ==========================================================
 // SECTION 8 - RESIZE
