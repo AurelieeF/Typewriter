@@ -79,8 +79,10 @@ const loader = new GLTFLoader();
 
 let typewriterModel = null;
 let paperObject = null;
+let paperTextSurface = null;
 
 const paperCanvas = document.createElement("canvas");
+
 paperCanvas.width = 1024;
 paperCanvas.height = 1024;
 
@@ -89,6 +91,18 @@ const paperContext = paperCanvas.getContext("2d");
 const paperTexture = new THREE.CanvasTexture(paperCanvas);
 
 paperTexture.colorSpace = THREE.SRGBColorSpace;
+
+
+// Fond initial du canvas
+paperContext.fillStyle = "#f5f0e6";
+paperContext.fillRect(
+    0,
+    0,
+    paperCanvas.width,
+    paperCanvas.height
+);
+
+paperTexture.needsUpdate = true;
 // ==========================================================
 // KEYBOARD → OBJETS BLENDER
 // ==========================================================
@@ -166,19 +180,78 @@ loader.load(
         scene.add(typewriterModel);
         paperObject = typewriterModel.getObjectByName("Paper");
 
-        if (!paperObject) {
-            console.warn("Paper not found");
-        }
-        else {
-            console.log("Paper found!");
+if (!paperObject) {
 
-            paperObject.material = new THREE.MeshStandardMaterial({
-                map: paperTexture,
-                roughness: 0.9,
-                metalness: 0
-            });
-        }
+    console.warn("Paper not found");
 
+}
+else {
+
+    console.log("Paper found!");
+
+
+    // --------------------------------------------------
+    // CRÉE UNE SURFACE TEXTE DEVANT LE PAPIER
+    // --------------------------------------------------
+
+    const paperBox = new THREE.Box3().setFromObject(
+        paperObject
+    );
+
+    const paperSize = paperBox.getSize(
+        new THREE.Vector3()
+    );
+
+
+    /*
+        Le papier est beaucoup plus large et haut
+        que profond.
+
+        On utilise donc X = largeur
+        et Y = hauteur visuelle du modèle.
+    */
+
+    const textGeometry = new THREE.PlaneGeometry(
+        paperSize.x * 0.92,
+        paperSize.y * 0.92
+    );
+
+
+    const textMaterial = new THREE.MeshBasicMaterial({
+        map: paperTexture,
+        transparent: true,
+        side: THREE.DoubleSide
+    });
+
+
+    paperTextSurface = new THREE.Mesh(
+        textGeometry,
+        textMaterial
+    );
+
+
+    paperTextSurface.position.copy(
+        paperObject.position
+    );
+
+    paperTextSurface.rotation.copy(
+        paperObject.rotation
+    );
+
+    paperTextSurface.position.z -= 0.003;
+
+
+    // Même parent que Paper
+    paperObject.parent.add(
+        paperTextSurface
+    );
+
+
+    console.log(
+        "3D paper text surface created!"
+    );
+}
+        
 
         // --------------------------------------------------
         // CENTRE AUTOMATIQUEMENT LE MODELE
@@ -471,11 +544,16 @@ window.addEventListener(
 
 function update3DPaperText(text) {
 
-    if (!paperObject) {
-        return;
-    }
+    console.log(
+        "Updating 3D paper:",
+        text
+    );
 
-    // Fond papier
+
+    // --------------------------------------------------
+    // EFFACE LE CANVAS
+    // --------------------------------------------------
+
     paperContext.fillStyle = "#f5f0e6";
 
     paperContext.fillRect(
@@ -486,24 +564,33 @@ function update3DPaperText(text) {
     );
 
 
-    // Style du texte
+    // --------------------------------------------------
+    // STYLE TEXTE
+    // --------------------------------------------------
+
     paperContext.fillStyle = "#2f2924";
 
     paperContext.font =
-        "42px Courier New";
+        "38px Courier New";
 
     paperContext.textBaseline =
         "top";
 
 
-    // Marges
-    const startX = 90;
+    // --------------------------------------------------
+    // POSITION
+    // --------------------------------------------------
+
+    const startX = 100;
     const startY = 120;
 
-    const lineHeight = 55;
+    const lineHeight = 52;
 
 
-    // Gère les retours à la ligne
+    // --------------------------------------------------
+    // LIGNES
+    // --------------------------------------------------
+
     const lines = text.split("\n");
 
 
@@ -518,9 +605,13 @@ function update3DPaperText(text) {
     });
 
 
-    // Informe Three.js que la texture a changé
+    // --------------------------------------------------
+    // RAFRAÎCHIT THREE.JS
+    // --------------------------------------------------
+
     paperTexture.needsUpdate = true;
 }
+
 
 window.update3DPaperText =
     update3DPaperText;
