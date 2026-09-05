@@ -195,7 +195,7 @@ doneButton.addEventListener("click", () => {
         ↓
     request.get_json() */
 
-    fetch("http://127.0.0.1:5000/api/notes", {
+    fetch("/api/notes", {
 
         method: "POST",
 

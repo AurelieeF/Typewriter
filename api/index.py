@@ -11,6 +11,7 @@ def test():
         "message": "The backend is workingggg!"
     })
 
+
 @app.route("/api/notes", methods=["POST"])
 def save_note():
 
@@ -22,4 +23,3 @@ def save_note():
         "message": "Note received!",
         "note": note
     })
-
