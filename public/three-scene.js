@@ -189,8 +189,8 @@ loader.load(
 
         camera.position.set(
             0,
-            maxDimension * 1.4,
-            maxDimension * -1.8
+            maxDimension * 0.65,
+            maxDimension * -0.85
         );
 
         camera.lookAt(
@@ -276,7 +276,7 @@ function press3DKey(objectName) {
         key.position.y =
             key.userData.originalY;
 
-    }, 100);
+    }, 120);
 
 }
 
