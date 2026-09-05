@@ -15,6 +15,7 @@ const savedNotesPanel = document.getElementById("saved-notes-panel");
 const closeNotesButton = document.getElementById("close-notes-button");
 const savedNotesList = document.getElementById("saved-notes-list");
 const notesDateFilter = document.getElementById("notes-date-filter");
+const notesCount = document.getElementById("notes-count");
 
 // Note Reader
 const noteReader = document.getElementById("note-reader");
@@ -285,15 +286,25 @@ doneButton.addEventListener("click", () => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log("Saved note:", data);
-        });
 
-    // Bloque la note après Done
+    console.log("Saved note:", data);
+
     isFinished = true;
     doneButton.disabled = true;
+
+    notesCount.textContent =
+        Number(notesCount.textContent) + 1;
+
+    animatePaperToNotes();
 });
 
+ 
+});
 
+function animatePaperToNotes() {
+
+    paper.classList.add("saving");
+}
 
 // ==========================================================
 // SECTION 9 - OUVRIR / FERMER SAVED NOTES
@@ -327,6 +338,7 @@ function loadSavedNotes() {
         .then(data => {
 
             allSavedNotes = data.notes;
+            notesCount.textContent = allSavedNotes.length;
 
             displayNotes(allSavedNotes);
         });
@@ -342,6 +354,15 @@ function displayNotes(notes) {
 
     // Vide la liste avant de la reconstruire
     savedNotesList.innerHTML = "";
+
+    if (notes.length === 0) {
+        savedNotesList.innerHTML = `
+        <p class="no-notes-message">
+            No notes for this date.
+        </p>
+    `;
+        return;
+    }
 
     notes.forEach((note) => {
 
@@ -408,6 +429,11 @@ function showCurrentNote() {
 
     noteReaderCounter.textContent =
         `Note ${currentNoteIndex + 1} of ${currentDayNotes.length}`;
+
+    previousNoteButton.disabled = currentNoteIndex === 0;
+
+    nextNoteButton.disabled =
+        currentNoteIndex === currentDayNotes.length - 1;
 }
 
 
@@ -463,3 +489,4 @@ notesDateFilter.addEventListener("change", () => {
 
     displayNotes(filteredNotes);
 });
+

@@ -1,3 +1,7 @@
+/* ==========================================================
+   SECTION 1 - PAGE GÉNÉRALE
+   ========================================================== */
+
 body {
     margin: 0;
     min-height: 100vh;
@@ -10,8 +14,11 @@ body {
 
 .typewriter-app {
     text-align: center;
-
 }
+
+/* ==========================================================
+   SECTION 2 - PAPIER / NOTE
+   ========================================================== */
 
 .paper,
 .paper-slot {
@@ -25,22 +32,33 @@ body {
 .paper {
     width: 100%;
     background-color: #eee3cf;
+    transition:
+        height 0.3s ease,
+        transform 0.8s ease,
+        opacity 0.8s ease;
 }
-
+/* Animation lorsque la note est sauvegardée */
+.paper.saving {
+    transform: translate(420px, -250px) scale(0.1);
+    opacity: 0;
+}
+/* Texte de la note */
 #paper-text {
     white-space: pre-wrap;
     overflow-wrap: break-word;
     word-break: normal;
     hyphens: auto;
 }
-
+/* Date affichée sur la note */
 #paper-date {
     font-size: 12px;
     color: #a18873;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     text-align: right;
 }
 
+
+/* Informations de fin : durée d'écriture */
 #paper-info {
     font-size: 12px;
     color: #a18873;
@@ -48,12 +66,17 @@ body {
     text-align: right;
 }
 
+
+/* ==========================================================
+   SECTION 3 - CLAVIER
+   ========================================================== */
+
 .keyboard {
     margin-top: 20px;
     display: flex;
-    gap: 10px;
     flex-direction: column;
     align-items: center;
+    gap: 10px;
 }
 
 .keyboard-row {
@@ -62,6 +85,9 @@ body {
 }
 
 
+/* ==========================================================
+   SECTION 4 - TOUCHES DU CLAVIER
+   ========================================================== */
 
 .key {
     width: 55px;
@@ -75,18 +101,27 @@ body {
     transition: transform 0.8s;
 }
 
+/* Touche actuellement pressée */
 .key.pressed {
     transform: translateY(12px);
 }
 
+
+/* Caps Lock actif */
 .key.active {
     transform: translateY(12px);
 }
 
+/* ==========================================================
+   SECTION 5 - TOUCHES SPÉCIALES
+   ========================================================== */
+
 .special-key {
-    border-radius: 12px;
-    padding: 0px 20px;
     width: auto;
+
+    padding: 0 20px;
+
+    border-radius: 12px;
 }
 
 .caps-key {
@@ -105,24 +140,40 @@ body {
     min-width: 140px;
 }
 
+
+/* ==========================================================
+   SECTION 6 - BOUTON DONE
+   ========================================================== */
+
 #done-button {
     margin-top: 20px;
+
     padding: 10px 20px;
-    font-size: 16px;
-    background-color: #3d342d;
-    color: #fff;
+
     border: none;
     border-radius: 5px;
+
+    background-color: #3d342d;
+    color: #fff;
+
+    font-size: 16px;
+
     cursor: pointer;
 }
 
-#done-button.disabled {
+#done-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
+
+/* ==========================================================
+   SECTION 7 - BOUTON SAVED NOTES
+   ========================================================== */
+
 #saved-notes-button {
     position: fixed;
+
     top: 20px;
     right: 20px;
 
@@ -136,37 +187,65 @@ body {
     color: white;
 
     font-family: "Courier New", monospace;
+
     cursor: pointer;
 
     z-index: 1000;
-
 }
 
 
+/* Cache le bouton Notes lorsque le drawer est ouvert */
+#saved-notes-button.hidden {
+    display: none;
+}
+
+
+/* Compteur de notes */
+#notes-count {
+    display: inline-block;
+
+    margin-left: 4px;
+
+    font-size: 11px;
+}
+
+
+/* ==========================================================
+   SECTION 8 - PANNEAU SAVED NOTES
+   ========================================================== */
+
 #saved-notes-panel {
     position: fixed;
+
     top: 0;
     right: -380px;
 
     width: 350px;
     height: 100vh;
 
-    background-color: #f5ecd8;
-
     padding: 20px;
 
     box-sizing: border-box;
 
-    transition: right 0.35s ease;
+    background-color: #f5ecd8;
 
     overflow-y: auto;
+
+    transition: right 0.35s ease;
 
     z-index: 999;
 }
 
+
+/* Panneau ouvert */
 #saved-notes-panel.open {
     right: 0;
 }
+
+
+/* ==========================================================
+   SECTION 9 - HEADER DU PANNEAU
+   ========================================================== */
 
 .saved-notes-header {
     display: flex;
@@ -176,11 +255,18 @@ body {
 
 #close-notes-button {
     border: none;
+
     background: none;
 
     font-size: 28px;
+
     cursor: pointer;
 }
+
+
+/* ==========================================================
+   SECTION 10 - OUTILS / FILTRE PAR DATE
+   ========================================================== */
 
 .saved-notes-tools {
     margin: 20px 0;
@@ -188,50 +274,81 @@ body {
 
 #notes-date-filter {
     width: 100%;
+
     padding: 8px;
 
     box-sizing: border-box;
 }
 
+
+/* ==========================================================
+   SECTION 11 - LISTE DES NOTES
+   ========================================================== */
+
 #saved-notes-list {
     display: flex;
     flex-direction: column;
+
     gap: 12px;
 }
 
-#saved-notes-button.hidden {
-    display: none;
-}
 
+/* Carte d'une note sauvegardée */
 .saved-note {
     padding: 12px;
 
-    background-color: #eee3cf;
-
     border-radius: 8px;
+
+    background-color: #eee3cf;
 
     cursor: pointer;
 }
 
+
+/* Date de la note */
 .saved-note-date {
-    font-size: 12px;
-    color: #a18873;
     margin: 0 0 6px 0;
+
+    font-size: 12px;
+
+    color: #a18873;
 }
 
+
+/* Preview du texte */
 .saved-note-text {
     margin: 0 0 8px 0;
 }
 
+
+/* Infos : caractères + durée */
 .saved-note-info {
-    font-size: 11px;
-    color: #a18873;
     margin: 0;
+
+    font-size: 11px;
+
+    color: #a18873;
 }
 
-.hidden {
-    display: none !important
+
+/* ==========================================================
+   SECTION 12 - ÉTAT VIDE
+   ========================================================== */
+
+.no-notes-message {
+    margin-top: 30px;
+
+    color: #a18873;
+
+    font-size: 13px;
+
+    text-align: center;
 }
+
+
+/* ==========================================================
+   SECTION 13 - NOTE READER
+   ========================================================== */
 
 #note-reader {
     padding-top: 10px;
@@ -245,14 +362,22 @@ body {
 
 #note-reader-date {
     font-size: 12px;
+
     color: #a18873;
 }
 
 #note-reader-text {
     margin-top: 20px;
+
     white-space: pre-wrap;
+
     line-height: 1.5;
 }
+
+
+/* ==========================================================
+   SECTION 14 - NAVIGATION DU NOTE READER
+   ========================================================== */
 
 .note-reader-navigation {
     margin-top: 30px;
@@ -266,4 +391,21 @@ body {
     height: 40px;
 
     cursor: pointer;
+}
+
+
+/* Flèche indisponible */
+.note-reader-navigation button:disabled {
+    opacity: 0.3;
+
+    cursor: not-allowed;
+}
+
+
+/* ==========================================================
+   SECTION 15 - CLASSES UTILITAIRES
+   ========================================================== */
+
+.hidden {
+    display: none !important;
 }
