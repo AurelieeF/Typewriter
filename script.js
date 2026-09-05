@@ -167,11 +167,41 @@ doneButton.addEventListener("click", () => {
 
     const durationMinutes = Math.floor(durationMilliseconds / 60000);
 
-    console.log("Started:", startTime);
-    console.log("Finished:", endTime);
-    console.log("Duration:", durationMinutes, "minutes");
+
+    //on remplace console log par noteData const
+    //console.log("Started:", startTime);
+    //console.log("Finished:", endTime);
+    //console.log("Duration:", durationMinutes, "minutes");
 
     paperInfo.textContent = 'Written in ' + durationMinutes + ' minutes.';
+    // noteData représente la note complète
+    const noteData = {
+        text: text,
+        characterCount: text.length,
+        date: startTime.toLocaleDateString(),
+        startedAt: startTime.toISOString(),
+        finishedAt: endTime.toISOString(),
+        durationMinutes: durationMinutes
+    };
+
+    //fetch il sert a quoi?
+
+     fetch("http://127.0.0.1:5000/api/notes", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(noteData) //envoie la note a Python
+
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Saved note:", data);
+    });
+
 
     isFinished = true;
     doneButton.disabled = true;
@@ -187,3 +217,6 @@ function updatePaperHeight() {
 
     paper.style.height = `${newHeight}px`;
 }
+
+//faire en sorte que js appelle mon python tout seule (test -local)
+
