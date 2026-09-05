@@ -228,3 +228,42 @@ body {
     color: #a18873;
     margin: 0;
 }
+
+.hidden {
+    display: none;
+}
+
+#note-reader {
+    padding-top: 10px;
+}
+
+.note-reader-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#note-reader-date {
+    font-size: 12px;
+    color: #a18873;
+}
+
+#note-reader-text {
+    margin-top: 20px;
+    white-space: pre-wrap;
+    line-height: 1.5;
+}
+
+.note-reader-navigation {
+    margin-top: 30px;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.note-reader-navigation button {
+    width: 50px;
+    height: 40px;
+
+    cursor: pointer;
+}

@@ -16,6 +16,18 @@ const savedNotesPanel = document.getElementById("saved-notes-panel");
 const closeNotesButton = document.getElementById("close-notes-button");
 const savedNotesList = document.getElementById("saved-notes-list");
 
+const noteReader = document.getElementById("note-reader");
+
+const backToListButton = document.getElementById("back-to-list-button");
+
+const noteReaderDate = document.getElementById("note-reader-date");
+const noteReaderText = document.getElementById("note-reader-text");
+const noteReaderCounter = document.getElementById("note-reader-counter");
+
+const previousNoteButton = document.getElementById("previous-note-button");
+const nextNoteButton = document.getElementById("next-note-button");
+let currentDayNotes = [];
+let currentNoteIndex = 0;
 
 const MAX_CHARACTERS = 200;
 
@@ -271,3 +283,55 @@ function loadSavedNotes() {
 
         });
 }
+
+function openNoteReader(selectedNote, allNotes) {
+
+    currentDayNotes = allNotes.filter(note => {
+        return note.date === selectedNote.date;
+    });
+
+    currentNoteIndex = currentDayNotes.findIndex(note => {
+        return note.id === selectedNote.id;
+    });
+
+    savedNotesList.classList.add("hidden");
+    noteReader.classList.remove("hidden");
+
+    showCurrentNote();
+}
+
+function showCurrentNote() {
+
+    const note = currentDayNotes[currentNoteIndex];
+
+    noteReaderDate.textContent = note.date;
+    noteReaderText.textContent = note.text;
+
+    noteReaderCounter.textContent =
+        `Note ${currentNoteIndex + 1} of ${currentDayNotes.length}`;
+}
+
+nextNoteButton.addEventListener("click", () => {
+
+    if (currentNoteIndex < currentDayNotes.length - 1) {
+        currentNoteIndex++;
+        showCurrentNote();
+    }
+
+});
+
+previousNoteButton.addEventListener("click", () => {
+
+    if (currentNoteIndex > 0) {
+        currentNoteIndex--;
+        showCurrentNote();
+    }
+
+});
+
+backToListButton.addEventListener("click", () => {
+
+    noteReader.classList.add("hidden");
+    savedNotesList.classList.remove("hidden");
+
+});
