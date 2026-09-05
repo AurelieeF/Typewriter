@@ -104,3 +104,21 @@ def save_note():
         "message": "Note saved!",
         "id": note_id
     })
+
+@app.route("/api/notes/<int:note_id>", methods=["DELETE"])
+def delete_note(note_id):
+
+    with psycopg.connect(DATABASE_URL) as connection:
+        with connection.cursor() as cursor:
+
+            cursor.execute(
+                "DELETE FROM notes WHERE id = %s",
+                (note_id,)
+            )
+
+        connection.commit()
+
+    return jsonify({
+        "message": "Note deleted!",
+        "id": note_id
+    })

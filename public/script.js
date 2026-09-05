@@ -8,6 +8,7 @@ const paperDate = document.getElementById("paper-date");
 const paperInfo = document.getElementById("paper-info");
 const doneButton = document.getElementById("done-button");
 const newNoteButton = document.getElementById("new-note-button");
+const deleteNoteButton = document.getElementById("delete-note-button");
 const paper = document.querySelector(".paper");
 // Saved Notes
 const savedNotesButton = document.getElementById("saved-notes-button");
@@ -522,6 +523,35 @@ function resetNote() {
 }
 
 
-newNoteButton.addEventListener("click", () => {
-    resetNote();
+// ==========================================================
+// SECTION 15 - SUPPRIMER UNE NOTE
+// ==========================================================
+
+
+
+deleteNoteButton.addEventListener("click", () => {
+
+      if (!confirm("Delete this note?")) {
+    return;
+}
+
+    const note = currentDayNotes[currentNoteIndex];
+
+    fetch(`/api/notes/${note.id}`, {
+        method: "DELETE"
+    })
+        .then(response => response.json())
+        .then(data => {
+
+            console.log("Deleted:", data);
+
+            // recharge les notes
+            loadSavedNotes();
+
+            // revient à la liste
+            noteReader.classList.add("hidden");
+            savedNotesList.classList.remove("hidden");
+        });
+
+  
 });
