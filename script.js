@@ -35,7 +35,7 @@ function handleKey(key) {
     }
 
     paperText.textContent = text;
-    UpdatePaperHeight();
+    updatePaperHeight();
 }
 
 
@@ -184,9 +184,18 @@ doneButton.addEventListener("click", () => {
         durationMinutes: durationMinutes
     };
 
-    //fetch il sert a quoi?
+    //fetch il sert a quoi? il fait la requete http depuis js vers le backend
+    /*JavaScript
+        ↓
+    envoie noteData
+        ↓
+    POST /api/notes
+        ↓
+    Flask reçoit
+        ↓
+    request.get_json() */
 
-     fetch("http://127.0.0.1:5000/api/notes", {
+    fetch("http://127.0.0.1:5000/api/notes", {
 
         method: "POST",
 
@@ -197,10 +206,10 @@ doneButton.addEventListener("click", () => {
         body: JSON.stringify(noteData) //envoie la note a Python
 
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Saved note:", data);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log("Saved note:", data);
+        });
 
 
     isFinished = true;
