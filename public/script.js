@@ -84,6 +84,10 @@ function handleKey(key) {
 
     // Met à jour le texte affiché
     paperText.textContent = text;
+    //update pour la connexion a three.js
+    if (window.update3DPaperText) {
+    window.update3DPaperText(text);
+}
 
     // Ajuste la hauteur de la feuille
     updatePaperHeight();

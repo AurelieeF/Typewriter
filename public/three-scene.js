@@ -78,6 +78,17 @@ scene.add(mainLight);
 const loader = new GLTFLoader();
 
 let typewriterModel = null;
+let paperObject = null;
+
+const paperCanvas = document.createElement("canvas");
+paperCanvas.width = 1024;
+paperCanvas.height = 1024;
+
+const paperContext = paperCanvas.getContext("2d");
+
+const paperTexture = new THREE.CanvasTexture(paperCanvas);
+
+paperTexture.colorSpace = THREE.SRGBColorSpace;
 // ==========================================================
 // KEYBOARD → OBJETS BLENDER
 // ==========================================================
@@ -153,6 +164,20 @@ loader.load(
         typewriterModel = gltf.scene;
 
         scene.add(typewriterModel);
+        paperObject = typewriterModel.getObjectByName("Paper");
+
+        if (!paperObject) {
+            console.warn("Paper not found");
+        }
+        else {
+            console.log("Paper found!");
+
+            paperObject.material = new THREE.MeshStandardMaterial({
+                map: paperTexture,
+                roughness: 0.9,
+                metalness: 0
+            });
+        }
 
 
         // --------------------------------------------------
@@ -443,6 +468,62 @@ window.addEventListener(
 
     }
 );
+
+function update3DPaperText(text) {
+
+    if (!paperObject) {
+        return;
+    }
+
+    // Fond papier
+    paperContext.fillStyle = "#f5f0e6";
+
+    paperContext.fillRect(
+        0,
+        0,
+        paperCanvas.width,
+        paperCanvas.height
+    );
+
+
+    // Style du texte
+    paperContext.fillStyle = "#2f2924";
+
+    paperContext.font =
+        "42px Courier New";
+
+    paperContext.textBaseline =
+        "top";
+
+
+    // Marges
+    const startX = 90;
+    const startY = 120;
+
+    const lineHeight = 55;
+
+
+    // Gère les retours à la ligne
+    const lines = text.split("\n");
+
+
+    lines.forEach((line, index) => {
+
+        paperContext.fillText(
+            line,
+            startX,
+            startY + index * lineHeight
+        );
+
+    });
+
+
+    // Informe Three.js que la texture a changé
+    paperTexture.needsUpdate = true;
+}
+
+window.update3DPaperText =
+    update3DPaperText;
 
 
 // ==========================================================
