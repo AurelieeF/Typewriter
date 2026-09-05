@@ -5,6 +5,7 @@ import psycopg
 
 app = Flask(__name__)
 CORS(app)
+
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
@@ -14,18 +15,6 @@ def test():
         "message": "The backend is workingggg!"
     })
 
-
-@app.route("/api/notes", methods=["POST"])
-def save_note():
-
-    note = request.get_json()
-
-    print(note)
-
-    return jsonify({
-        "message": "Note received!",
-        "note": note
-    })
 
 @app.route("/api/db-test", methods=["GET"])
 def db_test():
@@ -40,7 +29,7 @@ def db_test():
         "result": result[0]
     })
 
-#test temporaire
+
 @app.route("/api/notes", methods=["POST"])
 def save_note():
 
