@@ -7,8 +7,8 @@ const paperText = document.getElementById("paper-text");
 const paperDate = document.getElementById("paper-date");
 const paperInfo = document.getElementById("paper-info");
 const doneButton = document.getElementById("done-button");
+const newNoteButton = document.getElementById("new-note-button");
 const paper = document.querySelector(".paper");
-
 // Saved Notes
 const savedNotesButton = document.getElementById("saved-notes-button");
 const savedNotesPanel = document.getElementById("saved-notes-panel");
@@ -48,7 +48,7 @@ let currentNoteIndex = 0;
 const MAX_CHARACTERS = 200;
 
 // Heure de début de la note
-const startTime = new Date();
+let startTime = new Date();
 
 // Affiche la date/heure sur le papier
 paperDate.textContent = startTime.toLocaleString();
@@ -490,3 +490,38 @@ notesDateFilter.addEventListener("change", () => {
     displayNotes(filteredNotes);
 });
 
+
+// ==========================================================
+// SECTION 15 - CRÉER UNE NOUVELLE NOTE
+// ==========================================================
+
+function resetNote() {
+
+    // Réinitialise le texte
+    text = "";
+
+    // Réactive l'écriture
+    isFinished = false;
+
+    // Nouvelle heure de début
+    startTime = new Date();
+
+    // Réinitialise le papier
+    paperText.textContent = "";
+    paperInfo.textContent = "";
+    paperDate.textContent = startTime.toLocaleString();
+
+    // Remet la hauteur du papier à zéro
+    paper.style.height = "";
+
+    // Retire l'animation de sauvegarde
+    paper.classList.remove("saving");
+
+    // Réactive Done
+    doneButton.disabled = false;
+}
+
+
+newNoteButton.addEventListener("click", () => {
+    resetNote();
+});
