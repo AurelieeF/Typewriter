@@ -78,9 +78,14 @@ function handleKey(key) {
     }
 
     // Nouvelle ligne
-    else if (key === "Enter" && text.length < MAX_CHARACTERS) {
-        text += "\n";
+   else if (key === "Enter" && text.length < MAX_CHARACTERS) {
+
+    text += "\n";
+
+    if (window.feed3DPaper) {
+        window.feed3DPaper();
     }
+}
 
     // Met à jour le texte affiché
     paperText.textContent = text;

@@ -56,6 +56,11 @@ let typewriterModel = null;
 let paperObject = null;
 let paperTextSprite = null;
 
+let rollerObject = null;
+
+let paperStartY = null;
+let rollerStartRotation = null;
+
 const paperCanvas = document.createElement("canvas");
 
 paperCanvas.width = 1024;
@@ -208,6 +213,21 @@ loader.load(
 
         }
 
+        rollerObject =
+    typewriterModel.getObjectByName(
+        "Roller"
+    );
+
+if (paperObject) {
+    paperStartY =
+        paperObject.position.y;
+}
+
+if (rollerObject) {
+    rollerStartRotation =
+        rollerObject.rotation.x;
+}
+
         console.log(
             "Typewriter loaded!"
         );
@@ -237,57 +257,141 @@ loader.load(
 
     }
 );
+function feedPaper() {
+
+    if (!paperObject) {
+        return;
+    }
+
+    // La feuille monte légèrement
+    paperObject.position.y += 0.015;
+
+
+    // Le roller tourne
+    if (rollerObject) {
+        rollerObject.rotation.x += 0.15;
+    }
+}
+window.feed3DPaper =
+    feedPaper;
 
 function createPaperTextSprite() {
+
+    // Bounding box LOCALE du vrai Paper Blender
+    if (!paperObject.geometry.boundingBox) {
+        paperObject.geometry.computeBoundingBox();
+    }
+
+    const box = paperObject.geometry.boundingBox;
+
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+
 
     const textMaterial = new THREE.MeshBasicMaterial({
         map: paperTexture,
         transparent: true,
-        depthTest: false,
+        depthTest: true,
         depthWrite: false,
         side: THREE.DoubleSide
     });
 
-    const textGeometry = new THREE.PlaneGeometry(
-        1,
-        1
-    );
 
-    paperTextSprite = new THREE.Mesh(
-        textGeometry,
-        textMaterial
-    );
+    /*
+        On détecte automatiquement l'axe le plus mince
+        du Paper.
 
-    // On attache le texte directement au Paper
+        Le Paper est essentiellement un cube très mince.
+        L'axe le plus mince = profondeur de la feuille.
+    */
+
+    if (
+        size.z <= size.x &&
+        size.z <= size.y
+    ) {
+
+        // Grande face = XY
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.x * 0.92,
+                size.y * 0.92
+            ),
+            textMaterial
+        );
+
+        paperTextSprite.position.set(
+            center.x,
+            center.y,
+            box.min.z - 0.001
+        );
+
+    }
+
+    else if (
+        size.y <= size.x &&
+        size.y <= size.z
+    ) {
+
+        // Grande face = XZ
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.x * 0.92,
+                size.z * 0.92
+            ),
+            textMaterial
+        );
+
+        paperTextSprite.rotation.x =
+            Math.PI / 2;
+
+        paperTextSprite.position.set(
+            center.x,
+            box.min.y - 0.001,
+            center.z
+        );
+
+    }
+
+    else {
+
+        // Grande face = YZ
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.y * 0.92,
+                size.z * 0.92
+            ),
+            textMaterial
+        );
+
+        paperTextSprite.rotation.y =
+            Math.PI / 2;
+
+        paperTextSprite.position.set(
+            box.min.x - 0.001,
+            center.y,
+            center.z
+        );
+
+    }
+
+
     paperObject.add(
         paperTextSprite
     );
 
-    paperTextSprite.rotation.set(
-        0,
-        0,
-        0
-    );
 
-    paperTextSprite.position.set(
-        0,
-        0,
-        -0.01
-    );
+    paperTextSprite.renderOrder =
+        10;
 
-    paperTextSprite.scale.set(
-        0.85,
-        0.65,
-        1
-    );
-
-    paperTextSprite.scale.x *= -1;
-    paperTextSprite.renderOrder = 1000;
 
     update3DPaperText("");
 
     console.log(
-        "Paper text attached!"
+        "Text fitted to real Paper surface",
+        size
     );
 }
 
@@ -522,10 +626,10 @@ function update3DPaperText(
         "top";
 
     const leftMargin =
-        100;
+        70;
 
     const topMargin =
-        110;
+        70;
 
     const lineHeight =
         48;
