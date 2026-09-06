@@ -185,10 +185,10 @@ loader.load(
             );
 
         camera.position.set(
-    0,
-    maxDimension * 1.05,
-    maxDimension * 1.2
-);
+            0,
+            maxDimension * 1.40,
+            maxDimension * 1.8
+        );
 
         camera.lookAt(
             0,
@@ -214,19 +214,19 @@ loader.load(
         }
 
         rollerObject =
-    typewriterModel.getObjectByName(
-        "Roller"
-    );
+            typewriterModel.getObjectByName(
+                "Roller"
+            );
 
-if (paperObject) {
-    paperStartY =
-        paperObject.position.y;
-}
+        if (paperObject) {
+            paperStartY =
+                paperObject.position.y;
+        }
 
-if (rollerObject) {
-    rollerStartRotation =
-        rollerObject.rotation.x;
-}
+        if (rollerObject) {
+            rollerStartRotation =
+                rollerObject.rotation.x;
+        }
 
         console.log(
             "Typewriter loaded!"
