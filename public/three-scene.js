@@ -626,13 +626,13 @@ function update3DPaperText(
         "top";
 
     const leftMargin =
-        70;
+        140;
 
     const topMargin =
-        70;
+        140;
 
     const lineHeight =
-        48;
+        96;
 
     const maxWidth =
         paperCanvas.width -
