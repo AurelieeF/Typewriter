@@ -29,6 +29,9 @@ const nextNoteButton = document.getElementById("next-note-button");
 
 // Toutes les touches du clavier virtuel
 const keys = document.querySelectorAll(".key");
+// Switch 2D / 3D
+const viewModeToggle =
+    document.getElementById("view-mode-toggle");
 
 
 
@@ -569,4 +572,25 @@ deleteNoteButton.addEventListener("click", () => {
             noteReader.classList.add("hidden");
             savedNotesList.classList.remove("hidden");
         });
+});
+
+// ==========================================================
+// SECTION 17 - MODE 2D / 3D
+// ==========================================================
+
+viewModeToggle.addEventListener("change", () => {
+
+    if (viewModeToggle.checked) {
+
+        // Mode 3D
+        document.body.classList.remove("mode-2d");
+
+    }
+    else {
+
+        // Mode 2D
+        document.body.classList.add("mode-2d");
+
+    }
+
 });

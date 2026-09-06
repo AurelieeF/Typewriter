@@ -5,137 +5,361 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Typewriter</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
+
     <main class="typewriter-app">
-        <div id="typewriter-3d"></div>
-        <div class="typewriter">
-            <h1>Welcome to the Typewriter Effect!</h1>
+
+
+        <!-- ==================================================
+             MODE SWITCH
+        =================================================== -->
+
+        <div class="mode-switch">
+
+            <span class="mode-label">2D</span>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    id="view-mode-toggle"
+                    checked
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+            <span class="mode-label">3D</span>
+
         </div>
-        <section class="paper-slot">
-            <section class="paper">
-                <p id="paper-date"></p>
-                <p id="paper-text"></p>
-                <p id="paper-info"></p>
-            </section>
-        </section>
-        <button id="done-button">Done</button>
-        <button id="new-note-button">New Note</button>
-        <section class="keyboard">
-            <div class="keyboard-row">
-                <button class="key" data-key="1">1</button>
-                <button class="key" data-key="2">2</button>
-                <button class="key" data-key="3">3</button>
-                <button class="key" data-key="4">4</button>
-                <button class="key" data-key="5">5</button>
-                <button class="key" data-key="6">6</button>
-                <button class="key" data-key="7">7</button>
-                <button class="key" data-key="8">8</button>
-                <button class="key" data-key="9">9</button>
-                <button class="key" data-key="0">0</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key" data-key="q">Q</button>
-                <button class="key" data-key="w">W</button>
-                <button class="key" data-key="e">E</button>
-                <button class="key" data-key="r">R</button>
-                <button class="key" data-key="t">T</button>
-                <button class="key" data-key="y">Y</button>
-                <button class="key" data-key="u">U</button>
-                <button class="key" data-key="i">I</button>
-                <button class="key" data-key="o">O</button>
-                <button class="key" data-key="p">P</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key" data-key="a">A</button>
-                <button class="key" data-key="s">S</button>
-                <button class="key" data-key="d">D</button>
-                <button class="key" data-key="f">F</button>
-                <button class="key" data-key="g">G</button>
-                <button class="key" data-key="h">H</button>
-                <button class="key" data-key="j">J</button>
-                <button class="key" data-key="k">K</button>
-                <button class="key" data-key="l">L</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key" data-key="z">Z</button>
-                <button class="key" data-key="x">X</button>
-                <button class="key" data-key="c">C</button>
-                <button class="key" data-key="v">V</button>
-                <button class="key" data-key="b">B</button>
-                <button class="key" data-key="n">N</button>
-                <button class="key" data-key="m">M</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key" data-key=",">,</button>
-                <button class="key" data-key=".">.</button>
-                <button class="key" data-key="?">?</button>
-                <button class="key" data-key="!">!</button>
-                <button class="key" data-key=";">;</button>
-                <button class="key" data-key=":">:</button>
-                <button class="key" data-key="'">'</button>
-                <button class="key" data-key='"'>"</button>
-                <button class="key" data-key="-">-</button>
-                <button class="key" data-key="/">/</button>
-            </div>
-            <div class="keyboard-row">
+
+
+        <!-- ==================================================
+             TYPEWRITER VIEWS
+        =================================================== -->
+
+        <div class="typewriter-views">
+
+
+            <!-- ==================================================
+                 MODE 3D
+            =================================================== -->
+
+            <div
+                id="typewriter-3d"
+                class="typewriter-view view-3d"
+            ></div>
+
+
+            <!-- ==================================================
+                 MODE 2D
+            =================================================== -->
+
+            <div class="typewriter-view view-2d">
+
+
+                <!-- TITLE -->
+
+                <div class="typewriter">
+
+                    <h1>
+                        Welcome to the Typewriter Effect!
+                    </h1>
+
+                </div>
+
+
+                <!-- PAPER -->
+
+                <section class="paper-slot">
+
+                    <section class="paper">
+
+                        <p id="paper-date"></p>
+
+                        <p id="paper-text"></p>
+
+                        <p id="paper-info"></p>
+
+                    </section>
+
+                </section>
+
+
+                <!-- ==================================================
+                     2D KEYBOARD
+                =================================================== -->
+
+                <section class="keyboard">
+
+
+                    <!-- NUMBERS -->
+
+                    <div class="keyboard-row">
+
+                        <button class="key" data-key="1">1</button>
+                        <button class="key" data-key="2">2</button>
+                        <button class="key" data-key="3">3</button>
+                        <button class="key" data-key="4">4</button>
+                        <button class="key" data-key="5">5</button>
+                        <button class="key" data-key="6">6</button>
+                        <button class="key" data-key="7">7</button>
+                        <button class="key" data-key="8">8</button>
+                        <button class="key" data-key="9">9</button>
+                        <button class="key" data-key="0">0</button>
+
+                    </div>
+
+
+                    <!-- QWERTY -->
+
+                    <div class="keyboard-row">
+
+                        <button class="key" data-key="q">Q</button>
+                        <button class="key" data-key="w">W</button>
+                        <button class="key" data-key="e">E</button>
+                        <button class="key" data-key="r">R</button>
+                        <button class="key" data-key="t">T</button>
+                        <button class="key" data-key="y">Y</button>
+                        <button class="key" data-key="u">U</button>
+                        <button class="key" data-key="i">I</button>
+                        <button class="key" data-key="o">O</button>
+                        <button class="key" data-key="p">P</button>
+
+                    </div>
+
+
+                    <!-- ASDF -->
+
+                    <div class="keyboard-row">
+
+                        <button class="key" data-key="a">A</button>
+                        <button class="key" data-key="s">S</button>
+                        <button class="key" data-key="d">D</button>
+                        <button class="key" data-key="f">F</button>
+                        <button class="key" data-key="g">G</button>
+                        <button class="key" data-key="h">H</button>
+                        <button class="key" data-key="j">J</button>
+                        <button class="key" data-key="k">K</button>
+                        <button class="key" data-key="l">L</button>
+
+                    </div>
+
+
+                    <!-- ZXCV -->
+
+                    <div class="keyboard-row">
+
+                        <button class="key" data-key="z">Z</button>
+                        <button class="key" data-key="x">X</button>
+                        <button class="key" data-key="c">C</button>
+                        <button class="key" data-key="v">V</button>
+                        <button class="key" data-key="b">B</button>
+                        <button class="key" data-key="n">N</button>
+                        <button class="key" data-key="m">M</button>
+
+                    </div>
+
+
+                    <!-- PUNCTUATION -->
+
+                    <div class="keyboard-row">
+
+                        <button class="key" data-key=",">,</button>
+                        <button class="key" data-key=".">.</button>
+                        <button class="key" data-key="?">?</button>
+                        <button class="key" data-key="!">!</button>
+                        <button class="key" data-key=";">;</button>
+                        <button class="key" data-key=":">:</button>
+                        <button class="key" data-key="'">'</button>
+                        <button class="key" data-key='"'>"</button>
+                        <button class="key" data-key="-">-</button>
+                        <button class="key" data-key="/">/</button>
+
+                    </div>
+
+
+                    <!-- SPECIAL KEYS -->
+
+                    <div class="keyboard-row">
+
+                        <button
+                            class="key special-key caps-key"
+                            data-key="CapsLock"
+                        >
+                            CapsLk
+                        </button>
+
+                        <button
+                            class="key special-key space-key"
+                            data-key=" "
+                        >
+                            Space
+                        </button>
+
+                        <button
+                            class="key special-key enter-key"
+                            data-key="Enter"
+                        >
+                            Enter
+                        </button>
+
+                        <button
+                            class="key special-key backspace-key"
+                            data-key="Backspace"
+                        >
+                            Backspace
+                        </button>
+
+                    </div>
+
+
+                </section>
 
             </div>
-            <div class="keyboard-row">
-                <button class="key special-key caps-key" data-key="CapsLock">CapsLk</button>
-                <button class="key special-key space-key" data-key=" ">Space</button>
-                <button class="key special-key enter-key" data-key="Enter">Enter</button>
-                <button class="key special-key backspace-key" data-key="Backspace">Backspace</button>
-            </div>
-        </section>
+
+        </div>
+
+
+        <!-- ==================================================
+             SHARED CONTROLS
+        =================================================== -->
+
+        <div class="typewriter-controls">
+
+            <button id="done-button">
+                Done
+            </button>
+
+            <button id="new-note-button">
+                New Note
+            </button>
+
+        </div>
+
+
     </main>
+
+
+    <!-- ==================================================
+         SAVED NOTES BUTTON
+    =================================================== -->
+
     <button id="saved-notes-button">
+
         Notes
-        <span id="notes-count">0</span>
+
+        <span id="notes-count">
+            0
+        </span>
+
     </button>
 
+
+    <!-- ==================================================
+         SAVED NOTES PANEL
+    =================================================== -->
+
     <aside id="saved-notes-panel">
+
+
         <div class="saved-notes-header">
-            <h2>Saved Notes</h2>
-            <button id="close-notes-button">×</button>
+
+            <h2>
+                Saved Notes
+            </h2>
+
+            <button id="close-notes-button">
+                ×
+            </button>
+
         </div>
+
 
         <div class="saved-notes-tools">
-            <input type="date" id="notes-date-filter">
+
+            <input
+                type="date"
+                id="notes-date-filter"
+            >
+
         </div>
+
 
         <div id="saved-notes-list">
-            <!-- Les notes vont etre ajoutees ici avec javaScript.. suposemment -->
+
+            <!-- Notes added with JavaScript -->
+
         </div>
-        <div id="note-reader" class="hidden">
+
+
+        <!-- ==================================================
+             NOTE READER
+        =================================================== -->
+
+        <div
+            id="note-reader"
+            class="hidden"
+        >
+
 
             <div class="note-reader-header">
-                <button id="back-to-list-button">← Back</button>
+
+                <button id="back-to-list-button">
+                    ← Back
+                </button>
 
                 <span id="note-reader-counter"></span>
+
             </div>
+
 
             <p id="note-reader-date"></p>
 
+
             <div id="note-reader-text"></div>
 
+
             <div class="note-reader-navigation">
-                <button id="previous-note-button">←</button>
-                <button id="next-note-button">→</button>
+
+                <button id="previous-note-button">
+                    ←
+                </button>
+
+                <button id="next-note-button">
+                    →
+                </button>
+
             </div>
 
-            <button id="delete-note-button">Delete</button>
+
+            <button id="delete-note-button">
+                Delete
+            </button>
+
 
         </div>
+
+
     </aside>
 
+
     <footer>
-        <p>© 2026 AurelieeF. All rights reserved.</p>
+
+        <p>
+            © 2026 AurelieeF. All rights reserved.
+        </p>
 
     </footer>
+
 
     <script type="importmap">
     {
@@ -146,10 +370,15 @@
     }
     </script>
 
+
     <script src="script.js"></script>
-    <script type="module" src="three-scene.js"></script>
+
+    <script
+        type="module"
+        src="three-scene.js"
+    ></script>
+
 
 </body>
 
 </html>
-
