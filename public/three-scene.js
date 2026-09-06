@@ -382,6 +382,8 @@ function createPaperTextSprite() {
         paperTextSprite
     );
 
+    paperTextSprite.scale.x *= -1;
+
 
     paperTextSprite.renderOrder =
         10;
