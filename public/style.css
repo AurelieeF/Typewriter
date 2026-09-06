@@ -551,8 +551,8 @@ body {
 
 #typewriter-3d {
     width: min(1200px, 95vw);
-    height: 900px;
-    margin: 0 auto;
+    height: 1100px;
+    margin: 100px auto 0;
 }
 
 #typewriter-3d canvas {

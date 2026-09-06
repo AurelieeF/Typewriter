@@ -325,7 +325,7 @@ function createPaperTextSprite() {
         paperTextSprite.position.set(
             center.x,
             center.y,
-            box.min.z - 0.001
+            box.min.z + 0.001
         );
 
     }
