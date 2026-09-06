@@ -63,8 +63,8 @@ let rollerStartRotation = null;
 
 const paperCanvas = document.createElement("canvas");
 
-paperCanvas.width = 1024;
-paperCanvas.height = 1024;
+paperCanvas.width = 2084;
+paperCanvas.height = 2048;
 
 const paperContext =
     paperCanvas.getContext("2d");
@@ -620,7 +620,7 @@ function update3DPaperText(
         "#241f1b";
 
     paperContext.font =
-        "36px Courier New";
+        "72px Courier New";
 
     paperContext.textBaseline =
         "top";
