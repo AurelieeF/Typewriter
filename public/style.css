@@ -550,9 +550,8 @@ body {
    ========================================================== */
 
 #typewriter-3d {
-    width: 800px;
-    max-width: 100%;
-    height: 600px;
+    width: min(1100px, 95vw);
+    height: 800px;
 }
 
 #typewriter-3d canvas {
