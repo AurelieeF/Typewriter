@@ -620,7 +620,7 @@ function update3DPaperText(
         "#241f1b";
 
     paperContext.font =
-        "72px Courier New";
+        "100px Courier New";
 
     paperContext.textBaseline =
         "top";
