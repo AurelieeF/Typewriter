@@ -271,23 +271,46 @@ loader.load(
 
     }
 );
-function feedPaper() {
+function feedPaper(direction = 1) {
 
-    if (!paperObject) {
+    if (!paperObject || paperStartY === null) {
         return;
     }
 
-    // La feuille monte légèrement
-    paperObject.position.y += 0.015;
+    const lineMovement = 0.015;
+    const rollerMovement = 0.15;
 
+    const newPaperY =
+        paperObject.position.y +
+        lineMovement * direction;
 
-    // Le roller tourne
+    // NEVERRRR allow the paper below its starting position
+    paperObject.position.y =
+        Math.max(
+            paperStartY,
+            newPaperY
+        );
+
     if (rollerObject) {
-        rollerObject.rotation.x += 0.15;
+
+        if (paperObject.position.y > paperStartY) {
+
+            rollerObject.rotation.x +=
+                rollerMovement * direction;
+
+        }
+        else {
+
+            paperObject.position.y =
+                paperStartY;
+
+            rollerObject.rotation.x =
+                rollerStartRotation;
+        }
     }
 }
-window.feed3DPaper =
-    feedPaper;
+
+window.feed3DPaper = feedPaper;
 
 
 
