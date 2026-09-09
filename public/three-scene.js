@@ -208,6 +208,20 @@ loader.load(
             );
 
         } else {
+            const paperWorldBox =
+                new THREE.Box3().setFromObject(
+                    paperObject
+                );
+
+            const paperWorldSize =
+                paperWorldBox.getSize(
+                    new THREE.Vector3()
+                );
+
+            typewriterModel.position.y -=
+                paperWorldSize.y * 0.9;
+
+            typewriterModel.updateMatrixWorld(true);
 
             createPaperTextSprite();
 
@@ -274,6 +288,8 @@ function feedPaper() {
 }
 window.feed3DPaper =
     feedPaper;
+
+
 
 function createPaperTextSprite() {
 
