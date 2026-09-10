@@ -188,7 +188,7 @@ loader.load(
         camera.position.set(
             0,
             maxDimension * 1.05,
-            maxDimension * 1-.90
+            maxDimension * 1.90
         );
 
         camera.lookAt(
