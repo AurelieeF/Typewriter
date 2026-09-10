@@ -281,7 +281,7 @@ function feedPaper(lineDifference) {
         return;
     }
 
-    const lineMovement = 0.0055;
+    const lineMovement = 0.006;
     const rollerMovement = 0.15;
 
     const targetY =
