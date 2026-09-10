@@ -64,8 +64,8 @@ let previousVisualLineCount = 1;
 
 const paperCanvas = document.createElement("canvas");
 
-paperCanvas.width = 4096;
-paperCanvas.height = 4096;
+paperCanvas.width = 2084;
+paperCanvas.height = 2048;
 
 const paperContext =
     paperCanvas.getContext("2d");
@@ -77,16 +77,10 @@ paperTexture.colorSpace =
     THREE.SRGBColorSpace;
 
 paperTexture.minFilter =
-    THREE.LinearMipmapLinearFilter;
+    THREE.LinearFilter;
 
 paperTexture.magFilter =
     THREE.LinearFilter;
-
-paperTexture.generateMipmaps =
-    true;
-
-paperTexture.anisotropy =
-    renderer.capabilities.getMaxAnisotropy();
 
 const key3DMap = {
     "1": "Key_1",
@@ -193,8 +187,8 @@ loader.load(
 
         camera.position.set(
             0,
-            maxDimension * 1.5,
-            maxDimension * 1.90
+            maxDimension * 1.05,
+            maxDimension * 1.2
         );
 
         camera.lookAt(
@@ -671,8 +665,8 @@ function getVisualLines(text) {
     paperContext.font =
         "100px Courier New";
 
-    const leftMargin = 280;
-    const rightMargin = 280;
+    const leftMargin = 140;
+    const rightMargin = 140;
 
     const maxWidth =
         paperCanvas.width -
@@ -730,7 +724,7 @@ function getVisualLines(text) {
 
 function canFitOnPaper(text) {
 
-    const topMargin = 280;
+    const topMargin = 140;
     const bottomMargin = 140;
     const lineHeight = 96;
 
