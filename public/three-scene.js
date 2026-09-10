@@ -208,20 +208,6 @@ loader.load(
             );
 
         } else {
-            const paperWorldBox =
-                new THREE.Box3().setFromObject(
-                    paperObject
-                );
-
-            const paperWorldSize =
-                paperWorldBox.getSize(
-                    new THREE.Vector3()
-                );
-
-            typewriterModel.position.y -=
-                paperWorldSize.y * 0.9;
-
-            typewriterModel.updateMatrixWorld(true);
 
             createPaperTextSprite();
 
@@ -271,48 +257,23 @@ loader.load(
 
     }
 );
-function feedPaper(direction = 1) {
+function feedPaper() {
 
-    if (!paperObject || paperStartY === null) {
+    if (!paperObject) {
         return;
     }
 
-    const lineMovement = 0.015;
-    const rollerMovement = 0.15;
+    // La feuille monte légèrement
+    paperObject.position.y += 0.015;
 
-    const newPaperY =
-        paperObject.position.y +
-        lineMovement * direction;
 
-    // NEVERRRR allow the paper below its starting position
-    paperObject.position.y =
-        Math.max(
-            paperStartY,
-            newPaperY
-        );
-
+    // Le roller tourne
     if (rollerObject) {
-
-        if (paperObject.position.y > paperStartY) {
-
-            rollerObject.rotation.x +=
-                rollerMovement * direction;
-
-        }
-        else {
-
-            paperObject.position.y =
-                paperStartY;
-
-            rollerObject.rotation.x =
-                rollerStartRotation;
-        }
+        rollerObject.rotation.x += 0.15;
     }
 }
-
-window.feed3DPaper = feedPaper;
-
-
+window.feed3DPaper =
+    feedPaper;
 
 function createPaperTextSprite() {
 
