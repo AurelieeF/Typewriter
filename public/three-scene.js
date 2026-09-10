@@ -77,10 +77,16 @@ paperTexture.colorSpace =
     THREE.SRGBColorSpace;
 
 paperTexture.minFilter =
-    THREE.LinearFilter;
+    THREE.LinearMipmapLinearFilter;
 
 paperTexture.magFilter =
     THREE.LinearFilter;
+
+paperTexture.generateMipmaps =
+    true;
+
+paperTexture.anisotropy =
+    renderer.capabilities.getMaxAnisotropy();
 
 const key3DMap = {
     "1": "Key_1",
