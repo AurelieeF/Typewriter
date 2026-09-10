@@ -663,7 +663,7 @@ renderer.domElement.addEventListener(
 function getVisualLines(text) {
 
     paperContext.font =
-        "100px Courier New";
+        "bold 100px Courier New";
 
     const leftMargin = 140;
     const rightMargin = 140;
