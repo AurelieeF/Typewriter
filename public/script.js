@@ -1,596 +1,797 @@
-// ==========================================================
-// SECTION 1 - ÉLÉMENTS HTML
-// ==========================================================
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-// Papier / typewriter
-const paperText = document.getElementById("paper-text");
-const paperDate = document.getElementById("paper-date");
-const paperInfo = document.getElementById("paper-info");
-const doneButton = document.getElementById("done-button");
-const newNoteButton = document.getElementById("new-note-button");
-const deleteNoteButton = document.getElementById("delete-note-button");
-const paper = document.querySelector(".paper");
-// Saved Notes
-const savedNotesButton = document.getElementById("saved-notes-button");
-const savedNotesPanel = document.getElementById("saved-notes-panel");
-const closeNotesButton = document.getElementById("close-notes-button");
-const savedNotesList = document.getElementById("saved-notes-list");
-const notesDateFilter = document.getElementById("notes-date-filter");
-const notesCount = document.getElementById("notes-count");
+const container = document.getElementById("typewriter-3d");
 
-// Note Reader
-const noteReader = document.getElementById("note-reader");
-const backToListButton = document.getElementById("back-to-list-button");
-const noteReaderDate = document.getElementById("note-reader-date");
-const noteReaderText = document.getElementById("note-reader-text");
-const noteReaderCounter = document.getElementById("note-reader-counter");
-const previousNoteButton = document.getElementById("previous-note-button");
-const nextNoteButton = document.getElementById("next-note-button");
+const scene = new THREE.Scene();
 
-// Toutes les touches du clavier virtuel
-const keys = document.querySelectorAll(".key");
-// Switch 2D / 3D
-const viewModeToggle =
-    document.getElementById("view-mode-toggle");
+const camera = new THREE.PerspectiveCamera(
+    35,
+    container.clientWidth / container.clientHeight,
+    0.01,
+    100
+);
 
+const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true
+});
 
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, 3)
+);
 
-// ==========================================================
-// SECTION 2 - ÉTAT DE L'APPLICATION
-// ==========================================================
+renderer.setSize(
+    container.clientWidth,
+    container.clientHeight
+);
 
-let text = "";
-let capsLockActive = false;
-let isFinished = false;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-// Notes sauvegardées / lecteur
-let allSavedNotes = [];
-let currentDayNotes = [];
-let currentNoteIndex = 0;
+container.appendChild(renderer.domElement);
 
-// Limite de caractères
-const MAX_CHARACTERS = 200;
+const ambientLight = new THREE.AmbientLight(
+    0xffffff,
+    2
+);
 
-// Heure de début de la note
-let startTime = new Date();
+scene.add(ambientLight);
 
-// Affiche la date/heure sur le papier
-paperDate.textContent = startTime.toLocaleString();
+const mainLight = new THREE.DirectionalLight(
+    0xffffff,
+    3
+);
 
+mainLight.position.set(
+    3,
+    5,
+    4
+);
 
+scene.add(mainLight);
 
-// ==========================================================
-// SECTION 3 - LOGIQUE D'ÉCRITURE
-// ==========================================================
+const loader = new GLTFLoader();
 
-function handleKey(key) {
+let typewriterModel = null;
+let paperObject = null;
+let paperTextSprite = null;
 
-    // Une note terminée ne peut plus être modifiée
-    if (isFinished) {
-        return;
-    }
+let rollerObject = null;
 
-    // Lettre, chiffre, espace ou symbole
-    if (key.length === 1 && text.length < MAX_CHARACTERS) {
-        text += key;
-    }
+let paperStartY = null;
+let rollerStartRotation = null;
 
-    // Supprime le dernier caractère
-    else if (key === "Backspace") {
-        text = text.slice(0, -1);
-    }
+const paperCanvas = document.createElement("canvas");
 
-    // Nouvelle ligne
-   else if (key === "Enter" && text.length < MAX_CHARACTERS) {
+paperCanvas.width = 2084;
+paperCanvas.height = 2048;
 
-    text += "\n";
+const paperContext =
+    paperCanvas.getContext("2d");
 
-    if (window.feed3DPaper) {
-        window.feed3DPaper();
-    }
-}
+const paperTexture =
+    new THREE.CanvasTexture(paperCanvas);
 
-    // Met à jour le texte affiché
-    paperText.textContent = text;
-    //update pour la connexion a three.js
-    if (window.update3DPaperText) {
-        window.update3DPaperText(text);
-    }
+paperTexture.colorSpace =
+    THREE.SRGBColorSpace;
 
-    // Ajuste la hauteur de la feuille
-    updatePaperHeight();
-}
+paperTexture.minFilter =
+    THREE.LinearFilter;
 
-window.handleKey = handleKey;
+paperTexture.magFilter =
+    THREE.LinearFilter;
 
+const key3DMap = {
+    "1": "Key_1",
+    "2": "Key_2",
+    "3": "Key_3",
+    "4": "Key_4",
+    "5": "Key_5",
+    "6": "Key_6",
+    "7": "Key_7",
+    "8": "Key_8",
+    "9": "Key_9",
+    "0": "Key_0",
 
+    "a": "Key_A",
+    "b": "Key_B",
+    "c": "Key_C",
+    "d": "Key_D",
+    "e": "Key_E",
+    "f": "Key_F",
+    "g": "Key_G",
+    "h": "Key_H",
+    "i": "Key_I",
+    "j": "Key_J",
+    "k": "Key_K",
+    "l": "Key_L",
+    "m": "Key_M",
+    "n": "Key_N",
+    "o": "Key_O",
+    "p": "Key_P",
+    "q": "Key_Q",
+    "r": "Key_R",
+    "s": "Key_S",
+    "t": "Key_T",
+    "u": "Key_U",
+    "v": "Key_V",
+    "w": "Key_W",
+    "x": "Key_X",
+    "y": "Key_Y",
+    "z": "Key_Z",
 
-// ==========================================================
-// SECTION 4 - UTILITAIRES CLAVIER
-// ==========================================================
+    ",": "Key_Comma",
+    ".": "Key_Period",
+    "?": "Key_Question",
+    "!": "Key_Exclamation",
+    ";": "Key_Semicolon",
+    ":": "Key_Colon",
+    "'": "Key_Apostrophe",
+    '"': "Key_Quote",
+    "-": "Key_Minus",
+    "/": "Key_Slash",
 
-// Transforme seulement les caractères simples en minuscules
-// pour retrouver le bon data-key dans le HTML.
-// Ex: "A" -> "a"
-function getDataKey(key) {
+    " ": "Key_Space",
+    "Enter": "Key_Enter",
+    "Backspace": "Key_Backspace",
+    "CapsLock": "Key_CapsLock"
+};
 
-    if (key.length === 1) {
-        return key.toLowerCase();
-    }
+loader.load(
+    "./models/typewriter.glb",
 
-    return key;
-}
+    (gltf) => {
 
+        typewriterModel =
+            gltf.scene;
 
+        scene.add(
+            typewriterModel
+        );
 
-// ==========================================================
-// SECTION 5 - CLAVIER PHYSIQUE
-// ==========================================================
+        const box =
+            new THREE.Box3().setFromObject(
+                typewriterModel
+            );
 
-// Quand une touche physique est pressée
-window.addEventListener("keydown", (event) => {
+        const center =
+            box.getCenter(
+                new THREE.Vector3()
+            );
 
-    const pressedKey = event.key;
+        const size =
+            box.getSize(
+                new THREE.Vector3()
+            );
 
-    // Cherche la touche correspondante dans le clavier HTML
-    const keyElement = document.querySelector(
-        `.key[data-key="${getDataKey(pressedKey)}"]`
-    );
+        typewriterModel.position.x -=
+            center.x;
 
-    // Animation visuelle
-    if (keyElement) {
-        keyElement.classList.add("pressed");
-    }
+        typewriterModel.position.y -=
+            center.y;
 
-    // Caps Lock physique
-    if (pressedKey === "CapsLock") {
+        typewriterModel.position.z -=
+            center.z;
 
-        capsLockActive = event.getModifierState("CapsLock");
+        typewriterModel.updateMatrixWorld(
+            true
+        );
 
-        if (keyElement) {
+        const maxDimension =
+            Math.max(
+                size.x,
+                size.y,
+                size.z
+            );
 
-            if (capsLockActive) {
-                keyElement.classList.add("active");
-            }
-            else {
-                keyElement.classList.remove("active");
-            }
+        camera.position.set(
+            0,
+            maxDimension * 1.05,
+            maxDimension * 1.2
+        );
+
+        camera.lookAt(
+            0,
+            0,
+            0
+        );
+
+        paperObject =
+            typewriterModel.getObjectByName(
+                "Paper"
+            );
+
+        if (!paperObject) {
+
+            console.warn(
+                "Paper not found"
+            );
+
+        } else {
+            const paperWorldBox =
+                new THREE.Box3().setFromObject(
+                    paperObject
+                );
+
+            const paperWorldSize =
+                paperWorldBox.getSize(
+                    new THREE.Vector3()
+                );
+
+            typewriterModel.position.y -=
+                paperWorldSize.y * 0.9;
+
+            typewriterModel.updateMatrixWorld(true);
+
+            createPaperTextSprite();
+
         }
 
+        rollerObject =
+            typewriterModel.getObjectByName(
+                "Roller"
+            );
+
+        if (paperObject) {
+            paperStartY =
+                paperObject.position.y;
+        }
+
+        if (rollerObject) {
+            rollerStartRotation =
+                rollerObject.rotation.x;
+        }
+
+        console.log(
+            "Typewriter loaded!"
+        );
+
+        typewriterModel.traverse(
+            (object) => {
+
+                if (object.name) {
+                    console.log(
+                        object.name
+                    );
+                }
+
+            }
+        );
+
+    },
+
+    undefined,
+
+    (error) => {
+
+        console.error(
+            "Error loading typewriter:",
+            error
+        );
+
+    }
+);
+function feedPaper(direction = 1) {
+
+    if (!paperObject || paperStartY === null) {
         return;
     }
 
-    // Écrit la touche
-    handleKey(pressedKey);
-});
+    const lineMovement = 0.015;
+    const rollerMovement = 0.15;
+
+    const newPaperY =
+        paperObject.position.y +
+        lineMovement * direction;
+
+    // NEVERRRR allow the paper below its starting position
+    paperObject.position.y =
+        Math.max(
+            paperStartY,
+            newPaperY
+        );
+
+    if (rollerObject) {
+
+        if (paperObject.position.y > paperStartY) {
+
+            rollerObject.rotation.x +=
+                rollerMovement * direction;
+
+        }
+        else {
+
+            paperObject.position.y =
+                paperStartY;
+
+            rollerObject.rotation.x =
+                rollerStartRotation;
+        }
+    }
+}
+
+window.feed3DPaper = feedPaper;
 
 
-// Quand une touche physique est relâchée
-window.addEventListener("keyup", (event) => {
 
-    const releasedKey = event.key;
+function createPaperTextSprite() {
 
-    const keyElement = document.querySelector(
-        `.key[data-key="${getDataKey(releasedKey)}"]`
+    // Bounding box LOCALE du vrai Paper Blender
+    if (!paperObject.geometry.boundingBox) {
+        paperObject.geometry.computeBoundingBox();
+    }
+
+    const box = paperObject.geometry.boundingBox;
+
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+
+
+    const textMaterial = new THREE.MeshBasicMaterial({
+        map: paperTexture,
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        side: THREE.DoubleSide
+    });
+
+
+    /*
+        On détecte automatiquement l'axe le plus mince
+        du Paper.
+
+        Le Paper est essentiellement un cube très mince.
+        L'axe le plus mince = profondeur de la feuille.
+    */
+
+    if (
+        size.z <= size.x &&
+        size.z <= size.y
+    ) {
+
+        // Grande face = XY
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.x * 0.92,
+                size.y * 0.92
+            ),
+            textMaterial
+        );
+
+        paperTextSprite.position.set(
+            center.x,
+            center.y,
+            box.min.z + 0.001
+        );
+
+    }
+
+    else if (
+        size.y <= size.x &&
+        size.y <= size.z
+    ) {
+
+        // Grande face = XZ
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.x * 0.92,
+                size.z * 0.92
+            ),
+            textMaterial
+        );
+
+        paperTextSprite.rotation.x =
+            Math.PI / 2;
+
+        paperTextSprite.position.set(
+            center.x,
+            box.min.y - 0.001,
+            center.z
+        );
+
+    }
+
+    else {
+
+        // Grande face = YZ
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.y * 0.92,
+                size.z * 0.92
+            ),
+            textMaterial
+        );
+
+        paperTextSprite.rotation.y =
+            Math.PI / 2;
+
+        paperTextSprite.position.set(
+            box.min.x - 0.001,
+            center.y,
+            center.z
+        );
+
+    }
+
+
+    paperObject.add(
+        paperTextSprite
     );
 
-    if (keyElement) {
-        keyElement.classList.remove("pressed");
+    paperTextSprite.scale.x *= -1;
+
+
+    paperTextSprite.renderOrder =
+        10;
+
+
+    update3DPaperText("");
+
+    console.log(
+        "Text fitted to real Paper surface",
+        size
+    );
+}
+
+function press3DKey(
+    objectName
+) {
+
+    if (!typewriterModel) {
+        return;
     }
-});
 
+    const key =
+        typewriterModel.getObjectByName(
+            objectName
+        );
 
+    if (!key) {
 
-// ==========================================================
-// SECTION 6 - CLAVIER À LA SOURIS
-// ==========================================================
+        console.warn(
+            objectName +
+            " not found"
+        );
 
-keys.forEach((key) => {
+        return;
+    }
 
-    // Quand la souris appuie sur une touche
-    key.addEventListener("mousedown", () => {
+    if (
+        key.userData.originalY ===
+        undefined
+    ) {
 
-        key.classList.add("pressed");
+        key.userData.originalY =
+            key.position.y;
 
-        const clickedKey = key.dataset.key;
+    }
 
-        // Caps Lock virtuel
-        if (clickedKey === "CapsLock") {
+    key.position.y =
+        key.userData.originalY -
+        0.015;
 
-            capsLockActive = !capsLockActive;
+    setTimeout(
+        () => {
 
-            if (capsLockActive) {
-                key.classList.add("active");
-            }
-            else {
-                key.classList.remove("active");
-            }
+            key.position.y =
+                key.userData.originalY;
 
+        },
+        100
+    );
+}
+
+window.addEventListener(
+    "keydown",
+    (event) => {
+
+        let pressedKey =
+            event.key;
+
+        if (
+            pressedKey.length === 1
+        ) {
+
+            pressedKey =
+                pressedKey.toLowerCase();
+
+        }
+
+        const objectName =
+            key3DMap[
+            pressedKey
+            ];
+
+        if (!objectName) {
             return;
         }
 
-        // Si Caps Lock est actif, transforme la lettre en majuscule
-        if (capsLockActive && clickedKey.length === 1) {
-            handleKey(clickedKey.toUpperCase());
+        press3DKey(
+            objectName
+        );
+
+    }
+);
+
+function getKeyValueFrom3DObject(
+    objectName
+) {
+
+    for (
+        const [
+            keyValue,
+            mappedObject
+        ]
+        of Object.entries(
+            key3DMap
+        )
+    ) {
+
+        if (
+            mappedObject ===
+            objectName
+        ) {
+
+            return keyValue;
+
         }
-        else {
-            handleKey(clickedKey);
-        }
-    });
 
-
-    // Quand la souris relâche une touche
-    key.addEventListener("mouseup", () => {
-        key.classList.remove("pressed");
-    });
-});
-
-
-
-// ==========================================================
-// SECTION 7 - FEUILLE / HAUTEUR DU PAPIER
-// ==========================================================
-
-function updatePaperHeight() {
-
-    const baseHeight = 50;
-
-    // Hauteur réelle occupée par le texte
-    const textHeight = paperText.scrollHeight;
-
-    const newHeight = baseHeight + textHeight;
-
-    paper.style.height = `${newHeight}px`;
-}
-
-
-
-// ==========================================================
-// SECTION 8 - TERMINER ET SAUVEGARDER UNE NOTE
-// ==========================================================
-
-doneButton.addEventListener("click", () => {
-
-    // Évite de sauvegarder plusieurs fois la même note
-    if (isFinished) {
-        return;
     }
 
-    const endTime = new Date();
+    return null;
+}
 
-    // Durée totale
-    const durationMilliseconds = endTime - startTime;
-    const durationMinutes = Math.floor(durationMilliseconds / 60000);
+const raycaster =
+    new THREE.Raycaster();
 
-    // Affichage sur la feuille
-    paperInfo.textContent =
-        "Written in " + durationMinutes + " minutes.";
+const mouse =
+    new THREE.Vector2();
 
-    // Objet représentant la note complète
-    const noteData = {
-        text: text,
-        characterCount: text.length,
-        date: startTime.toISOString().split("T")[0],
-        startedAt: startTime.toISOString(),
-        finishedAt: endTime.toISOString(),
-        durationMinutes: durationMinutes
+renderer.domElement.addEventListener(
+    "pointerdown",
+    (event) => {
+
+        if (!typewriterModel) {
+            return;
+        }
+
+        const rect =
+            renderer.domElement
+                .getBoundingClientRect();
+
+        mouse.x =
+            (
+                (
+                    event.clientX -
+                    rect.left
+                )
+                /
+                rect.width
+            )
+            * 2 - 1;
+
+        mouse.y =
+            -(
+                (
+                    event.clientY -
+                    rect.top
+                )
+                /
+                rect.height
+            )
+            * 2 + 1;
+
+        raycaster.setFromCamera(
+            mouse,
+            camera
+        );
+
+        const intersections =
+            raycaster.intersectObject(
+                typewriterModel,
+                true
+            );
+
+        if (
+            intersections.length === 0
+        ) {
+            return;
+        }
+
+        let clickedObject =
+            intersections[0].object;
+
+        while (
+            clickedObject &&
+            !clickedObject.name.startsWith(
+                "Key_"
+            )
+        ) {
+
+            clickedObject =
+                clickedObject.parent;
+
+        }
+
+        if (!clickedObject) {
+            return;
+        }
+
+        const objectName =
+            clickedObject.name;
+
+        press3DKey(
+            objectName
+        );
+
+        const keyValue =
+            getKeyValueFrom3DObject(
+                objectName
+            );
+
+        if (
+            keyValue !== null &&
+            window.handleKey
+        ) {
+
+            window.handleKey(
+                keyValue
+            );
+
+        }
+
+    }
+);
+
+function update3DPaperText(
+    text
+) {
+
+    paperContext.clearRect(
+        0,
+        0,
+        paperCanvas.width,
+        paperCanvas.height
+    );
+
+    paperContext.fillStyle =
+        "#241f1b";
+
+    paperContext.font =
+        "100px Courier New";
+
+    paperContext.textBaseline =
+        "top";
+
+    const leftMargin =
+        140;
+
+    const topMargin =
+        140;
+
+    const lineHeight =
+        96;
+
+    const maxWidth =
+        paperCanvas.width -
+        200;
+
+    const paragraphs =
+        text.split("\n");
+
+    let currentY =
+        topMargin;
+
+    for (
+        const paragraph
+        of paragraphs
+    ) {
+
+        const words =
+            paragraph.split(" ");
+
+        let line = "";
+
+        for (
+            const word
+            of words
+        ) {
+
+            const testLine =
+                line.length === 0
+                    ? word
+                    : line + " " + word;
+
+            const width =
+                paperContext
+                    .measureText(
+                        testLine
+                    )
+                    .width;
+
+            if (
+                width >
+                maxWidth &&
+                line !== ""
+            ) {
+
+                paperContext.fillText(
+                    line,
+                    leftMargin,
+                    currentY
+                );
+
+                line =
+                    word;
+
+                currentY +=
+                    lineHeight;
+
+            } else {
+
+                line =
+                    testLine;
+
+            }
+
+        }
+
+        paperContext.fillText(
+            line,
+            leftMargin,
+            currentY
+        );
+
+        currentY +=
+            lineHeight;
+
+    }
+
+    paperTexture.needsUpdate =
+        true;
+}
+
+window.update3DPaperText =
+    update3DPaperText;
+
+window.clear3DPaper =
+    function () {
+
+        update3DPaperText("");
+
     };
 
-    /*
-        JavaScript
-            ↓
-        noteData
-            ↓
-        POST /api/notes
-            ↓
-        Flask
-            ↓
-        Neon PostgreSQL
-    */
+window.addEventListener(
+    "resize",
+    () => {
 
-    fetch("/api/notes", {
+        camera.aspect =
+            container.clientWidth /
+            container.clientHeight;
 
-        method: "POST",
+        camera.updateProjectionMatrix();
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+        renderer.setSize(
+            container.clientWidth,
+            container.clientHeight
+        );
 
-        body: JSON.stringify(noteData)
+    }
+);
 
-    })
-        .then(response => response.json())
-        .then(data => {
+function animate() {
 
-            console.log("Saved note:", data);
+    requestAnimationFrame(
+        animate
+    );
 
-            isFinished = true;
-            doneButton.disabled = true;
-
-            // Recharge immédiatement les notes depuis Neon
-            // Donc si le drawer est ouvert, la nouvelle note apparaît tout de suite
-            loadSavedNotes();
-
-            animatePaperToNotes();
-        });
-
-
-});
-
-function animatePaperToNotes() {
-
-    paper.classList.add("saving");
+    renderer.render(
+        scene,
+        camera
+    );
 }
 
-// ==========================================================
-// SECTION 9 - OUVRIR / FERMER SAVED NOTES
-// ==========================================================
-
-savedNotesButton.addEventListener("click", () => {
-
-    savedNotesPanel.classList.add("open");
-    savedNotesButton.classList.add("hidden");
-
-    loadSavedNotes();
-});
-
-
-closeNotesButton.addEventListener("click", () => {
-
-    savedNotesPanel.classList.remove("open");
-    savedNotesButton.classList.remove("hidden");
-});
-
-
-
-// ==========================================================
-// SECTION 10 - CHARGER LES NOTES DEPUIS NEON
-// ==========================================================
-
-function loadSavedNotes() {
-
-    fetch("/api/notes")
-        .then(response => response.json())
-        .then(data => {
-
-            allSavedNotes = data.notes;
-            notesCount.textContent = allSavedNotes.length;
-
-            displayNotes(allSavedNotes);
-        });
-}
-
-
-
-// ==========================================================
-// SECTION 11 - AFFICHER LES NOTES DANS LA LISTE
-// ==========================================================
-
-function displayNotes(notes) {
-
-    // Vide la liste avant de la reconstruire
-    savedNotesList.innerHTML = "";
-
-    if (notes.length === 0) {
-        savedNotesList.innerHTML = `
-        <p class="no-notes-message">
-            No notes for this date.
-        </p>
-    `;
-        return;
-    }
-
-    notes.forEach((note) => {
-
-        const noteElement = document.createElement("div");
-
-        noteElement.classList.add("saved-note");
-
-        noteElement.innerHTML = `
-            <p class="saved-note-date">${note.date}</p>
-
-            <p class="saved-note-text">
-                ${note.text}
-            </p>
-
-            <p class="saved-note-info">
-                ${note.characterCount} characters ·
-                ${note.durationMinutes} min
-            </p>
-        `;
-
-        // Ouvre le lecteur quand on clique sur une note
-        noteElement.addEventListener("click", () => {
-            openNoteReader(note, allSavedNotes);
-        });
-
-        savedNotesList.appendChild(noteElement);
-    });
-}
-
-
-
-// ==========================================================
-// SECTION 12 - LECTEUR DE NOTE
-// ==========================================================
-
-function openNoteReader(selectedNote, allNotes) {
-
-    // Garde uniquement les notes de la même journée
-    currentDayNotes = allNotes.filter(note => {
-        return note.date === selectedNote.date;
-    });
-
-    // Trouve l'index de la note sélectionnée
-    currentNoteIndex = currentDayNotes.findIndex(note => {
-        return note.id === selectedNote.id;
-    });
-
-    // Cache la liste
-    savedNotesList.classList.add("hidden");
-
-    // Affiche le lecteur
-    noteReader.classList.remove("hidden");
-
-    showCurrentNote();
-}
-
-
-function showCurrentNote() {
-
-    const note = currentDayNotes[currentNoteIndex];
-
-    noteReaderDate.textContent = note.date;
-    noteReaderText.textContent = note.text;
-
-    noteReaderCounter.textContent =
-        `Note ${currentNoteIndex + 1} of ${currentDayNotes.length}`;
-
-    previousNoteButton.disabled = currentNoteIndex === 0;
-
-    nextNoteButton.disabled =
-        currentNoteIndex === currentDayNotes.length - 1;
-}
-
-
-
-// ==========================================================
-// SECTION 13 - NAVIGATION ENTRE LES NOTES DU MÊME JOUR
-// ==========================================================
-
-nextNoteButton.addEventListener("click", () => {
-
-    if (currentNoteIndex < currentDayNotes.length - 1) {
-        currentNoteIndex++;
-        showCurrentNote();
-    }
-});
-
-
-previousNoteButton.addEventListener("click", () => {
-
-    if (currentNoteIndex > 0) {
-        currentNoteIndex--;
-        showCurrentNote();
-    }
-});
-
-
-backToListButton.addEventListener("click", () => {
-
-    noteReader.classList.add("hidden");
-    savedNotesList.classList.remove("hidden");
-});
-
-
-
-// ==========================================================
-// SECTION 14 - FILTRER LES NOTES PAR DATE
-// ==========================================================
-
-notesDateFilter.addEventListener("change", () => {
-
-    const selectedDate = notesDateFilter.value;
-
-    // Si aucune date n'est sélectionnée, affiche tout
-    if (selectedDate === "") {
-        displayNotes(allSavedNotes);
-        return;
-    }
-
-    // Garde seulement les notes de la date choisie
-    const filteredNotes = allSavedNotes.filter((note) => {
-        return note.date === selectedDate;
-    });
-
-    displayNotes(filteredNotes);
-});
-
-// ==========================================================
-// SECTION 15 - CRÉER UNE NOUVELLE NOTE
-// ==========================================================
-
-function resetNote() {
-
-    // Réinitialise le texte
-    text = "";
-
-    // Réactive l'écriture
-    isFinished = false;
-
-    // Nouvelle heure de début
-    startTime = new Date();
-
-    // Réinitialise le papier
-    paperText.textContent = "";
-    paperInfo.textContent = "";
-    paperDate.textContent = startTime.toLocaleString();
-
-
-    if (window.clear3DPaper) {
-        window.clear3DPaper();
-    }
-
-    // Remet la hauteur du papier à zéro
-    paper.style.height = "";
-
-    // Retire l'animation de sauvegarde
-    paper.classList.remove("saving");
-
-    // Réactive Done
-    doneButton.disabled = false;
-}
-
-// Quand on clique sur New Note
-newNoteButton.addEventListener("click", () => {
-    resetNote();
-});
-
-
-// ==========================================================
-// SECTION 16 - SUPPRIMER UNE NOTE
-// ==========================================================
-
-deleteNoteButton.addEventListener("click", () => {
-
-    if (!confirm("Delete this note?")) {
-        return;
-    }
-
-    const note = currentDayNotes[currentNoteIndex];
-
-    fetch(`/api/notes/${note.id}`, {
-        method: "DELETE"
-    })
-        .then(response => response.json())
-        .then(data => {
-
-            console.log("Deleted:", data);
-
-            loadSavedNotes();
-
-            noteReader.classList.add("hidden");
-            savedNotesList.classList.remove("hidden");
-        });
-});
-
-// ==========================================================
-// SECTION 17 - MODE 2D / 3D
-// ==========================================================
-
-viewModeToggle.addEventListener("change", () => {
-
-    if (viewModeToggle.checked) {
-
-        // Mode 3D
-        document.body.classList.remove("mode-2d");
-
-    }
-    else {
-
-        // Mode 2D
-        document.body.classList.add("mode-2d");
-
-    }
-
-});
+animate();
