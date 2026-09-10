@@ -665,8 +665,8 @@ function getVisualLines(text) {
     paperContext.font =
         "100px Courier New";
 
-    const leftMargin = 140;
-    const rightMargin = 140;
+    const leftMargin = 280;
+    const rightMargin = 280;
 
     const maxWidth =
         paperCanvas.width -
@@ -724,7 +724,7 @@ function getVisualLines(text) {
 
 function canFitOnPaper(text) {
 
-    const topMargin = 140;
+    const topMargin = 280;
     const bottomMargin = 140;
     const lineHeight = 96;
 
