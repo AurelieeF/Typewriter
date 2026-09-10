@@ -663,7 +663,7 @@ renderer.domElement.addEventListener(
 function getVisualLines(text) {
 
     paperContext.font =
-        "900 10px Courier New";
+        "900 100px Courier New";
 
     const leftMargin = 140;
     const rightMargin = 140;
@@ -757,11 +757,12 @@ function update3DPaperText(text) {
         paperCanvas.height
     );
 
-    paperContext.fillStyle =
-        "#241f1b";
+    paperContext.fillStyle = "#241f1b";
+    paperContext.strokeStyle = "#241f1b";
+    paperContext.lineWidth = 3;
 
     paperContext.font =
-        "100px Courier New";
+        "900 100px Courier New";
 
     paperContext.textBaseline =
         "top";
@@ -841,16 +842,27 @@ function update3DPaperText(text) {
 
 
     visualLines.forEach(
-        (line, index) => {
+    (line, index) => {
 
-            paperContext.fillText(
-                line,
-                leftMargin,
-                topMargin +
-                index * lineHeight
-            );
-        }
-    );
+        const x = leftMargin;
+
+        const y =
+            topMargin +
+            index * lineHeight;
+
+        paperContext.strokeText(
+            line,
+            x,
+            y
+        );
+
+        paperContext.fillText(
+            line,
+            x,
+            y
+        );
+    }
+);
 
 
     const currentVisualLineCount =
