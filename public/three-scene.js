@@ -1,78 +1,46 @@
 import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import {
-    GLTFLoader
-} from "three/addons/loaders/GLTFLoader.js";
+const container = document.getElementById("typewriter-3d");
 
+const scene = new THREE.Scene();
 
-const container =
-    document.getElementById(
-        "typewriter-3d"
-    );
-
-
-const scene =
-    new THREE.Scene();
-
-
-const camera =
-    new THREE.PerspectiveCamera(
-        35,
-        container.clientWidth /
-        container.clientHeight,
-        0.01,
-        100
-    );
-
-
-const renderer =
-    new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true
-    });
-
-
-renderer.setPixelRatio(
-    Math.min(
-        window.devicePixelRatio,
-        3
-    )
+const camera = new THREE.PerspectiveCamera(
+    35,
+    container.clientWidth / container.clientHeight,
+    0.01,
+    100
 );
 
+const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true
+});
+
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio, 3)
+);
 
 renderer.setSize(
     container.clientWidth,
     container.clientHeight
 );
 
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-renderer.outputColorSpace =
-    THREE.SRGBColorSpace;
+container.appendChild(renderer.domElement);
 
-
-container.appendChild(
-    renderer.domElement
+const ambientLight = new THREE.AmbientLight(
+    0xffffff,
+    2
 );
 
+scene.add(ambientLight);
 
-const ambientLight =
-    new THREE.AmbientLight(
-        0xffffff,
-        2
-    );
-
-
-scene.add(
-    ambientLight
+const mainLight = new THREE.DirectionalLight(
+    0xffffff,
+    3
 );
-
-
-const mainLight =
-    new THREE.DirectionalLight(
-        0xffffff,
-        3
-    );
-
 
 mainLight.position.set(
     3,
@@ -80,109 +48,40 @@ mainLight.position.set(
     4
 );
 
+scene.add(mainLight);
 
-scene.add(
-    mainLight
-);
-
-
-const loader =
-    new GLTFLoader();
-
+const loader = new GLTFLoader();
 
 let typewriterModel = null;
-
 let paperObject = null;
-
 let paperTextSprite = null;
 
 let rollerObject = null;
 
 let paperStartY = null;
-
 let rollerStartRotation = null;
 
-let currentVisualLineCount = 1;
+const paperCanvas = document.createElement("canvas");
 
-
-const paperCanvas =
-    document.createElement(
-        "canvas"
-    );
-
-
-paperCanvas.width =
-    2048;
-
-paperCanvas.height =
-    2048;
-
+paperCanvas.width = 2084;
+paperCanvas.height = 2048;
 
 const paperContext =
-    paperCanvas.getContext(
-        "2d"
-    );
-
+    paperCanvas.getContext("2d");
 
 const paperTexture =
-    new THREE.CanvasTexture(
-        paperCanvas
-    );
-
+    new THREE.CanvasTexture(paperCanvas);
 
 paperTexture.colorSpace =
     THREE.SRGBColorSpace;
 
-
 paperTexture.minFilter =
     THREE.LinearFilter;
-
 
 paperTexture.magFilter =
     THREE.LinearFilter;
 
-
-const FONT_SIZE = 100;
-
-const LINE_HEIGHT = 110;
-
-const LEFT_MARGIN = 140;
-
-const RIGHT_MARGIN = 140;
-
-const TOP_MARGIN = 140;
-
-const BOTTOM_MARGIN = 140;
-
-
-const MAX_TEXT_WIDTH =
-    paperCanvas.width -
-    LEFT_MARGIN -
-    RIGHT_MARGIN;
-
-
-const MAX_LINES =
-    Math.floor(
-        (
-            paperCanvas.height -
-            TOP_MARGIN -
-            BOTTOM_MARGIN
-        )
-        /
-        LINE_HEIGHT
-    );
-
-
-paperContext.font =
-    `${FONT_SIZE}px Courier New`;
-
-
-paperContext.textBaseline =
-    "top";
-
-
 const key3DMap = {
-
     "1": "Key_1",
     "2": "Key_2",
     "3": "Key_3",
@@ -238,57 +137,45 @@ const key3DMap = {
     "CapsLock": "Key_CapsLock"
 };
 
-
 loader.load(
-
     "./models/typewriter.glb",
 
-    gltf => {
+    (gltf) => {
 
         typewriterModel =
             gltf.scene;
-
 
         scene.add(
             typewriterModel
         );
 
-
         const box =
-            new THREE.Box3()
-                .setFromObject(
-                    typewriterModel
-                );
-
+            new THREE.Box3().setFromObject(
+                typewriterModel
+            );
 
         const center =
             box.getCenter(
                 new THREE.Vector3()
             );
 
-
         const size =
             box.getSize(
                 new THREE.Vector3()
             );
 
-
         typewriterModel.position.x -=
             center.x;
-
 
         typewriterModel.position.y -=
             center.y;
 
-
         typewriterModel.position.z -=
             center.z;
-
 
         typewriterModel.updateMatrixWorld(
             true
         );
-
 
         const maxDimension =
             Math.max(
@@ -297,13 +184,11 @@ loader.load(
                 size.z
             );
 
-
         camera.position.set(
             0,
             maxDimension * 1.05,
             maxDimension * 1.2
         );
-
 
         camera.lookAt(
             0,
@@ -311,69 +196,73 @@ loader.load(
             0
         );
 
-
         paperObject =
             typewriterModel.getObjectByName(
                 "Paper"
             );
 
+        if (!paperObject) {
 
-        if (paperObject) {
+            console.warn(
+                "Paper not found"
+            );
 
+        } else {
             const paperWorldBox =
-                new THREE.Box3()
-                    .setFromObject(
-                        paperObject
-                    );
-
+                new THREE.Box3().setFromObject(
+                    paperObject
+                );
 
             const paperWorldSize =
                 paperWorldBox.getSize(
                     new THREE.Vector3()
                 );
 
-
             typewriterModel.position.y -=
-                paperWorldSize.y *
-                0.9;
+                paperWorldSize.y * 0.9;
 
-
-            typewriterModel.updateMatrixWorld(
-                true
-            );
-
+            typewriterModel.updateMatrixWorld(true);
 
             createPaperTextSprite();
 
         }
-
 
         rollerObject =
             typewriterModel.getObjectByName(
                 "Roller"
             );
 
-
         if (paperObject) {
-
             paperStartY =
                 paperObject.position.y;
-
         }
-
 
         if (rollerObject) {
-
             rollerStartRotation =
                 rollerObject.rotation.x;
-
         }
+
+        console.log(
+            "Typewriter loaded!"
+        );
+
+        typewriterModel.traverse(
+            (object) => {
+
+                if (object.name) {
+                    console.log(
+                        object.name
+                    );
+                }
+
+            }
+        );
 
     },
 
     undefined,
 
-    error => {
+    (error) => {
 
         console.error(
             "Error loading typewriter:",
@@ -381,73 +270,36 @@ loader.load(
         );
 
     }
-
 );
+function feedPaper(direction = 1) {
 
-
-function feedPaper(
-    lineDifference = 1
-) {
-
-    if (
-        !paperObject ||
-        paperStartY === null
-    ) {
-
+    if (!paperObject || paperStartY === null) {
         return;
-
     }
 
+    const lineMovement = 0.015;
+    const rollerMovement = 0.15;
 
-    const lineMovement =
-        0.015;
+    const newPaperY =
+        paperObject.position.y +
+        lineMovement * direction;
 
-
-    const rollerMovement =
-        0.15;
-
-
-    const oldPaperY =
-        paperObject.position.y;
-
-
-    const targetPaperY =
+    // NEVERRRR allow the paper below its starting position
+    paperObject.position.y =
         Math.max(
             paperStartY,
-            oldPaperY +
-            lineMovement *
-            lineDifference
+            newPaperY
         );
 
+    if (rollerObject) {
 
-    const appliedMovement =
-        targetPaperY -
-        oldPaperY;
+        if (paperObject.position.y > paperStartY) {
 
+            rollerObject.rotation.x +=
+                rollerMovement * direction;
 
-    const appliedLines =
-        appliedMovement /
-        lineMovement;
-
-
-    paperObject.position.y =
-        targetPaperY;
-
-
-    if (
-        rollerObject &&
-        rollerStartRotation !== null
-    ) {
-
-        rollerObject.rotation.x +=
-            rollerMovement *
-            appliedLines;
-
-
-        if (
-            paperObject.position.y <=
-            paperStartY
-        ) {
+        }
+        else {
 
             paperObject.position.y =
                 paperStartY;
@@ -458,78 +310,56 @@ function feedPaper(
     }
 }
 
+window.feed3DPaper = feedPaper;
 
-window.feed3DPaper =  feedPaper;
 
 
 function createPaperTextSprite() {
 
-    if (
-        !paperObject.geometry.boundingBox
-    ) {
-
+    // Bounding box LOCALE du vrai Paper Blender
+    if (!paperObject.geometry.boundingBox) {
         paperObject.geometry.computeBoundingBox();
     }
 
-    const box =
-        paperObject.geometry.boundingBox;
+    const box = paperObject.geometry.boundingBox;
+
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    const center = new THREE.Vector3();
+    box.getCenter(center);
 
 
-    const size =
-        new THREE.Vector3();
+    const textMaterial = new THREE.MeshBasicMaterial({
+        map: paperTexture,
+        transparent: true,
+        depthTest: true,
+        depthWrite: false,
+        side: THREE.DoubleSide
+    });
 
 
-    box.getSize(
-        size
-    );
+    /*
+        On détecte automatiquement l'axe le plus mince
+        du Paper.
 
-
-    const center =
-        new THREE.Vector3();
-
-
-    box.getCenter(
-        center
-    );
-
-
-    const textMaterial =
-        new THREE.MeshBasicMaterial({
-
-            map:
-                paperTexture,
-
-            transparent:
-                true,
-
-            depthTest:
-                true,
-
-            depthWrite:
-                false,
-
-            side:
-                THREE.DoubleSide
-
-        });
-
+        Le Paper est essentiellement un cube très mince.
+        L'axe le plus mince = profondeur de la feuille.
+    */
 
     if (
         size.z <= size.x &&
         size.z <= size.y
     ) {
 
-        paperTextSprite =
-            new THREE.Mesh(
-
-                new THREE.PlaneGeometry(
-                    size.x * 0.92,
-                    size.y * 0.92
-                ),
-
-                textMaterial
-
-            );
+        // Grande face = XY
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.x * 0.92,
+                size.y * 0.92
+            ),
+            textMaterial
+        );
 
         paperTextSprite.position.set(
             center.x,
@@ -544,17 +374,14 @@ function createPaperTextSprite() {
         size.y <= size.z
     ) {
 
-        paperTextSprite =
-            new THREE.Mesh(
-
-                new THREE.PlaneGeometry(
-                    size.x * 0.92,
-                    size.z * 0.92
-                ),
-
-                textMaterial
-
-            );
+        // Grande face = XZ
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.x * 0.92,
+                size.z * 0.92
+            ),
+            textMaterial
+        );
 
         paperTextSprite.rotation.x =
             Math.PI / 2;
@@ -569,17 +396,14 @@ function createPaperTextSprite() {
 
     else {
 
-        paperTextSprite =
-            new THREE.Mesh(
-
-                new THREE.PlaneGeometry(
-                    size.y * 0.92,
-                    size.z * 0.92
-                ),
-
-                textMaterial
-
-            );
+        // Grande face = YZ
+        paperTextSprite = new THREE.Mesh(
+            new THREE.PlaneGeometry(
+                size.y * 0.92,
+                size.z * 0.92
+            ),
+            textMaterial
+        );
 
         paperTextSprite.rotation.y =
             Math.PI / 2;
@@ -597,21 +421,20 @@ function createPaperTextSprite() {
         paperTextSprite
     );
 
-
-    paperTextSprite.scale.x *=
-        -1;
+    paperTextSprite.scale.x *= -1;
 
 
     paperTextSprite.renderOrder =
         10;
 
 
-    update3DPaperText(
-        ""
+    update3DPaperText("");
+
+    console.log(
+        "Text fitted to real Paper surface",
+        size
     );
-
 }
-
 
 function press3DKey(
     objectName
@@ -627,6 +450,11 @@ function press3DKey(
         );
 
     if (!key) {
+
+        console.warn(
+            objectName +
+            " not found"
+        );
 
         return;
     }
@@ -658,7 +486,7 @@ function press3DKey(
 
 window.addEventListener(
     "keydown",
-    event => {
+    (event) => {
 
         let pressedKey =
             event.key;
@@ -686,8 +514,7 @@ window.addEventListener(
         );
 
     }
-)
-
+);
 
 function getKeyValueFrom3DObject(
     objectName
@@ -698,8 +525,7 @@ function getKeyValueFrom3DObject(
             keyValue,
             mappedObject
         ]
-        of
-        Object.entries(
+        of Object.entries(
             key3DMap
         )
     ) {
@@ -726,7 +552,7 @@ const mouse =
 
 renderer.domElement.addEventListener(
     "pointerdown",
-    event => {
+    (event) => {
 
         if (!typewriterModel) {
             return;
@@ -745,9 +571,7 @@ renderer.domElement.addEventListener(
                 /
                 rect.width
             )
-            * 2 -
-            1;
-
+            * 2 - 1;
 
         mouse.y =
             -(
@@ -758,9 +582,7 @@ renderer.domElement.addEventListener(
                 /
                 rect.height
             )
-            * 2 +
-            1;
-
+            * 2 + 1;
 
         raycaster.setFromCamera(
             mouse,
@@ -774,8 +596,7 @@ renderer.domElement.addEventListener(
             );
 
         if (
-            intersections.length ===
-            0
+            intersections.length === 0
         ) {
             return;
         }
@@ -825,166 +646,8 @@ renderer.domElement.addEventListener(
     }
 );
 
-
-function getWrappedLines(
-    currentText
-) {
-
-    paperContext.font =
-        `${FONT_SIZE}px Courier New`;
-
-
-    const paragraphs =
-        currentText.split(
-            "\n"
-        );
-
-
-    const lines = [];
-
-
-    for (
-        const paragraph
-        of paragraphs
-    ) {
-
-        if (
-            paragraph.length === 0
-        ) {
-
-            lines.push(
-                ""
-            );
-
-            continue;
-
-        }
-
-
-        let currentLine =
-            "";
-
-
-        for (
-            const character
-            of paragraph
-        ) {
-
-            const candidateLine =
-                currentLine +
-                character;
-
-
-            const width =
-                paperContext
-                    .measureText(
-                        candidateLine
-                    )
-                    .width;
-
-            if (
-                width <=
-                MAX_TEXT_WIDTH
-            ) {
-
-                currentLine =
-                    candidateLine;
-
-            }
-
-            else {
-
-                if (
-                    currentLine.length >
-                    0
-                ) {
-
-                    lines.push(
-                        currentLine
-                    );
-
-                }
-
-
-                currentLine =
-                    character;
-
-            }
-
-        }
-
-
-        lines.push(
-            currentLine
-        );
-
-    }
-
-
-    if (
-        lines.length === 0
-    ) {
-
-        lines.push(
-            ""
-        );
-
-    }
-
-
-    return lines;
-}
-
-
-function canFit3DText(
-    candidateText
-) {
-
-    const lines =
-        getWrappedLines(
-            candidateText
-        );
-
-
-    return (
-        lines.length <=
-        MAX_LINES
-    );
-
-}
-
-
-window.canFit3DText =
-    canFit3DText;
-
-
-function syncPaperToLineCount(
-    newLineCount
-) {
-
-    const lineDifference =
-        newLineCount -
-        currentVisualLineCount;
-
-
-    if (
-        lineDifference !== 0
-    ) {
-
-        feedPaper(
-            lineDifference
-        );
-
-    }
-
-
-    currentVisualLineCount =
-        newLineCount;
-}
-
-
 function update3DPaperText(
-    currentText
+    text
 ) {
 
     paperContext.clearRect(
@@ -994,109 +657,110 @@ function update3DPaperText(
         paperCanvas.height
     );
 
-
     paperContext.fillStyle =
         "#241f1b";
 
-
     paperContext.font =
-        `${FONT_SIZE}px Courier New`;
-
+        "100px Courier New";
 
     paperContext.textBaseline =
         "top";
 
+    const leftMargin =
+        140;
 
-    const lines =
-        getWrappedLines(
-            currentText
-        );
+    const topMargin =
+        140;
 
+    const lineHeight =
+        96;
 
-    const visibleLines =
-        lines.slice(
-            0,
-            MAX_LINES
-        );
+    const maxWidth =
+        paperCanvas.width -
+        200;
 
+    const paragraphs =
+        text.split("\n");
 
-    visibleLines.forEach(
-        (
-            line,
-            index
-        ) => {
+    let currentY =
+        topMargin;
 
-            paperContext.fillText(
-                line,
-                LEFT_MARGIN,
-                TOP_MARGIN +
-                index *
-                LINE_HEIGHT
-            );
+    for (
+        const paragraph
+        of paragraphs
+    ) {
+
+        const words =
+            paragraph.split(" ");
+
+        let line = "";
+
+        for (
+            const word
+            of words
+        ) {
+
+            const testLine =
+                line.length === 0
+                    ? word
+                    : line + " " + word;
+
+            const width =
+                paperContext
+                    .measureText(
+                        testLine
+                    )
+                    .width;
+
+            if (
+                width >
+                maxWidth &&
+                line !== ""
+            ) {
+
+                paperContext.fillText(
+                    line,
+                    leftMargin,
+                    currentY
+                );
+
+                line =
+                    word;
+
+                currentY +=
+                    lineHeight;
+
+            } else {
+
+                line =
+                    testLine;
+
+            }
 
         }
-    );
 
+        paperContext.fillText(
+            line,
+            leftMargin,
+            currentY
+        );
 
-    syncPaperToLineCount(
-        lines.length
-    );
+        currentY +=
+            lineHeight;
 
+    }
 
     paperTexture.needsUpdate =
         true;
 }
+
 window.update3DPaperText =
     update3DPaperText;
 
 window.clear3DPaper =
     function () {
 
-        update3DPaperText(
-            ""
-        );
-
-    };
-
-
-window.reset3DPaper =
-    function () {
-
-        if (
-            paperObject &&
-            paperStartY !== null
-        ) {
-
-            paperObject.position.y =
-                paperStartY;
-
-        }
-
-
-        if (
-            rollerObject &&
-            rollerStartRotation !== null
-        ) {
-
-            rollerObject.rotation.x =
-                rollerStartRotation;
-
-        }
-
-
-        currentVisualLineCount =
-            1;
-
-
-        paperContext.clearRect(
-            0,
-            0,
-            paperCanvas.width,
-            paperCanvas.height
-        );
-
-        paperTexture.needsUpdate =
-            true;
+        update3DPaperText("");
 
     };
 
@@ -1117,6 +781,7 @@ window.addEventListener(
 
     }
 );
+
 function animate() {
 
     requestAnimationFrame(
