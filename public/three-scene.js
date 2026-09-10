@@ -18,7 +18,7 @@ const renderer = new THREE.WebGLRenderer({
 });
 
 renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, 4)
+    Math.min(window.devicePixelRatio, 5)
 );
 
 renderer.setSize(
@@ -64,8 +64,8 @@ let previousVisualLineCount = 1;
 
 const paperCanvas = document.createElement("canvas");
 
-paperCanvas.width = 2084;
-paperCanvas.height = 2048;
+paperCanvas.width = 4096;
+paperCanvas.height = 4096;
 
 const paperContext =
     paperCanvas.getContext("2d");
