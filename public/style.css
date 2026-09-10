@@ -155,7 +155,7 @@ body {
     margin-top: 2px;
 
     padding: 10px 20px;
-
+a
     border: none;
     border-radius: 5px;
 
@@ -743,4 +743,29 @@ body.mode-2d .view-2d {
 
 #typewriter-3d canvas {
     display: block;
+}
+
+body.mode-2d .typewriter-views {
+    display: block;
+    width: 100%;
+}
+
+body.mode-2d .view-3d {
+    display: none;
+}
+
+body.mode-2d .view-2d {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+}
+
+body.mode-2d .typewriter-controls {
+    margin-top: 8px;
+}
+
+body.mode-2d .keyboard {
+    margin-bottom: 0;
 }
