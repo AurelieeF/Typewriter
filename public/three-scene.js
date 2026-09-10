@@ -193,7 +193,7 @@ loader.load(
 
         camera.lookAt(
             0,
-            0,
+            0.25,
             0
         );
 
