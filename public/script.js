@@ -35,6 +35,7 @@ const viewModeToggle =
 
 
 
+
 // ==========================================================
 // SECTION 2 - ÉTAT DE L'APPLICATION
 // ==========================================================
@@ -81,14 +82,14 @@ function handleKey(key) {
     }
 
     // Nouvelle ligne
-   else if (key === "Enter" && text.length < MAX_CHARACTERS) {
+    else if (
+        key === "Enter" &&
+        text.length < MAX_CHARACTERS
+    ) {
 
-    text += "\n";
-
-    if (window.feed3DPaper) {
-        window.feed3DPaper();
+        text += "\n";
     }
-}
+
 
     // Met à jour le texte affiché
     paperText.textContent = text;
@@ -99,8 +100,8 @@ function handleKey(key) {
 
     // Ajuste la hauteur de la feuille
     updatePaperHeight();
-}
 
+}
 window.handleKey = handleKey;
 
 

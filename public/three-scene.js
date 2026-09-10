@@ -60,6 +60,7 @@ let rollerObject = null;
 
 let paperStartY = null;
 let rollerStartRotation = null;
+let previousVisualLineCount = 1;
 
 const paperCanvas = document.createElement("canvas");
 
@@ -257,21 +258,56 @@ loader.load(
 
     }
 );
-function feedPaper() {
+function feedPaper(lineDifference) {
 
-    if (!paperObject) {
+    if (!paperObject || paperStartY === null) {
         return;
     }
 
-    // La feuille monte légèrement
-    paperObject.position.y += 0.015;
+    const lineMovement = 0.015;
+    const rollerMovement = 0.15;
 
+    const targetY =
+        paperObject.position.y +
+        lineMovement * lineDifference;
 
-    // Le roller tourne
-    if (rollerObject) {
-        rollerObject.rotation.x += 0.15;
+    const newY =
+        Math.max(
+            paperStartY,
+            targetY
+        );
+
+    const actualMovement =
+        newY - paperObject.position.y;
+
+    const actualLines =
+        actualMovement / lineMovement;
+
+    paperObject.position.y =
+        newY;
+
+    if (
+        rollerObject &&
+        rollerStartRotation !== null
+    ) {
+
+        rollerObject.rotation.x +=
+            rollerMovement * actualLines;
+
+        if (
+            paperObject.position.y <=
+            paperStartY
+        ) {
+
+            paperObject.position.y =
+                paperStartY;
+
+            rollerObject.rotation.x =
+                rollerStartRotation;
+        }
     }
 }
+
 window.feed3DPaper =
     feedPaper;
 
@@ -607,9 +643,7 @@ renderer.domElement.addEventListener(
     }
 );
 
-function update3DPaperText(
-    text
-) {
+function update3DPaperText(text) {
 
     paperContext.clearRect(
         0,
@@ -627,44 +661,42 @@ function update3DPaperText(
     paperContext.textBaseline =
         "top";
 
-    const leftMargin =
-        140;
+    const leftMargin = 140;
+    const rightMargin = 140;
+    const topMargin = 140;
 
-    const topMargin =
-        140;
-
-    const lineHeight =
-        96;
+    const lineHeight = 96;
 
     const maxWidth =
         paperCanvas.width -
-        200;
+        leftMargin -
+        rightMargin;
+
+
+    const visualLines = [];
 
     const paragraphs =
         text.split("\n");
 
-    let currentY =
-        topMargin;
 
-    for (
-        const paragraph
-        of paragraphs
-    ) {
+    for (const paragraph of paragraphs) {
 
-        const words =
-            paragraph.split(" ");
+        if (paragraph === "") {
 
-        let line = "";
+            visualLines.push("");
 
-        for (
-            const word
-            of words
-        ) {
+            continue;
+        }
+
+
+        let currentLine = "";
+
+
+        for (const character of paragraph) {
 
             const testLine =
-                line.length === 0
-                    ? word
-                    : line + " " + word;
+                currentLine +
+                character;
 
             const width =
                 paperContext
@@ -673,43 +705,69 @@ function update3DPaperText(
                     )
                     .width;
 
-            if (
-                width >
-                maxWidth &&
-                line !== ""
-            ) {
 
-                paperContext.fillText(
-                    line,
-                    leftMargin,
-                    currentY
+            if (width <= maxWidth) {
+
+                currentLine =
+                    testLine;
+            }
+            else {
+
+                visualLines.push(
+                    currentLine
                 );
 
-                line =
-                    word;
-
-                currentY +=
-                    lineHeight;
-
-            } else {
-
-                line =
-                    testLine;
-
+                currentLine =
+                    character;
             }
-
         }
 
-        paperContext.fillText(
-            line,
-            leftMargin,
-            currentY
+
+        visualLines.push(
+            currentLine
         );
-
-        currentY +=
-            lineHeight;
-
     }
+
+
+    if (visualLines.length === 0) {
+
+        visualLines.push("");
+    }
+
+
+    visualLines.forEach(
+        (line, index) => {
+
+            paperContext.fillText(
+                line,
+                leftMargin,
+                topMargin +
+                index * lineHeight
+            );
+        }
+    );
+
+
+    const currentVisualLineCount =
+        visualLines.length;
+
+
+    const lineDifference =
+        currentVisualLineCount -
+        previousVisualLineCount;
+
+
+    if (lineDifference !== 0) {
+
+        feedPaper(
+            lineDifference
+        );
+    }
+
+
+    previousVisualLineCount =
+        currentVisualLineCount;
+
 
     paperTexture.needsUpdate =
         true;
