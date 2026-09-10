@@ -759,7 +759,7 @@ function update3DPaperText(text) {
 
     paperContext.fillStyle = "#241f1b";
     paperContext.strokeStyle = "#241f1b";
-    paperContext.lineWidth = 3;
+    paperContext.lineWidth = 4;
 
     paperContext.font =
         "900 100px Courier New";
