@@ -209,6 +209,23 @@ loader.load(
             );
 
         } else {
+            const paperWorldBox =
+                new THREE.Box3().setFromObject(
+                    paperObject
+                );
+
+            const paperWorldSize =
+                paperWorldBox.getSize(
+                    new THREE.Vector3()
+                );
+
+            typewriterModel.position.y -=
+                paperWorldSize.y;
+
+            typewriterModel.updateMatrixWorld(
+                true
+            );
+
 
             createPaperTextSprite();
 
@@ -642,6 +659,94 @@ renderer.domElement.addEventListener(
 
     }
 );
+
+function getVisualLines(text) {
+
+    paperContext.font =
+        "100px Courier New";
+
+    const leftMargin = 140;
+    const rightMargin = 140;
+
+    const maxWidth =
+        paperCanvas.width -
+        leftMargin -
+        rightMargin;
+
+    const visualLines = [];
+
+    const paragraphs =
+        text.split("\n");
+
+    for (const paragraph of paragraphs) {
+
+        if (paragraph === "") {
+
+            visualLines.push("");
+            continue;
+        }
+
+        let currentLine = "";
+
+        for (const character of paragraph) {
+
+            const testLine =
+                currentLine + character;
+
+            const width =
+                paperContext
+                    .measureText(testLine)
+                    .width;
+
+            if (width <= maxWidth) {
+
+                currentLine =
+                    testLine;
+            }
+            else {
+
+                visualLines.push(
+                    currentLine
+                );
+
+                currentLine =
+                    character;
+            }
+        }
+
+        visualLines.push(
+            currentLine
+        );
+    }
+
+    return visualLines;
+}
+
+function canFitOnPaper(text) {
+
+    const topMargin = 140;
+    const bottomMargin = 140;
+    const lineHeight = 96;
+
+    const usableHeight =
+        paperCanvas.height -
+        topMargin -
+        bottomMargin;
+
+    const maxLines =
+        Math.floor(
+            usableHeight /
+            lineHeight
+        );
+
+    return (
+        getVisualLines(text).length <=
+        maxLines
+    );
+}
+
+window.canFitOnPaper =
+    canFitOnPaper;
 
 function update3DPaperText(text) {
 

@@ -71,9 +71,21 @@ function handleKey(key) {
         return;
     }
 
-    // Lettre, chiffre, espace ou symbole
-    if (key.length === 1 && text.length < MAX_CHARACTERS) {
-        text += key;
+    // Lettre, chiffre, espace ou symbole avec version 3d
+    if (key.length === 1) {
+
+        const nextText =
+            text + key;
+
+        if (
+            window.canFitOnPaper &&
+            !window.canFitOnPaper(nextText)
+        ) {
+            return;
+        }
+
+        text =
+            nextText;
     }
 
     // Supprime le dernier caractère
@@ -81,13 +93,21 @@ function handleKey(key) {
         text = text.slice(0, -1);
     }
 
-    // Nouvelle ligne
-    else if (
-        key === "Enter" &&
-        text.length < MAX_CHARACTERS
-    ) {
+    // Nouvelle ligne avec version 3d ajoutee
+    else if (key === "Enter") {
 
-        text += "\n";
+        const nextText =
+            text + "\n";
+
+        if (
+            window.canFitOnPaper &&
+            !window.canFitOnPaper(nextText)
+        ) {
+            return;
+        }
+
+        text =
+            nextText;
     }
 
 
