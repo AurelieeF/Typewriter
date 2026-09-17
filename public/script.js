@@ -33,7 +33,16 @@ const keys = document.querySelectorAll(".key");
 const viewModeToggle =
     document.getElementById("view-mode-toggle");
 
+// Partie son
+const normalKeySounds = [
+    new Audio("./Sounds/Key1.mp3"),
+    new Audio("./Sounds/Key2.mp3"),
+    new Audio("./Sounds/Key3.mp3")
+];
 
+const spaceSound = new Audio("./Sounds/Space.mp3");
+const enterSound = new Audio("./Sounds/Enter.mp3");
+const backspaceSound = new Audio("./Sounds/Backspace.mp3");
 
 
 // ==========================================================
@@ -70,6 +79,8 @@ function handleKey(key) {
     if (isFinished) {
         return;
     }
+
+    playKeySound(key);
 
     // Lettre, chiffre, espace ou symbole avec version 3d
     if (key.length === 1) {
@@ -615,3 +626,29 @@ viewModeToggle.addEventListener("change", () => {
     }
 
 });
+
+//Creer une fonction playsound
+
+function playKeySound(key) {
+
+    let sound;
+
+    if (key === " ") {
+        sound = spaceSound;
+    }
+    else if (key === "Enter") {
+        sound = enterSound;
+    }
+    else if (key === "Backspace") {
+        sound = backspaceSound;
+    }
+    else {
+        const randomIndex =
+            Math.floor(Math.random() * normalKeySounds.length);
+
+        sound = normalKeySounds[randomIndex];
+    }
+
+    sound.currentTime = 0;
+    sound.play();
+}
