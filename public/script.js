@@ -639,7 +639,7 @@ function playKeySound(key) {
     else if (key === "Enter") {
         sound = enterSound;
     }
-    else if (key === "Backspace") {
+    else if (key === "Backspace" || key ==="CapsLock") {
         sound = backspaceSound;
     }
     else {
