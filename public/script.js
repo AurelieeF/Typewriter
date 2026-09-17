@@ -177,6 +177,8 @@ window.addEventListener("keydown", (event) => {
     // Caps Lock physique
     if (pressedKey === "CapsLock") {
 
+        playKeySound(pressedKey);
+
         capsLockActive = event.getModifierState("CapsLock");
 
         if (keyElement) {
@@ -228,6 +230,8 @@ keys.forEach((key) => {
 
         // Caps Lock virtuel
         if (clickedKey === "CapsLock") {
+            playKeySound(pressedKey);
+            
 
             capsLockActive = !capsLockActive;
 
@@ -633,13 +637,13 @@ function playKeySound(key) {
 
     let sound;
 
-    if (key === " ") {
+    if (key === " " || key ==="CapsLock") {
         sound = spaceSound;
     }
     else if (key === "Enter") {
         sound = enterSound;
     }
-    else if (key === "Backspace" || key ==="CapsLock") {
+    else if (key === "Backspace" ) {
         sound = backspaceSound;
     }
     else {
