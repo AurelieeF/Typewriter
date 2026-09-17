@@ -1,127 +1,434 @@
 /* ==========================================================
-   SECTION 1 - PAGE GÉNÉRALE
+   PARTIE 1 - ALLURE GÉNÉRALE DE LA PAGE
    ========================================================== */
 
 body {
     margin: 0;
     min-height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
+
     font-family: "Courier New", monospace;
+    color: #2c2621;
+
+    /* Couleur de secours si l'image ne charge pas */
+    background-color: #f5f1eb;
+
+    /* Nécessaire pour mettre les fonds derrière l'application i took this from online*/
+    position: relative;
+    isolation: isolate;
 }
 
+/* ----------------------------------------------------------
+   1.1 - FONDS DES MODES 2D ET 3D
+   ---------------------------------------------------------- */
+
+body::before,
+body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transition: opacity 0.8s ease;
+
+    pointer-events: none;
+}
+
+
+/* Fond du mode 3D */
+
+body::before {
+    background-image:
+        url("./images/background-3d.png");
+
+    opacity: 1;
+
+    z-index: -2;
+}
+
+
+/* Fond du mode 2D */
+
+body::after {
+    background-image:
+        url("./images/background-2d.png");
+
+    opacity: 0;
+
+    z-index: -1;
+}
+
+
+/* Quand on passe en mode 2D */
+
+body.mode-2d::before {
+    opacity: 0;
+}
+
+body.mode-2d::after {
+    opacity: 1;
+}
+
+/* 1.2 - Conteneur principal */
 .typewriter-app {
     min-height: 100vh;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     gap: 12px;
+    position: relative;
+z-index: 1;
 }
 
+/* 1.3 - Bouton pour changer entre 2D et 3D */
+.mode-switch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 30px;
+    margin-bottom: 25px;
+}
+
+.mode-label {
+    font-size: 13px;
+    color: #6f5b4d;
+}
+
+.switch {
+    position: relative;
+
+    width: 58px;
+    height: 30px;
+
+    display: inline-block;
+}
+
+.switch input {
+    opacity: 0;
+
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+
+    background-color: #c0a28c;
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    transition: background-color 0.3s ease;
+}
+
+.slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 22px;
+    height: 22px;
+
+    left: 4px;
+    top: 4px;
+
+    border-radius: 50%;
+    background-color: #f5ecd8;
+
+    transition: transform 0.35s ease;
+}
+
+.switch input:checked+.slider {
+    background-color: #3d342d;
+}
+
+.switch input:checked+.slider::before {
+    transform: translateX(28px);
+}
+
+/* 1.4 - Conteneur des deux versions */
+.typewriter-views {
+    display: grid;
+
+    justify-items: center;
+    align-items: start;
+
+    width: 100%;
+}
+
+.typewriter-view {
+    grid-area: 1 / 1;
+
+    width: 100%;
+
+    transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+}
+
+/* Version 3D visible par défaut */
+.view-3d {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    transform: translateY(0);
+}
+
+.view-2d {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: translateY(15px);
+}
+
+/* Quand le mode 2D est actif */
+body.mode-2d .typewriter-views {
+    display: block;
+    width: 100%;
+}
+
+body.mode-2d .view-3d {
+    display: none;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: translateY(-15px);
+}
+
+body.mode-2d .view-2d {
+    display: flex;
+
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    transform: none;
+}
+
+
 /* ==========================================================
-   SECTION 2 - PAPIER / NOTE
+   PARTIE 2 - VERSION 2D
    ========================================================== */
 
+/* 2.1 - Conteneur de la version 2D */
+body.mode-2d .view-2d {
+    width: min(760px, 94vw);
+
+    flex-direction: column;
+    align-items: center;
+
+    padding: 28px 20px 34px;
+
+    box-sizing: border-box;
+}
+
+/* 2.2 - Titre */
+body.mode-2d .typewriter h1 {
+    margin: 0 0 28px;
+
+    font-size: clamp(22px, 3vw, 34px);
+    letter-spacing: -1px;
+
+    color: #2f2924;
+    text-align: center;
+}
+
+/* 2.3 - Zone du papier */
 .paper,
 .paper-slot {
     box-sizing: border-box;
 }
 
-.paper-slot {
-    width: 500px;
-    margin: 0 auto;
+body.mode-2d .paper-slot {
+    width: min(500px, 82vw);
+
+    position: relative;
+    z-index: 3;
+
+    margin: 0 auto -10px;
 }
 
-.paper {
+body.mode-2d .paper {
     width: 100%;
-    background-color: #eee3cf;
+    min-height: 125px;
+
+    padding: 20px 26px;
+
+    background:
+        linear-gradient(145deg,
+            #fffefa,
+            #eeeae2);
+    border: 1px solid rgba(100, 78, 58, 0.18);
+
+    box-shadow:
+        0 16px 30px rgba(61, 52, 45, 0.13),
+        inset 0 0 20px rgba(255, 255, 255, 0.55);
+
+    transform: rotate(-0.4deg);
+
     transition:
         height 0.3s ease,
         transform 0.8s ease,
         opacity 0.8s ease;
 }
-/* Animation lorsque la note est sauvegardée */
+
+/* 2.4 - Animation du papier quand la note est sauvegardée */
 .paper.saving {
     transform: translate(420px, -250px) scale(0.1);
     opacity: 0;
 }
-/* Texte de la note */
+
+/* 2.5 - Texte, date et infos sur le papier */
 #paper-text {
     white-space: pre-wrap;
     overflow-wrap: break-word;
     word-break: normal;
     hyphens: auto;
 }
-/* Date affichée sur la note */
+
 #paper-date {
-    font-size: 12px;
-    color: #a18873;
     margin-bottom: 0;
-    text-align: right;
-}
 
-
-/* Informations de fin : durée d'écriture */
-#paper-info {
     font-size: 12px;
     color: #a18873;
-    margin-top: 10px;
     text-align: right;
 }
 
+#paper-info {
+    margin-top: 10px;
 
-/* ==========================================================
-   SECTION 3 - CLAVIER
-   ========================================================== */
+    font-size: 12px;
+    color: #a18873;
+    text-align: right;
+}
 
-.keyboard {
-    margin-top: 20px;
+/* 2.6 - Corps du clavier */
+body.mode-2d .keyboard {
+    position: relative;
+
+    margin-top: 0;
+    margin-bottom: 0;
+
+    padding: 46px 50px 34px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+
     gap: 10px;
+
+    background:
+        linear-gradient(145deg,
+            #353231,
+            #211f1e);
+
+    border: 1px solid rgba(33, 27, 23, 0.7);
+    border-radius: 28px 28px 18px 18px;
+
+    box-shadow:
+        0 26px 45px rgba(53, 42, 34, 0.24),
+        inset 0 2px 0 rgba(255, 255, 255, 0.08),
+        inset 0 -5px 10px rgba(0, 0, 0, 0.25);
 }
 
+/* Barre décorative au-dessus du clavier */
+body.mode-2d .keyboard::before {
+    content: "";
+
+    position: absolute;
+
+    top: 15px;
+    left: 8%;
+    right: 8%;
+
+    height: 13px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(90deg,
+            #191817,
+            #45413e,
+            #191817);
+
+    box-shadow:
+        inset 0 2px 2px rgba(255, 255, 255, 0.08);
+}
+
+/* 2.7 - Rangées du clavier */
 .keyboard-row {
     display: flex;
     gap: 10px;
 }
 
+/* 2.8 - Touches normales */
+body.mode-2d .key {
+    width: 50px;
+    height: 50px;
 
-/* ==========================================================
-   SECTION 4 - TOUCHES DU CLAVIER
-   ========================================================== */
+    border: 1px solid #bda88b;
+    border-radius: 50%;
 
-.key {
-    width: 55px;
-    height: 55px;
-    border-radius: 46%;
-    border: 2px solid #c0a28c;
-    background-color: #eee3cf;
+    background:
+        radial-gradient(circle at 35% 30%,
+            #ffffff 0%,
+            #f4f0e8 60%,
+            #d8d0c5 100%);
+
+    color: #29231f;
+
     font-family: "Courier New", monospace;
-    font-size: 20px;
+    font-size: 17px;
+    font-weight: 700;
+
+    box-shadow:
+        0 5px 0 #827161,
+        0 8px 12px rgba(0, 0, 0, 0.18),
+        inset 0 2px 3px rgba(255, 255, 255, 0.9);
+
     cursor: pointer;
-    transition: transform 0.8s;
+
+    transition:
+        transform 0.08s ease,
+        box-shadow 0.08s ease;
 }
 
-/* Touche actuellement pressée */
-.key.pressed {
-    transform: translateY(12px);
+body.mode-2d .key:hover {
+    transform: translateY(-2px);
 }
 
+/* Touche pressée ou Caps Lock actif */
+body.mode-2d .key.pressed,
+body.mode-2d .key.active {
+    transform: translateY(5px);
 
-/* Caps Lock actif */
-.key.active {
-    transform: translateY(12px);
+    box-shadow:
+        0 1px 0 #827161,
+        0 2px 4px rgba(0, 0, 0, 0.16);
 }
 
-/* ==========================================================
-   SECTION 5 - TOUCHES SPÉCIALES
-   ========================================================== */
-
+/* 2.9 - Touches spéciales */
 .special-key {
     width: auto;
 
@@ -148,14 +455,42 @@ body {
 
 
 /* ==========================================================
-   SECTION 6A - BOUTON DONE
+   PARTIE 3 - VERSION 3D
    ========================================================== */
 
+/* 3.1 - Conteneur du modèle 3D */
+#typewriter-3d {
+    width: min(1200px, 95vw);
+    height: 1100px;
+
+    margin: 0 auto;
+}
+
+/* 3.2 - Canvas Three.js */
+#typewriter-3d canvas {
+    display: block;
+}
+
+
+/* ==========================================================
+   PARTIE 4 - BOUTONS COMMUNS AUX DEUX VERSIONS
+   ========================================================== */
+
+/* 4.1 - Zone des boutons */
+.typewriter-controls {
+    margin-top: 20px;
+}
+
+body.mode-2d .typewriter-controls {
+    margin-top: 8px;
+}
+
+/* 4.2 - Bouton Done */
 #done-button {
     margin-top: 2px;
 
     padding: 10px 20px;
-a
+
     border: none;
     border-radius: 5px;
 
@@ -172,10 +507,7 @@ a
     cursor: not-allowed;
 }
 
-/* ==========================================================
-   SECTION 6B - BOUTON NEW NOTE
-   ========================================================== */
-
+/* 4.3 - Bouton New Note */
 #new-note-button {
     margin-top: 20px;
     margin-left: 10px;
@@ -188,8 +520,8 @@ a
     background-color: #c0a28c;
     color: #3d342d;
 
-    font-size: 16px;
     font-family: "Courier New", monospace;
+    font-size: 16px;
 
     cursor: pointer;
 }
@@ -200,9 +532,10 @@ a
 
 
 /* ==========================================================
-   SECTION 7 - BOUTON SAVED NOTES
+   PARTIE 5 - NOTES SAUVEGARDÉES
    ========================================================== */
 
+/* 5.1 - Bouton Notes */
 #saved-notes-button {
     position: fixed;
 
@@ -225,14 +558,10 @@ a
     z-index: 1000;
 }
 
-
-/* Cache le bouton Notes lorsque le drawer est ouvert */
 #saved-notes-button.hidden {
     display: none;
 }
 
-
-/* Compteur de notes */
 #notes-count {
     display: inline-block;
 
@@ -241,11 +570,7 @@ a
     font-size: 11px;
 }
 
-
-/* ==========================================================
-   SECTION 8 - PANNEAU SAVED NOTES
-   ========================================================== */
-
+/* 5.2 - Panneau des notes */
 #saved-notes-panel {
     position: fixed;
 
@@ -268,17 +593,11 @@ a
     z-index: 999;
 }
 
-
-/* Panneau ouvert */
 #saved-notes-panel.open {
     right: 0;
 }
 
-
-/* ==========================================================
-   SECTION 9 - HEADER DU PANNEAU
-   ========================================================== */
-
+/* 5.3 - Haut du panneau */
 .saved-notes-header {
     display: flex;
     justify-content: space-between;
@@ -287,7 +606,6 @@ a
 
 #close-notes-button {
     border: none;
-
     background: none;
 
     font-size: 28px;
@@ -295,11 +613,7 @@ a
     cursor: pointer;
 }
 
-
-/* ==========================================================
-   SECTION 10 - OUTILS / FILTRE PAR DATE
-   ========================================================== */
-
+/* 5.4 - Filtre par date */
 .saved-notes-tools {
     margin: 20px 0;
 }
@@ -312,11 +626,7 @@ a
     box-sizing: border-box;
 }
 
-
-/* ==========================================================
-   SECTION 11 - LISTE DES NOTES
-   ========================================================== */
-
+/* 5.5 - Liste des notes */
 #saved-notes-list {
     display: flex;
     flex-direction: column;
@@ -324,64 +634,44 @@ a
     gap: 12px;
 }
 
-
-/* Carte d'une note sauvegardée */
 .saved-note {
     padding: 12px;
 
     border-radius: 8px;
-
     background-color: #eee3cf;
 
     cursor: pointer;
 }
 
-
-/* Date de la note */
 .saved-note-date {
     margin: 0 0 6px 0;
 
     font-size: 12px;
-
     color: #a18873;
 }
 
-
-/* Preview du texte */
 .saved-note-text {
     margin: 0 0 8px 0;
 }
 
-
-/* Infos : caractères + durée */
 .saved-note-info {
     margin: 0;
 
     font-size: 11px;
-
     color: #a18873;
 }
 
-
-/* ==========================================================
-   SECTION 12 - ÉTAT VIDE
-   ========================================================== */
-
+/* 5.6 - Message quand il n'y a aucune note */
 .no-notes-message {
     margin-top: 30px;
 
     color: #a18873;
 
     font-size: 13px;
-
     text-align: center;
 }
 
-
-/* ==========================================================
-   SECTION 13 - NOTE READER
-   ========================================================== */
-
+/* 5.7 - Lecteur d'une note */
 #note-reader {
     padding-top: 10px;
 }
@@ -394,7 +684,6 @@ a
 
 #note-reader-date {
     font-size: 12px;
-
     color: #a18873;
 }
 
@@ -402,43 +691,10 @@ a
     margin-top: 20px;
 
     white-space: pre-wrap;
-
     line-height: 1.5;
 }
 
-
-/* ==========================================================
-   SECTION 14 - NAVIGATION DU NOTE READER
-   ========================================================== */
-
-.note-reader-navigation {
-    margin-top: 30px;
-
-    display: flex;
-    justify-content: space-between;
-}
-
-.note-reader-navigation button {
-    width: 50px;
-    height: 40px;
-
-    cursor: pointer;
-}
-
-
-/* Flèche indisponible */
-.note-reader-navigation button:disabled {
-    opacity: 0.3;
-
-    cursor: not-allowed;
-}
-
-/* ==========================================================
-   SECTION 14B - BOUTONS DU NOTE READER (de la barre de droite)
-   ========================================================== */
-
-/* ---------- BACK ---------- */
-
+/* 5.8 - Bouton retour */
 #back-to-list-button {
     padding: 8px 14px;
 
@@ -463,8 +719,13 @@ a
     transform: translateX(-2px);
 }
 
+/* 5.9 - Flèches pour changer de note */
+.note-reader-navigation {
+    margin-top: 30px;
 
-/* ---------- FLÈCHES ---------- */
+    display: flex;
+    justify-content: space-between;
+}
 
 .note-reader-navigation button {
     width: 46px;
@@ -486,9 +747,6 @@ a
         background-color 0.2s ease;
 }
 
-
-/* Petite animation au hover */
-
 #previous-note-button:hover:not(:disabled) {
     transform: translateX(-3px);
     background-color: #e5d5bb;
@@ -499,18 +757,13 @@ a
     background-color: #e5d5bb;
 }
 
-
-/* Flèche impossible à utiliser */
-
 .note-reader-navigation button:disabled {
     opacity: 0.3;
     cursor: not-allowed;
     transform: none;
 }
 
-
-/* ---------- DELETE ---------- */
-
+/* 5.10 - Bouton Delete */
 #delete-note-button {
     width: 100%;
 
@@ -543,229 +796,9 @@ a
 
 
 /* ==========================================================
-   SECTION 15 - CLASSES UTILITAIRES
+   PARTIE 6 - CLASSES UTILES
    ========================================================== */
 
 .hidden {
     display: none !important;
-}
-
-
-/* ==========================================================
-   TYPEWRITER 3D
-   ========================================================== */
-
-#typewriter-3d {
-    width: min(1400px, 95vw);
-    height: 1100px;
-    margin: 100px auto 0;
-}
-
-#typewriter-3d canvas {
-    display: block;
-}
-
-/* ==========================================================
-   SECTION 16 - MODE 2D / 3D
-   ========================================================== */
-
-.mode-switch {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    gap: 12px;
-
-    margin-top: 30px;
-    margin-bottom: 25px;
-}
-
-.mode-label {
-    font-size: 13px;
-    color: #6f5b4d;
-}
-
-
-/* SWITCH */
-
-.switch {
-    position: relative;
-
-    width: 58px;
-    height: 30px;
-
-    display: inline-block;
-}
-
-.switch input {
-    opacity: 0;
-
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-
-    inset: 0;
-
-    background-color: #c0a28c;
-
-    border-radius: 30px;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.3s ease;
-}
-
-.slider::before {
-    content: "";
-
-    position: absolute;
-
-    width: 22px;
-    height: 22px;
-
-    left: 4px;
-    top: 4px;
-
-    border-radius: 50%;
-
-    background-color: #f5ecd8;
-
-    transition:
-        transform 0.35s ease;
-}
-
-.switch input:checked + .slider {
-    background-color: #3d342d;
-}
-
-.switch input:checked + .slider::before {
-    transform: translateX(28px);
-}
-
-
-/* ==========================================================
-   CONTENEUR DES DEUX VUES
-   ========================================================== */
-
-.typewriter-views {
-    display: grid;
-
-    justify-items: center;
-    align-items: start;
-
-    width: 100%;
-}
-
-.typewriter-view {
-    grid-area: 1 / 1;
-
-    width: 100%;
-
-    transition:
-        opacity 0.4s ease,
-        transform 0.4s ease;
-}
-
-
-/* ==========================================================
-   MODE 3D PAR DÉFAUT
-   ========================================================== */
-
-.view-3d {
-    opacity: 1;
-
-    transform: translateY(0);
-
-    pointer-events: auto;
-
-    visibility: visible;
-}
-
-.view-2d {
-    opacity: 0;
-
-    transform: translateY(15px);
-
-    pointer-events: none;
-
-    visibility: hidden;
-}
-
-
-/* ==========================================================
-   MODE 2D
-   ========================================================== */
-
-body.mode-2d .view-3d {
-    opacity: 0;
-
-    transform: translateY(-15px);
-
-    pointer-events: none;
-
-    visibility: hidden;
-}
-
-body.mode-2d .view-2d {
-    opacity: 1;
-
-    transform: translateY(0);
-
-    pointer-events: auto;
-
-    visibility: visible;
-}
-
-
-/* ==========================================================
-   CONTRÔLES PARTAGÉS
-   ========================================================== */
-
-.typewriter-controls {
-    margin-top: 20px;
-}
-
-
-/* ==========================================================
-   TYPEWRITER 3D
-   ========================================================== */
-
-#typewriter-3d {
-    width: min(1200px, 95vw);
-    height: 1100px;
-
-    margin: 0 auto;
-}
-
-#typewriter-3d canvas {
-    display: block;
-}
-
-body.mode-2d .typewriter-views {
-    display: block;
-    width: 100%;
-}
-
-body.mode-2d .view-3d {
-    display: none;
-}
-
-body.mode-2d .view-2d {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    pointer-events: auto;
-}
-
-body.mode-2d .typewriter-controls {
-    margin-top: 8px;
-}
-
-body.mode-2d .keyboard {
-    margin-bottom: 0;
 }
