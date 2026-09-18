@@ -653,32 +653,26 @@ body.mode-2d .typewriter-controls {
 }
 
 #notes-date-filter {
-    border-radius: 15px;
-    border-color: #f0dba8;
-
-    /*learning how to make a metallic border*/
-    border-image:
-        linear-gradier(180deg,
-            /*ici on indique lordre de repetitions des couleurs*/
-            #6b4f28 0%,
-            #ffefc3 20%,
-            #a9803f 45%,
-            #fff6da 65%,
-            #6b4f28 85%,
-            #d4af7a 100%) 1;
-    /*1 cest le slice, border-image prend une image et le decoupe en morceau, decoupe a 1px du bord*/
-
-
-    box-shadow: 0 0 30px rgba(245, 223, 160, 0.45);
-
-
-    color: #5f4e25;
-    background-color: #f0dba8;
+    /* LA STRUCTURE */
     width: 100%;
-
     padding: 8px;
-
     box-sizing: border-box;
+    border-radius: 15px;
+
+    /* LE DESIGN */
+    background: linear-gradient(
+        90deg,
+        #f9e8c5,
+        #ffebc0
+    );
+
+    color: #654631;
+
+    border: 1px solid #ffd79a;
+
+    box-shadow:
+        0 0 10px rgba(255, 205, 125, 0.45),
+        0 0 25px rgba(255, 183, 80, 0.20);
 }
 
 /* 5.5 - Liste des notes */
