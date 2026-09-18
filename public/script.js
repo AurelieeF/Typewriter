@@ -255,7 +255,7 @@ keys.forEach((key) => {
 
 function updatePaperHeight() {
 
-    const baseHeight = 50;
+    const baseHeight = 80;
 
     const textHeight = paperText.scrollHeight;
 
