@@ -452,13 +452,17 @@ body.mode-2d .key.active {
 .typewriter-controls {
     position: fixed;
     top: 50%;
-    right: 70px;
-
     /*
-       MOI : en 3D, mes boutons étaient trop collés au bord droit.
-       Je les ramène juste un peu vers l'intérieur avec 70px.
-       Je ne touche pas à leur logique, seulement à leur position visuelle.
+       MOI : mes boutons 3D étaient encore trop loin de la machine à écrire.
+       Au lieu de leur donner une distance fixe ridicule par rapport au bord,
+       je leur donne une distance responsive avec clamp().
+
+       12vw = environ 12% de la largeur de l'écran.
+       140px = minimum, 240px = maximum.
+       Donc sur un grand écran, mes boutons viennent davantage vers la machine,
+       sans partir n'importe où sur un écran plus petit.
     */
+    right: clamp(140px, 12vw, 240px);
     transform: translateY(-50%);
 
     display: flex;
@@ -485,8 +489,8 @@ body.mode-2d .typewriter-controls {
        Avant il était étroit, donc je le mets à 130px x 50px.
        box-sizing garde exactement cette taille même avec la bordure/padding.
     */
-    width: 130px;
-    height: 50px;
+    width: 150px;
+    height: 54px;
     box-sizing: border-box;
 
     padding: 0 18px;
@@ -529,8 +533,8 @@ body.mode-2d .typewriter-controls {
        MOI : je mets New Note à la même taille que Done.
        Comme ça, en 2D ET en 3D, mes deux boutons ont l'air cohérents.
     */
-    width: 130px;
-    height: 50px;
+    width: 150px;
+    height: 54px;
     box-sizing: border-box;
 
     padding: 0 18px;
@@ -1154,8 +1158,16 @@ body.mode-2d .typewriter-controls {
         0 0 8px rgba(255, 200, 120, 0.35);
 }
 
-.saved-note-date,
-.saved-note-info,
+/*
+   MOI : IMPORTANT.
+   Avant j'avais aussi .saved-note-date et .saved-note-info ici.
+   Problème : cette règle arrivait PLUS BAS dans le fichier, donc elle
+   écrasait mes nouvelles couleurs brunes (#765438) même si je les avais
+   bien écrites plus haut. CSS lit de haut en bas : à spécificité égale,
+   la dernière règle gagne.
+
+   Je garde donc seulement #note-reader-date ici.
+*/
 #note-reader-date {
     color: #e8d2ad;
 }
