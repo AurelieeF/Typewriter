@@ -912,3 +912,20 @@ ambienceVolumeSlider.addEventListener("input", () => {
     ambienceVolumeValue.textContent =
         `${volumePercent}%`;
 });
+
+
+// ==========================================================
+// ARRÊTER DE FAIRE EN SORTE QUE SPACE SELECTION TOUT
+//  ========================================================
+// 
+document.addEventListener("pointerup", (event) => {
+
+    const clickedElement = event.target.closest(
+        "button, input[type='range']"
+    );
+
+    if (clickedElement) {
+        clickedElement.blur();
+    }
+
+});
