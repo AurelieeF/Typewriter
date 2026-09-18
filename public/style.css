@@ -667,6 +667,11 @@ body.mode-2d .typewriter-controls {
     z-index: 999;
 
     isolation: isolate;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+#saved-notes-panel::-webkit-scrollbar {
+    display: none;
 }
 
 #saved-notes-panel::before {
@@ -1085,19 +1090,20 @@ body.mode-2d .typewriter-controls {
 .saved-note-date {
     margin: 0 0 6px 0;
 
-    font-size: 12px;
+    font-size: 13px;
     color: #765438;
 }
 
 .saved-note-text {
     margin: 0 0 8px 0;
     color: #2f2119;
+    font-size: 15px;
 }
 
 .saved-note-info {
     margin: 0;
 
-    font-size: 11px;
+    font-size: 12px;
     color: #765438;
 }
 
@@ -1123,7 +1129,7 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-date {
-    font-size: 12px;
+    font-size: 13px;
     color: #e8d2ad;
 }
 
@@ -1148,14 +1154,15 @@ body.mode-2d .typewriter-controls {
         inset 0 0 12px rgba(255, 244, 220, 0.05);
 
     color: #fff0d0;
+    font-size: 15px;
 }
 
 /*afficher le nombre total de notes*/
 #note-reader-counter {
     color: #fff0ce;
-
     text-shadow:
         0 0 8px rgba(255, 200, 120, 0.35);
+        font-size:14px;
 }
 
 /*
