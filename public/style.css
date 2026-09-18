@@ -630,14 +630,14 @@ body.mode-2d .typewriter-controls {
     position: fixed;
     top: 0;
 
-    right: -380px;
+    right: -450px;
 
 
-    width: 350px;
+    width: 420px;
 
     height: 100vh;
 
-    padding: 20px;
+    padding: 26px;
     box-sizing: border-box;
 
     background:
@@ -663,15 +663,13 @@ body.mode-2d .typewriter-controls {
 
     overflow-y: auto;
     overflow-x: hidden;
+
+    /* MOI : je peux scroller mais je cache la barre visible */
+    scrollbar-width: none;
     transition: right 0.35s ease;
     z-index: 999;
 
     isolation: isolate;
-    overflow-y: auto;
-    scrollbar-width: none;
-}
-#saved-notes-panel::-webkit-scrollbar {
-    display: none;
 }
 
 #saved-notes-panel::before {
@@ -739,6 +737,14 @@ body.mode-2d .typewriter-controls {
     right: 0;
 }
 
+/*
+   MOI : Chrome / Edge / Safari ont leur propre syntaxe pour cacher
+   la barre de scroll. Le scroll fonctionne encore normalement.
+*/
+#saved-notes-panel::-webkit-scrollbar {
+    display: none;
+}
+
 /* 5.3 - Haut du panneau */
 .saved-notes-header {
     display: flex;
@@ -766,8 +772,14 @@ body.mode-2d .typewriter-controls {
 #notes-date-filter {
     /* LA STRUCTURE */
     width: 100%;
-    padding: 8px;
+    padding: 12px;
     box-sizing: border-box;
+
+    /*
+       MOI : le champ date était aussi minuscule à 80%.
+       J'augmente légèrement son texte.
+    */
+    font-size: 15px;
     border-radius: 15px;
 
     /* LE DESIGN */
@@ -1043,6 +1055,7 @@ body.mode-2d .typewriter-controls {
    Je veux "magique", pas "enseigne néon".
 */
 .saved-notes-header h2 {
+    font-size: 24px;
     color: #fff0ce;
 
     text-shadow:
@@ -1060,8 +1073,13 @@ body.mode-2d .typewriter-controls {
 }
 
 .saved-note {
-    padding: 14px 16px;
-    border-radius: 14px;
+    /*
+       MOI : mes cartes étaient trop petites à 80% de zoom.
+       Je leur donne plus d'espace pour que le contenu respire.
+    */
+    padding: 18px 20px;
+    min-height: 70px;
+    border-radius: 16px;
 
     background:
         linear-gradient(145deg,
@@ -1090,20 +1108,26 @@ body.mode-2d .typewriter-controls {
 .saved-note-date {
     margin: 0 0 6px 0;
 
-    font-size: 13px;
+    font-size: 14px;
     color: #765438;
 }
 
 .saved-note-text {
     margin: 0 0 8px 0;
+
+    /*
+       MOI : ça c'est le vrai contenu de ma note, donc je le rends
+       plus gros et plus foncé que les infos secondaires.
+    */
+    font-size: 17px;
+    line-height: 1.45;
     color: #2f2119;
-    font-size: 15px;
 }
 
 .saved-note-info {
     margin: 0;
 
-    font-size: 12px;
+    font-size: 13px;
     color: #765438;
 }
 
@@ -1129,14 +1153,21 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-date {
-    font-size: 13px;
+    font-size: 14px;
     color: #e8d2ad;
 }
 
 #note-reader-text {
     /*STRUCTUREEEEEE*/
     margin-top: 20px;
-    padding: 14px 16px;
+
+    /*
+       MOI : quand j'ouvre une note, je veux que ce soit confortable
+       à lire, pas une mini fiche perdue dans le panneau.
+    */
+    padding: 18px 20px;
+    font-size: 17px;
+    line-height: 1.6;
     border-radius: 18px;
     /*DESIGN*/
     background:
@@ -1154,15 +1185,15 @@ body.mode-2d .typewriter-controls {
         inset 0 0 12px rgba(255, 244, 220, 0.05);
 
     color: #fff0d0;
-    font-size: 15px;
 }
 
 /*afficher le nombre total de notes*/
 #note-reader-counter {
+    font-size: 15px;
     color: #fff0ce;
+
     text-shadow:
         0 0 8px rgba(255, 200, 120, 0.35);
-        font-size:14px;
 }
 
 /*
@@ -1222,6 +1253,12 @@ body.mode-2d .typewriter-controls {
 }
 
 .note-reader-navigation button {
+    width: 52px;
+    height: 52px;
+
+    font-size: 22px;
+    border-radius: 50%;
+
     background:
         radial-gradient(circle at 35% 30%,
             #fff4d8 0%,
