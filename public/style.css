@@ -452,7 +452,13 @@ body.mode-2d .key.active {
 .typewriter-controls {
     position: fixed;
     top: 50%;
-    right: 30px;
+    right: 70px;
+
+    /*
+       MOI : en 3D, mes boutons étaient trop collés au bord droit.
+       Je les ramène juste un peu vers l'intérieur avec 70px.
+       Je ne touche pas à leur logique, seulement à leur position visuelle.
+    */
     transform: translateY(-50%);
 
     display: flex;
@@ -474,11 +480,21 @@ body.mode-2d .typewriter-controls {
 
 /* 4.2 - Bouton Done */
 #done-button {
-    width: 70px;
+    /*
+       MOI : je donne à Done une vraie taille de bouton.
+       Avant il était étroit, donc je le mets à 130px x 50px.
+       box-sizing garde exactement cette taille même avec la bordure/padding.
+    */
+    width: 130px;
     height: 50px;
+    box-sizing: border-box;
 
-    padding: 20px 10px;
-    border-radius: 10px;
+    padding: 0 18px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     font-size: 16px;
     font-family: "Courier New", monospace;
@@ -509,9 +525,20 @@ body.mode-2d .typewriter-controls {
 
 /* 4.3 - Bouton New Note */
 #new-note-button {
-    padding: 10px 20px;
+    /*
+       MOI : je mets New Note à la même taille que Done.
+       Comme ça, en 2D ET en 3D, mes deux boutons ont l'air cohérents.
+    */
+    width: 130px;
+    height: 50px;
+    box-sizing: border-box;
 
-    border-radius: 10px;
+    padding: 0 18px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     background:
         linear-gradient(145deg,
@@ -685,7 +712,18 @@ body.mode-2d .typewriter-controls {
     z-index: 2;
 }
 
-/* Difference elle permet de propager */
+/*
+   MOI : plus haut, je mets tous les enfants du panel en z-index: 2
+   pour que mon texte et mes boutons restent visibles.
+
+   MAIS mes sparkles doivent rester derrière le contenu.
+   Donc ici je fais une exception juste pour .panel-sparkles.
+
+   En gros :
+   z-index 0 = reflets du panneau
+   z-index 1 = magie / sparkles
+   z-index 2 = mon vrai contenu
+*/
 #saved-notes-panel > .panel-sparkles {
     position: absolute;
     inset: 0;
@@ -741,7 +779,25 @@ body.mode-2d .typewriter-controls {
         0 0 25px rgba(255, 183, 80, 0.20);
 }
 
-/*5.4 b petit bonus d effets */
+/* ==========================================================
+   5.4 B - EFFETS MAGIQUES DU PANNEAU
+   ==========================================================
+
+   MOI : ici je veux éviter que mon panneau fasse juste "brun + blur".
+   Je veux que ça ressemble plus à un verre magique / un orbe lumineux.
+
+   Je fais donc 2 types d'effets :
+
+   1) .sparkle = les vraies petites étoiles en forme de croix.
+      Elles sont visibles et elles clignotent doucement.
+
+   2) .dust = des petits points lumineux.
+      Eux bougent à peine vers le haut, juste assez pour donner de la vie.
+
+   pointer-events: none veut dire que ces effets ne peuvent PAS bloquer
+   mes clics sur les notes ou sur les boutons.
+   ========================================================== */
+
 .panel-sparkles {
     position: absolute;
     inset: 0;
@@ -764,12 +820,17 @@ body.mode-2d .typewriter-controls {
     );
 
     box-shadow:
-        0 0 6px rgba(255, 234, 190, 0.8),
-        0 0 14px rgba(255, 196, 110, 0.55);
+        0 0 6px rgba(255, 234, 190, 0.85),
+        0 0 14px rgba(255, 196, 110, 0.55),
+        0 0 24px rgba(255, 180, 90, 0.20);
 
     animation: twinkle 2.8s infinite ease-in-out;
 }
 
+/*
+   MOI : ::before et ::after dessinent la croix de l'étoile.
+   Comme ça je n'ai pas besoin de rajouter encore plus de HTML.
+*/
 .sparkle::before,
 .sparkle::after {
     content: "";
@@ -784,31 +845,118 @@ body.mode-2d .typewriter-controls {
 .sparkle::before {
     width: 2px;
     height: 18px;
-    box-shadow: 0 0 6px rgba(255, 220, 150, 0.6);
 }
 
 .sparkle::after {
     width: 18px;
     height: 2px;
-    box-shadow: 0 0 6px rgba(255, 220, 150, 0.6);
+}
+
+/*
+   MOI : je donne différentes tailles aux étoiles.
+   Si elles avaient toutes exactement la même taille, ça ferait trop fake.
+*/
+.sparkle-small {
+    width: 8px;
+    height: 8px;
+}
+.sparkle-small::before { height: 14px; }
+.sparkle-small::after { width: 14px; }
+
+.sparkle-big {
+    width: 14px;
+    height: 14px;
+}
+.sparkle-big::before { height: 24px; }
+.sparkle-big::after { width: 24px; }
+
+.sparkle-tiny {
+    width: 5px;
+    height: 5px;
+}
+.sparkle-tiny::before { height: 10px; }
+.sparkle-tiny::after { width: 10px; }
+
+/*
+   MOI : ça ce sont les petits points de lumière.
+   Ils sont volontairement plus discrets que les vraies étoiles.
+*/
+.dust {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+
+    background: rgba(255, 236, 190, 0.85);
+
+    box-shadow:
+        0 0 6px rgba(255, 228, 170, 0.65),
+        0 0 12px rgba(255, 196, 110, 0.35);
+
+    opacity: 0.5;
+    animation: floaty 5.5s infinite ease-in-out;
 }
 
 @keyframes twinkle {
     0%, 100% {
-        opacity: 0.25;
+        opacity: 0.22;
         transform: scale(0.7) rotate(0deg);
     }
+
     50% {
         opacity: 1;
         transform: scale(1.15) rotate(45deg);
     }
 }
-.sp1 { top: 40px; right: 34px; animation-delay: 0s; }
-.sp2 { top: 120px; left: 20px; animation-delay: 0.6s; }
-.sp3 { top: 240px; right: 18px; animation-delay: 1.2s; }
-.sp4 { top: 420px; left: 28px; animation-delay: 1.8s; }
-.sp5 { bottom: 160px; right: 30px; animation-delay: 0.9s; }
-.sp6 { bottom: 70px; left: 40px; animation-delay: 1.4s; }
+
+/*
+   MOI : je fais monter les poussières juste de 8px.
+   Je veux un effet subtil, pas des confettis en panique.
+*/
+@keyframes floaty {
+    0%, 100% {
+        opacity: 0.12;
+        transform: translateY(0px);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: translateY(-8px);
+    }
+}
+
+/*
+   MOI : je les place à différents endroits ET je décale leurs animations.
+   Comme ça tout ne clignote pas en même temps.
+*/
+.sp1 { top: 52px; right: 38px; animation-delay: 0s; }
+.sp2 { top: 145px; left: 24px; animation-delay: 0.6s; }
+.sp3 { top: 245px; right: 22px; animation-delay: 1.2s; }
+.sp4 { top: 405px; left: 28px; animation-delay: 1.8s; }
+.sp5 { bottom: 145px; right: 34px; animation-delay: 0.9s; }
+.sp6 { bottom: 70px; left: 45px; animation-delay: 1.4s; }
+
+.d1 { top: 90px; left: 118px; animation-delay: 0.2s; }
+.d2 { top: 175px; right: 66px; animation-delay: 1.1s; }
+.d3 { top: 295px; left: 88px; animation-delay: 2.1s; }
+.d4 { top: 360px; right: 110px; animation-delay: 0.9s; }
+.d5 { bottom: 230px; left: 62px; animation-delay: 1.8s; }
+.d6 { bottom: 185px; right: 72px; animation-delay: 2.6s; }
+.d7 { bottom: 112px; left: 142px; animation-delay: 0.7s; }
+.d8 { bottom: 45px; right: 125px; animation-delay: 1.9s; }
+
+/*
+   MOI : je rajoute juste un petit halo au titre.
+   Je veux "magique", pas "enseigne néon".
+*/
+.saved-notes-header h2 {
+    color: #fff0ce;
+
+    text-shadow:
+        0 0 8px rgba(255, 218, 145, 0.35),
+        0 0 18px rgba(255, 188, 92, 0.12);
+}
+
 
 /* 5.5 - Liste des notes */
 #saved-notes-list {
