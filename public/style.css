@@ -1,25 +1,6 @@
 /* ==========================================================
    PARTIE 1 - ALLURE GÉNÉRALE DE LA PAGE
    ========================================================== */
-/*
-body {
-    margin: 0;
-    min-height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-family: "Courier New", monospace;
-    color: #2c2621;
-
-    /* Couleur de secours si l'image ne charge pas 
-    background-color: #f5f1eb;
-
-    /* Nécessaire pour mettre les fonds derrière l'application i took this from online
-    position: relative;
-    isolation: isolate;
-}*/
 
 html,
 body {
@@ -31,23 +12,6 @@ body {
 body {
     min-height: 100dvh;
     overflow: hidden;
-}
-
-body::before,
-body::after {
-    content: "";
-
-    position: fixed;
-    inset: 0;
-
-    background-repeat: no-repeat;
-    background-position: center;
-
-    background-size: 30% auto;
-
-    transition: opacity 0.8s ease;
-
-    pointer-events: none;
 }
 
 /* ----------------------------------------------------------
@@ -73,9 +37,6 @@ body::after {
     pointer-events: none;
 }
 
-
-/* Fond du mode 3D */
-
 body::before {
     background-image:
         url("./images/background-3d.png");
@@ -85,9 +46,6 @@ body::before {
     z-index: -2;
 }
 
-
-/* Fond du mode 2D */
-
 body::after {
     background-image:
         url("./images/background-2d.png");
@@ -96,9 +54,6 @@ body::after {
 
     z-index: -1;
 }
-
-
-/* Quand on passe en mode 2D */
 
 body.mode-2d::before {
     opacity: 0;
@@ -217,7 +172,6 @@ body.mode-2d::after {
         transform 0.4s ease;
 }
 
-/* Version 3D visible par défaut */
 .view-3d {
     opacity: 1;
     visibility: visible;
@@ -234,7 +188,6 @@ body.mode-2d::after {
     transform: translateY(15px);
 }
 
-/* Quand le mode 2D est actif */
 body.mode-2d .typewriter-views {
     display: block;
     width: 100%;
@@ -265,7 +218,6 @@ body.mode-2d .view-2d {
    PARTIE 2 - VERSION 2D
    ========================================================== */
 
-/* 2.1 - Conteneur de la version 2D */
 body.mode-2d .view-2d {
     width: min(760px, 94vw);
 
@@ -277,7 +229,6 @@ body.mode-2d .view-2d {
     box-sizing: border-box;
 }
 
-/* 2.2 - Titre */
 body.mode-2d .typewriter h1 {
     margin: 0 0 28px;
 
@@ -288,7 +239,6 @@ body.mode-2d .typewriter h1 {
     text-align: center;
 }
 
-/* 2.3 - Zone du papier */
 .paper,
 .paper-slot {
     box-sizing: border-box;
@@ -327,13 +277,11 @@ body.mode-2d .paper {
         opacity 0.8s ease;
 }
 
-/* 2.4 - Animation du papier quand la note est sauvegardée */
 .paper.saving {
     transform: translate(420px, -250px) scale(0.1);
     opacity: 0;
 }
 
-/* 2.5 - Texte, date et infos sur le papier */
 #paper-text {
     white-space: pre-wrap;
     overflow-wrap: break-word;
@@ -357,7 +305,6 @@ body.mode-2d .paper {
     text-align: right;
 }
 
-/* 2.6 - Corps du clavier */
 body.mode-2d .keyboard {
     position: relative;
 
@@ -386,7 +333,6 @@ body.mode-2d .keyboard {
         inset 0 -5px 10px rgba(0, 0, 0, 0.25);
 }
 
-/* Barre décorative au-dessus du clavier */
 body.mode-2d .keyboard::before {
     content: "";
 
@@ -410,13 +356,11 @@ body.mode-2d .keyboard::before {
         inset 0 2px 2px rgba(255, 255, 255, 0.08);
 }
 
-/* 2.7 - Rangées du clavier */
 .keyboard-row {
     display: flex;
     gap: 10px;
 }
 
-/* 2.8 - Touches normales */
 body.mode-2d .key {
     width: 50px;
     height: 50px;
@@ -452,7 +396,6 @@ body.mode-2d .key:hover {
     transform: translateY(-2px);
 }
 
-/* Touche pressée ou Caps Lock actif */
 body.mode-2d .key.pressed,
 body.mode-2d .key.active {
     transform: translateY(5px);
@@ -462,7 +405,6 @@ body.mode-2d .key.active {
         0 2px 4px rgba(0, 0, 0, 0.16);
 }
 
-/* 2.9 - Touches spéciales */
 .special-key {
     width: auto;
 
@@ -492,7 +434,6 @@ body.mode-2d .key.active {
    PARTIE 3 - VERSION 3D
    ========================================================== */
 
-/* 3.1 - Conteneur du modèle 3D */
 #typewriter-3d {
     width: 95vw;
     height: 100%;
@@ -500,7 +441,6 @@ body.mode-2d .key.active {
     margin: 0 auto;
 }
 
-/* 3.2 - Canvas Three.js */
 #typewriter-3d canvas {
     display: block;
 }
@@ -509,9 +449,6 @@ body.mode-2d .key.active {
    PARTIE 4 - BOUTONS COMMUNS AUX DEUX VERSIONS
    ========================================================== */
 
-/* 4.1 - Zone des boutons */
-
-/* Par défaut (mode 3D) : les boutons sont à côté de la machine, à droite */
 .typewriter-controls {
     position: fixed;
     top: 50%;
@@ -525,7 +462,6 @@ body.mode-2d .key.active {
     z-index: 10;
 }
 
-/* En mode 2D : les boutons reviennent sous le clavier, comme avant */
 body.mode-2d .typewriter-controls {
     position: static;
     transform: none;
@@ -538,33 +474,22 @@ body.mode-2d .typewriter-controls {
 
 /* 4.2 - Bouton Done */
 #done-button {
-    padding: 20px 10px;
-    border: none;
-    border-radius: 5px;
-   
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-
-    top: 20px;
-    right: 20px;
-
     width: 70px;
     height: 50px;
 
+    padding: 20px 10px;
     border: none;
     border-radius: 10px;
+
+    color: white;
+    font-size: 16px;
+    font-family: "Courier New", monospace;
+    cursor: pointer;
 
     background:
         linear-gradient(160deg,
             #4a4038,
             #2f2822);
-
-
-
-    font-family: "Courier New", monospace;
-
-   
 
     box-shadow:
         0 6px 14px rgba(0, 0, 0, 0.3),
@@ -573,7 +498,6 @@ body.mode-2d .typewriter-controls {
     transition:
         transform 0.15s ease,
         box-shadow 0.15s ease;
-    
 }
 
 #done-button:disabled {
@@ -670,20 +594,29 @@ body.mode-2d .typewriter-controls {
 
     box-sizing: border-box;
 
-
-    background-color:
+    background:
         linear-gradient(180deg,
-            #0e001f,
-            #da96fa);
+            rgba(230, 190, 120, 0.261),
+            rgba(209, 169, 100, 0.5));
 
+    border-radius: 25px 0px 0px 25px;
 
-    border-left: 1px solid rgba(252, 228, 228, 0.25);/*couleur de la bordure*/
+    border-style: solid;
+    border-width: 0 0 0 2px;
+
+    border-image:
+        linear-gradient(180deg,
+            #6b4f28 0%,
+            #ffefc3 20%,
+            #a9803f 45%,
+            #fff6da 65%,
+            #6b4f28 85%,
+            #d4af7a 100%
+        ) 1;
 
     box-shadow:
-        -12px 0 35px rgba(219, 213, 206, 0.25), /*couleur de leffet ombre*/
-        inset 1px 0 0 rgba(255, 255, 255, 0.4); /*ici, c est la couleur de la bordure*/
-
-
+        -12px 0 35px rgba(230, 190, 120, 0.5),
+        inset 1px 0 0 rgba(230, 190, 120, 0.5);
 
     overflow-y: auto;
 
@@ -719,6 +652,7 @@ body.mode-2d .typewriter-controls {
 }
 
 #notes-date-filter {
+    border-radius: 5px;
     width: 100%;
 
     padding: 8px;
@@ -733,6 +667,7 @@ body.mode-2d .typewriter-controls {
 
     gap: 12px;
 }
+
 .saved-note {
     padding: 14px 16px;
 
@@ -806,13 +741,19 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-text {
-    background-color: #df94fda6;
-    backdrop-filter:blur();
+    margin-top: 20px;
+
+    padding: 12px;
+
     border-radius: 5px;
 
-    color:#d8d0c5
-    margin-top: 20px;
+    background-color: #df94fdb6;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    color: #d8d0c5;
     font-family: "Courier New", monospace;
+
     white-space: pre-wrap;
     line-height: 1.5;
 }
