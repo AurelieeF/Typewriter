@@ -8,7 +8,7 @@
 
     <title>Typewriter</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-player.css">
 </head>
 
 
@@ -34,6 +34,60 @@
             </label>
 
             <span class="mode-label">3D</span>
+
+        </div>
+
+
+        <!-- ==================================================
+             MINI PLAYER D'AMBIANCE
+             ==================================================
+
+             MOI : je mets ici un petit lecteur pour mes 3 musiques.
+             Le HTML crée seulement les boutons + le nom de la chanson.
+             Toute la logique play/pause/avant/arrière reste dans script.js,
+             et tout le look reste dans le CSS.
+        =================================================== -->
+
+        <div class="ambience-player">
+
+            <div class="ambience-player-top">
+                <span class="ambience-icon">✦</span>
+
+                <span id="ambience-track-name">
+                    Ambiance 1
+                </span>
+            </div>
+
+            <div class="ambience-controls">
+
+                <button
+                    id="ambience-previous"
+                    class="ambience-button"
+                    type="button"
+                    aria-label="Previous ambience"
+                >
+                    ◀
+                </button>
+
+                <button
+                    id="ambience-play"
+                    class="ambience-button ambience-play-button"
+                    type="button"
+                    aria-label="Play ambience"
+                >
+                    ▶
+                </button>
+
+                <button
+                    id="ambience-next"
+                    class="ambience-button"
+                    type="button"
+                    aria-label="Next ambience"
+                >
+                    ▶
+                </button>
+
+            </div>
 
         </div>
 
@@ -376,7 +430,7 @@
     </script>
 
 
-    <script src="script.js"></script>
+    <script src="script-player.js"></script>
 
     <script type="module" src="three-scene.js"></script>
 
