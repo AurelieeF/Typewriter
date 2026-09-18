@@ -595,28 +595,29 @@ body.mode-2d .typewriter-controls {
     box-sizing: border-box;
 
     background:
-        linear-gradient(180deg,
-            rgba(230, 190, 120, 0.261),
-            rgba(209, 169, 100, 0.5));
+        radial-gradient(
+            circle at 65% 25%,
+            rgba(218, 161, 124, 0.181),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(72, 43, 34, 0.62) 0%,
+            rgba(92, 57, 43, 0.54) 45%,
+            rgba(55, 34, 30, 0.65) 100%
+        );
 
-    border-radius: 25px 0px 0px 25px;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(14px);
 
-    border-style: solid;
-    border-width: 0 0 0 2px;
+    border-radius: 25px 0 0 25px;
 
-    border-image:
-        linear-gradient(180deg,
-            #6b4f28 0%,
-            #ffefc3 20%,
-            #a9803f 45%,
-            #fff6da 65%,
-            #6b4f28 85%,
-            #d4af7a 100%
-        ) 1;
+    border: 1px solid rgba(255, 211, 145, 0.65);
 
     box-shadow:
-        -12px 0 35px rgba(230, 190, 120, 0.5),
-        inset 1px 0 0 rgba(230, 190, 120, 0.5);
+        0 0 8px rgba(255, 207, 130, 0.55),
+        0 0 24px rgba(255, 171, 79, 0.22),
+        inset 0 0 22px rgba(255, 214, 160, 0.08);
 
     overflow-y: auto;
 
@@ -652,7 +653,27 @@ body.mode-2d .typewriter-controls {
 }
 
 #notes-date-filter {
-    border-radius: 5px;
+    border-radius: 15px;
+    border-color: #f0dba8;
+
+    /*learning how to make a metallic border*/
+    border-image:
+        linear-gradier(180deg,
+            /*ici on indique lordre de repetitions des couleurs*/
+            #6b4f28 0%,
+            #ffefc3 20%,
+            #a9803f 45%,
+            #fff6da 65%,
+            #6b4f28 85%,
+            #d4af7a 100%) 1;
+    /*1 cest le slice, border-image prend une image et le decoupe en morceau, decoupe a 1px du bord*/
+
+
+    box-shadow: 0 0 30px rgba(245, 223, 160, 0.45);
+
+
+    color: #5f4e25;
+    background-color: #f0dba8;
     width: 100%;
 
     padding: 8px;
