@@ -1508,3 +1508,117 @@ body.mode-2d .typewriter-controls {
 .ambience-player-button:active {
     transform: translateY(1px) scale(0.97);
 }
+
+/* ==========================================================
+   VOLUME DU MINI PLAYER
+   ==========================================================
+
+   MOI : je mets le volume sous mes boutons.
+   Le slider est petit et discret pour rester dans le vibe
+   du player au lieu d'avoir une énorme barre de volume.
+   ========================================================== */
+
+.ambience-volume {
+    margin-top: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+
+.ambience-volume-icon {
+    color: #ffd99a;
+
+    font-size: 14px;
+
+    text-shadow:
+        0 0 7px rgba(255, 203, 115, 0.45);
+}
+
+
+#ambience-volume-slider {
+    /*
+       MOI : j'enlève le style par défaut du navigateur,
+       sinon chaque navigateur décide de faire son petit design.
+    */
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 90px;
+    height: 4px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 226, 174, 0.30);
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+
+/* ==========================================================
+   PETITE BOULE QU'ON DRAG
+   Chrome / Edge / Safari
+   ========================================================== */
+
+#ambience-volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 15px;
+    height: 15px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background:
+        #ffe3ad;
+
+    box-shadow:
+        0 0 7px rgba(255, 202, 115, 0.65);
+
+    cursor: grab;
+}
+
+
+#ambience-volume-slider::-webkit-slider-thumb:active {
+    cursor: grabbing;
+}
+
+
+/* ==========================================================
+   Même boule pour Firefox
+   ========================================================== */
+
+#ambience-volume-slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background:
+        #ffe3ad;
+
+    box-shadow:
+        0 0 7px rgba(255, 202, 115, 0.65);
+
+    cursor: grab;
+}
+
+
+#ambience-volume-value {
+    min-width: 34px;
+
+    color: #fff0ce;
+
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+}

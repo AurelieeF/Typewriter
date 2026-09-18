@@ -651,6 +651,12 @@ const ambienceNextButton =
 const ambienceTrackName =
     document.getElementById("ambience-track-name");
 
+const ambienceVolumeSlider =
+    document.getElementById("ambience-volume-slider");
+
+const ambienceVolumeValue =
+    document.getElementById("ambience-volume-value");
+
 
 let currentAmbienceIndex = 0;
 
@@ -660,6 +666,22 @@ let currentAmbienceIndex = 0;
 // mais il ne la joue pas encore.
 const ambienceAudio =
     new Audio(ambienceTracks[currentAmbienceIndex].src);
+
+// ==========================================================
+// VOLUME INITIAL
+// ==========================================================
+//
+// MOI : en JavaScript le volume ne va PAS de 0 à 100.
+// Il va de 0 à 1.
+//
+// 0   = 0%
+// 0.5 = 50%
+// 1   = 100%
+//
+// Donc je commence à 0.5.
+// ==========================================================
+
+ambienceAudio.volume = 0.5;
 
 
 // ==========================================================
@@ -857,4 +879,36 @@ ambienceAudio.addEventListener("ended", () => {
 
 
     loadAmbienceTrack(true);
+});
+
+// ==========================================================
+// CHANGER LE VOLUME
+// ==========================================================
+//
+// MOI : "input" se déclenche pendant que je DRAG le slider.
+// Donc le volume change immédiatement pendant que je le bouge.
+//
+// Mon slider donne une valeur entre 0 et 100.
+// Mais Audio.volume veut une valeur entre 0 et 1.
+//
+// Donc je divise simplement par 100.
+//
+// Exemple :
+// slider = 50
+// 50 / 100 = 0.5
+// donc volume = 50%
+// ==========================================================
+
+ambienceVolumeSlider.addEventListener("input", () => {
+
+    const volumePercent =
+        Number(ambienceVolumeSlider.value);
+
+
+    ambienceAudio.volume =
+        volumePercent / 100;
+
+
+    ambienceVolumeValue.textContent =
+        `${volumePercent}%`;
 });
