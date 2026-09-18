@@ -528,6 +528,11 @@ function resetNote() {
         window.clear3DPaper();
     }
 
+    if (window.reset3DPaper) {
+        window.reset3DPaper();
+    }
+
+
     paper.style.height = "";
 
     paper.classList.remove("saving");

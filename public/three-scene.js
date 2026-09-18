@@ -364,6 +364,22 @@ function animatePaperOut() {
 
 window.animate3DPaperOut = animatePaperOut;
 
+// Remet le papier exactement à sa position de départ, cause avant ca le new note fonctionnait plus
+function resetPaperPosition() {
+
+    if (!paperObject || paperStartY === null) {
+        return;
+    }
+
+    paperObject.position.y = paperStartY;
+
+    if (rollerObject && rollerStartRotation !== null) {
+        rollerObject.rotation.x = rollerStartRotation;
+    }
+}
+
+window.reset3DPaper = resetPaperPosition;
+
 function createPaperTextSprite() {
 
     if (!paperObject.geometry.boundingBox) {
