@@ -610,3 +610,251 @@ function playKeySound(key) {
     sound.currentTime = 0;
     sound.play();
 }
+
+// ==========================================================
+// MINI PLAYER D'AMBIANCE
+// ==========================================================
+//
+// MOI : j'ajoute ici seulement la logique de mes 3 musiques.
+// Je ne touche pas à la logique de mes touches, de mes notes,
+// de Three.js ou de ma base de données.
+//
+// J'utilise UN seul objet Audio et je change simplement son fichier
+// quand je fais précédent / suivant.
+// ==========================================================
+
+const ambienceTracks = [
+    {
+        name: "Ambiance 1",
+        src: "./Sounds/Ambiance1.mp3"
+    },
+    {
+        name: "Ambiance 2",
+        src: "./Sounds/Ambiance2.mp3"
+    },
+    {
+        name: "Ambiance 3",
+        src: "./Sounds/Ambiance3.mp3"
+    }
+];
+
+
+const ambiencePreviousButton =
+    document.getElementById("ambience-previous");
+
+const ambiencePlayButton =
+    document.getElementById("ambience-play");
+
+const ambienceNextButton =
+    document.getElementById("ambience-next");
+
+const ambienceTrackName =
+    document.getElementById("ambience-track-name");
+
+
+let currentAmbienceIndex = 0;
+
+
+// MOI : je crée mon lecteur audio.
+// Au début il charge automatiquement Ambiance 1,
+// mais il ne la joue pas encore.
+const ambienceAudio =
+    new Audio(ambienceTracks[currentAmbienceIndex].src);
+
+
+// ==========================================================
+// CHARGER UNE MUSIQUE
+// ==========================================================
+//
+// MOI : cette fonction sert quand je change de chanson.
+//
+// Elle va :
+// 1. récupérer la chanson actuelle dans mon tableau
+// 2. changer le fichier audio
+// 3. changer le nom affiché dans mon mini-player
+//
+// shouldPlay = false veut dire :
+// "je change la chanson mais je ne la lance pas forcément".
+//
+// shouldPlay = true veut dire :
+// "je change la chanson ET je la joue directement".
+// ==========================================================
+
+function loadAmbienceTrack(shouldPlay = false) {
+
+    const selectedTrack =
+        ambienceTracks[currentAmbienceIndex];
+
+
+    ambienceAudio.src =
+        selectedTrack.src;
+
+
+    ambienceTrackName.textContent =
+        selectedTrack.name;
+
+
+    if (shouldPlay) {
+
+        ambienceAudio
+            .play()
+
+            .then(() => {
+
+                // MOI : maintenant que la musique joue,
+                // mon bouton devient le symbole Pause.
+                ambiencePlayButton.textContent =
+                    "❚❚";
+
+
+                ambiencePlayButton.setAttribute(
+                    "aria-label",
+                    "Pause ambience"
+                );
+            })
+
+            .catch((error) => {
+
+                console.log(
+                    "Ambience playback blocked:",
+                    error
+                );
+            });
+    }
+}
+
+
+// ==========================================================
+// PLAY / PAUSE
+// ==========================================================
+//
+// MOI : quand je clique sur le bouton du milieu,
+// je regarde d'abord si ma musique est présentement arrêtée.
+//
+// Si elle est arrêtée -> play
+// Si elle joue déjà -> pause
+// ==========================================================
+
+ambiencePlayButton.addEventListener("click", () => {
+
+    if (ambienceAudio.paused) {
+
+        ambienceAudio
+            .play()
+
+            .then(() => {
+
+                ambiencePlayButton.textContent =
+                    "❚❚";
+
+
+                ambiencePlayButton.setAttribute(
+                    "aria-label",
+                    "Pause ambience"
+                );
+            });
+    }
+
+    else {
+
+        ambienceAudio.pause();
+
+
+        ambiencePlayButton.textContent =
+            "▶";
+
+
+        ambiencePlayButton.setAttribute(
+            "aria-label",
+            "Play ambience"
+        );
+    }
+});
+
+
+// ==========================================================
+// MUSIQUE PRÉCÉDENTE
+// ==========================================================
+//
+// MOI : ici je diminue mon index.
+//
+// Exemple :
+// Ambiance 2 = index 1
+// je clique previous
+// index devient 0
+// donc Ambiance 1.
+//
+// Le petit calcul avec % permet aussi de faire :
+// Ambiance 1 -> previous -> Ambiance 3
+// au lieu d'avoir un index -1 qui ferait exploser mon tableau.
+// ==========================================================
+
+ambiencePreviousButton.addEventListener("click", () => {
+
+    const wasPlaying =
+        !ambienceAudio.paused;
+
+
+    currentAmbienceIndex =
+        (
+            currentAmbienceIndex
+            - 1
+            + ambienceTracks.length
+        )
+        % ambienceTracks.length;
+
+
+    loadAmbienceTrack(wasPlaying);
+});
+
+
+// ==========================================================
+// MUSIQUE SUIVANTE
+// ==========================================================
+//
+// MOI : même principe, mais cette fois j'ajoute 1.
+//
+// Ambiance 1 -> Ambiance 2
+// Ambiance 2 -> Ambiance 3
+// Ambiance 3 -> Ambiance 1
+// ==========================================================
+
+ambienceNextButton.addEventListener("click", () => {
+
+    const wasPlaying =
+        !ambienceAudio.paused;
+
+
+    currentAmbienceIndex =
+        (
+            currentAmbienceIndex + 1
+        )
+        % ambienceTracks.length;
+
+
+    loadAmbienceTrack(wasPlaying);
+});
+
+
+// ==========================================================
+// QUAND UNE MUSIQUE SE TERMINE
+// ==========================================================
+//
+// MOI : si je laisse une chanson jouer jusqu'à la fin,
+// je passe automatiquement à la suivante.
+//
+// Et ici je mets true dans loadAmbienceTrack(true)
+// parce que je veux que la prochaine musique démarre toute seule.
+// ==========================================================
+
+ambienceAudio.addEventListener("ended", () => {
+
+    currentAmbienceIndex =
+        (
+            currentAmbienceIndex + 1
+        )
+        % ambienceTracks.length;
+
+
+    loadAmbienceTrack(true);
+});

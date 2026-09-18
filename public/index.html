@@ -8,7 +8,7 @@
 
     <title>Typewriter</title>
 
-    <link rel="stylesheet" href="style-player.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 
@@ -38,31 +38,26 @@
         </div>
 
 
+
         <!-- ==================================================
              MINI PLAYER D'AMBIANCE
-             ==================================================
 
-             MOI : je mets ici un petit lecteur pour mes 3 musiques.
-             Le HTML crée seulement les boutons + le nom de la chanson.
-             Toute la logique play/pause/avant/arrière reste dans script.js,
-             et tout le look reste dans le CSS.
+             MOI : j'ajoute juste un petit lecteur à gauche.
+             Je ne touche pas à ma machine, mes notes, mes boutons,
+             ni à la structure déjà existante.
         =================================================== -->
-
         <div class="ambience-player">
 
-            <div class="ambience-player-top">
-                <span class="ambience-icon">✦</span>
-
-                <span id="ambience-track-name">
-                    Ambiance 1
-                </span>
+            <div class="ambience-player-title">
+                <span class="ambience-star">✦</span>
+                <span id="ambience-track-name">Ambiance 1</span>
             </div>
 
-            <div class="ambience-controls">
+            <div class="ambience-player-controls">
 
                 <button
                     id="ambience-previous"
-                    class="ambience-button"
+                    class="ambience-player-button"
                     type="button"
                     aria-label="Previous ambience"
                 >
@@ -71,7 +66,7 @@
 
                 <button
                     id="ambience-play"
-                    class="ambience-button ambience-play-button"
+                    class="ambience-player-button ambience-main-button"
                     type="button"
                     aria-label="Play ambience"
                 >
@@ -80,7 +75,7 @@
 
                 <button
                     id="ambience-next"
-                    class="ambience-button"
+                    class="ambience-player-button"
                     type="button"
                     aria-label="Next ambience"
                 >
@@ -430,7 +425,7 @@
     </script>
 
 
-    <script src="script-player.js"></script>
+    <script src="script.js"></script>
 
     <script type="module" src="three-scene.js"></script>
 

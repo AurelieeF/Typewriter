@@ -1324,3 +1324,187 @@ body.mode-2d .typewriter-controls {
 .hidden {
     display: none !important;
 }
+
+/* ==========================================================
+   MINI PLAYER D'AMBIANCE
+   ==========================================================
+
+   MOI : le player fonctionne déjà.
+   Ici je change seulement son LOOK pour qu'il ressemble
+   au reste du site et pas à trois boutons Windows posés là 😭
+   ========================================================== */
+
+.ambience-player {
+    position: fixed;
+
+    left: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 190px;
+
+    padding: 14px 16px;
+
+    box-sizing: border-box;
+
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at 25% 20%,
+            rgba(255, 226, 174, 0.15),
+            transparent 35%
+        ),
+        linear-gradient(
+            160deg,
+            rgba(74, 45, 38, 0.72),
+            rgba(49, 30, 27, 0.82)
+        );
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255, 214, 150, 0.60);
+
+    box-shadow:
+        0 0 10px rgba(255, 209, 140, 0.28),
+        0 0 24px rgba(255, 180, 95, 0.12),
+        inset 0 0 15px rgba(255, 240, 215, 0.05);
+
+    z-index: 20;
+}
+
+
+/* ==========================================================
+   TITRE / NOM DE LA MUSIQUE
+   ========================================================== */
+
+.ambience-player-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-bottom: 12px;
+
+    color: #fff0ce;
+
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+
+    text-shadow:
+        0 0 8px rgba(255, 208, 130, 0.25);
+}
+
+.ambience-star {
+    color: #ffd99a;
+
+    text-shadow:
+        0 0 8px rgba(255, 203, 115, 0.55);
+}
+
+
+/* ==========================================================
+   LIGNE DES BOUTONS
+   ========================================================== */
+
+.ambience-player-controls {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+}
+
+
+/* ==========================================================
+   BOUTONS
+   ==========================================================
+
+   MOI : c'est ici que je retire le look blanc / carré par défaut.
+   border: none enlève la bordure HTML native.
+   appearance: none empêche le navigateur de décider lui-même
+   à quoi le bouton doit ressembler.
+   ========================================================== */
+
+.ambience-player-button {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fff4d8 0%,
+            #f0d09b 65%,
+            #cf9550 100%
+        );
+
+    color: #5b3d2b;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 8px rgba(255, 214, 150, 0.45),
+        0 0 16px rgba(255, 184, 90, 0.20),
+        inset 0 2px 3px rgba(255, 255, 255, 0.55);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+/* ==========================================================
+   BOUTON PLAY / PAUSE
+   ========================================================== */
+
+.ambience-main-button {
+    width: 50px;
+    height: 50px;
+
+    font-size: 18px;
+
+    box-shadow:
+        0 0 10px rgba(255, 220, 160, 0.55),
+        0 0 22px rgba(255, 184, 90, 0.28),
+        inset 0 2px 3px rgba(255, 255, 255, 0.60);
+}
+
+
+/* ==========================================================
+   HOVER
+   ========================================================== */
+
+.ambience-player-button:hover {
+    transform: translateY(-2px) scale(1.05);
+
+    box-shadow:
+        0 0 12px rgba(255, 220, 160, 0.65),
+        0 0 24px rgba(255, 184, 90, 0.30),
+        inset 0 2px 3px rgba(255, 255, 255, 0.60);
+}
+
+
+/* ==========================================================
+   QUAND JE CLIQUE
+   ========================================================== */
+
+.ambience-player-button:active {
+    transform: translateY(1px) scale(0.97);
+}
