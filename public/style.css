@@ -806,7 +806,9 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-text {
-    background-color: #b700ff79;
+    background-color: #e298ff42;
+    filter:blur();
+
     color:#d8d0c5
     margin-top: 20px;
     font-family: "Courier New", monospace;
