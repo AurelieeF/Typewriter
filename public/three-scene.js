@@ -185,18 +185,18 @@ loader.load(
                 size.z
             );
 
-        camera.position.set(
-            0,
-            maxDimension * 1.05,
-            maxDimension * 1.2
-        );
+   camera.position.set(
+    0.0,  //decalage droite gauche camera
+    maxDimension * 1.2, //hauteur de la camera
+    maxDimension * 1.5//distance de la camera par rapport a lobjet
+);
 
-        camera.lookAt(
-            0,
-            0,
-            0
-        );
+camera.lookAt(
+    0, //0=centre de lobkect
+    -0.02, //negativ camera penche vers le bas ce qui pousse object vers le haut
+    -0.15 // centre de lobject
 
+);
         paperObject =
             typewriterModel.getObjectByName(
                 "Paper"
@@ -219,9 +219,7 @@ loader.load(
                     new THREE.Vector3()
                 );
 
-            typewriterModel.position.y -=
-                paperWorldSize.y;
-
+            typewriterModel.position.y -= paperWorldSize.y * 0.15;
             typewriterModel.updateMatrixWorld(
                 true
             );

@@ -1,7 +1,7 @@
 /* ==========================================================
    PARTIE 1 - ALLURE GÉNÉRALE DE LA PAGE
    ========================================================== */
-
+/*
 body {
     margin: 0;
     min-height: 100vh;
@@ -13,12 +13,40 @@ body {
     font-family: "Courier New", monospace;
     color: #2c2621;
 
-    /* Couleur de secours si l'image ne charge pas */
+    /* Couleur de secours si l'image ne charge pas 
     background-color: #f5f1eb;
 
-    /* Nécessaire pour mettre les fonds derrière l'application i took this from online*/
+    /* Nécessaire pour mettre les fonds derrière l'application i took this from online
     position: relative;
     isolation: isolate;
+}*/
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    min-height: 100dvh;
+    overflow: hidden;
+}
+body::before,
+body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    background-repeat: no-repeat;
+    background-position: center;
+
+    background-size: 30% auto;
+
+    transition: opacity 0.8s ease;
+
+    pointer-events: none;
 }
 
 /* ----------------------------------------------------------
@@ -81,16 +109,19 @@ body.mode-2d::after {
 
 /* 1.2 - Conteneur principal */
 .typewriter-app {
-    min-height: 100vh;
+    width: 100%;
+    height: 100dvh;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 
-    gap: 12px;
-    position: relative;
-z-index: 1;
+    box-sizing: border-box;
+
+    padding:
+        20px
+        20px
+        0px;
 }
 
 /* 1.3 - Bouton pour changer entre 2D et 3D */
@@ -171,18 +202,21 @@ z-index: 1;
     align-items: start;
 
     width: 100%;
+
+    flex: 1;
+    min-height: 0;
 }
 
 .typewriter-view {
     grid-area: 1 / 1;
 
     width: 100%;
+    height: 100%;
 
     transition:
         opacity 0.4s ease,
         transform 0.4s ease;
 }
-
 /* Version 3D visible par défaut */
 .view-3d {
     opacity: 1;
@@ -460,8 +494,8 @@ body.mode-2d .key.active {
 
 /* 3.1 - Conteneur du modèle 3D */
 #typewriter-3d {
-    width: min(1200px, 95vw);
-    height: 1100px;
+    width: 95vw;
+    height: 100%;
 
     margin: 0 auto;
 }
@@ -471,34 +505,44 @@ body.mode-2d .key.active {
     display: block;
 }
 
-
 /* ==========================================================
    PARTIE 4 - BOUTONS COMMUNS AUX DEUX VERSIONS
    ========================================================== */
 
 /* 4.1 - Zone des boutons */
+
+/* Par défaut (mode 3D) : les boutons sont à côté de la machine, à droite */
 .typewriter-controls {
-    margin-top: 20px;
+    position: fixed;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    z-index: 10;
 }
 
+/* En mode 2D : les boutons reviennent sous le clavier, comme avant */
 body.mode-2d .typewriter-controls {
+    position: static;
+    transform: none;
+
+    flex-direction: row;
+    justify-content: center;
+
     margin-top: 8px;
 }
-
 /* 4.2 - Bouton Done */
 #done-button {
-    margin-top: 2px;
-
     padding: 10px 20px;
-
     border: none;
     border-radius: 5px;
-
     background-color: #3d342d;
     color: #fff;
-
     font-size: 16px;
-
     cursor: pointer;
 }
 
@@ -509,27 +553,19 @@ body.mode-2d .typewriter-controls {
 
 /* 4.3 - Bouton New Note */
 #new-note-button {
-    margin-top: 20px;
-    margin-left: 10px;
-
     padding: 10px 20px;
-
     border: none;
     border-radius: 5px;
-
     background-color: #c0a28c;
     color: #3d342d;
-
     font-family: "Courier New", monospace;
     font-size: 16px;
-
     cursor: pointer;
 }
 
 #new-note-button:hover {
     opacity: 0.85;
 }
-
 
 /* ==========================================================
    PARTIE 5 - NOTES SAUVEGARDÉES
