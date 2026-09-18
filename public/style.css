@@ -32,6 +32,7 @@ body {
     min-height: 100dvh;
     overflow: hidden;
 }
+
 body::before,
 body::after {
     content: "";
@@ -119,9 +120,7 @@ body.mode-2d::after {
     box-sizing: border-box;
 
     padding:
-        20px
-        20px
-        0px;
+        20px 20px 0px;
 }
 
 /* 1.3 - Bouton pour changer entre 2D et 3D */
@@ -217,6 +216,7 @@ body.mode-2d::after {
         opacity 0.4s ease,
         transform 0.4s ease;
 }
+
 /* Version 3D visible par défaut */
 .view-3d {
     opacity: 1;
@@ -535,6 +535,7 @@ body.mode-2d .typewriter-controls {
 
     margin-top: 8px;
 }
+
 /* 4.2 - Bouton Done */
 #done-button {
     padding: 10px 20px;
@@ -620,7 +621,20 @@ body.mode-2d .typewriter-controls {
 
     box-sizing: border-box;
 
-    background-color: #f5ecd8;
+
+    background-color:
+        linear-gradient(180deg,
+            #0e001f,
+            #da96fa);
+
+
+    border-left: 1px solid rgba(252, 228, 228, 0.25);/*couleur de la bordure*/
+
+    box-shadow:
+        -12px 0 35px rgba(219, 213, 206, 0.25), /*couleur de leffet ombre*/
+        inset 1px 0 0 rgba(255, 255, 255, 0.4); /*ici, c est la couleur de la bordure*/
+
+
 
     overflow-y: auto;
 
@@ -669,14 +683,32 @@ body.mode-2d .typewriter-controls {
 
     gap: 12px;
 }
-
 .saved-note {
-    padding: 12px;
+    padding: 14px 16px;
 
-    border-radius: 8px;
-    background-color: #eee3cf;
+    border-radius: 10px;
+    background:
+        linear-gradient(160deg,
+            #f5ead2,
+            #e2ae47);
+
+    box-shadow:
+        0 3px 8px rgba(61, 52, 45, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 
     cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.saved-note:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 16px rgba(61, 52, 45, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .saved-note-date {
