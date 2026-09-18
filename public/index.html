@@ -55,32 +55,41 @@
 
             <div class="ambience-player-controls">
 
-                <button
-                    id="ambience-previous"
-                    class="ambience-player-button"
-                    type="button"
-                    aria-label="Previous ambience"
-                >
+                <button id="ambience-previous" class="ambience-player-button" type="button"
+                    aria-label="Previous ambience">
                     ◀
                 </button>
 
-                <button
-                    id="ambience-play"
-                    class="ambience-player-button ambience-main-button"
-                    type="button"
-                    aria-label="Play ambience"
-                >
+                <button id="ambience-play" class="ambience-player-button ambience-main-button" type="button"
+                    aria-label="Play ambience">
                     ▶
                 </button>
 
-                <button
-                    id="ambience-next"
-                    class="ambience-player-button"
-                    type="button"
-                    aria-label="Next ambience"
-                >
+                <button id="ambience-next" class="ambience-player-button" type="button" aria-label="Next ambience">
                     ▶
                 </button>
+
+            </div>
+            <!-- ==================================================
+     MOI : contrôle du volume de mes musiques d'ambiance.
+
+     Le slider va de 0 à 100.
+     Je commence à 50 parce que je ne veux pas que la musique
+     explose les oreilles de quelqu'un dès qu'il clique Play 😭
+=================================================== -->
+
+            <div class="ambience-volume">
+
+                <span class="ambience-volume-icon">
+                    ♫
+                </span>
+
+                <input id="ambience-volume-slider" type="range" min="0" max="100" value="50"
+                    aria-label="Ambience volume">
+
+                <span id="ambience-volume-value">
+                    50%
+                </span>
 
             </div>
 
