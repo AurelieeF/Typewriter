@@ -585,14 +585,34 @@ body.mode-2d .typewriter-controls {
     border: none;
     border-radius: 10px;
 
-    background-color: #3d342d;
+    background:
+        linear-gradient(160deg,
+            #4a4038,
+            #2f2822);
+
     color: white;
 
     font-family: "Courier New", monospace;
 
     cursor: pointer;
 
+    box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+
     z-index: 1000;
+}
+
+#saved-notes-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 18px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 #saved-notes-button.hidden {
