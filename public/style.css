@@ -478,21 +478,25 @@ body.mode-2d .typewriter-controls {
     height: 50px;
 
     padding: 20px 10px;
-    border: none;
     border-radius: 10px;
 
-    color: white;
     font-size: 16px;
     font-family: "Courier New", monospace;
     cursor: pointer;
 
+    color: #fff0ce;
+
     background:
-        linear-gradient(160deg,
-            #4a4038,
-            #2f2822);
+        linear-gradient(
+            160deg,
+            rgba(99, 59, 42, 0.95),
+            rgba(52, 32, 28, 0.95)
+        );
+
+    border: 1px solid rgba(255, 211, 145, 0.65);
 
     box-shadow:
-        0 6px 14px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(255, 183, 91, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
 
     transition:
@@ -508,13 +512,27 @@ body.mode-2d .typewriter-controls {
 /* 4.3 - Bouton New Note */
 #new-note-button {
     padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #c0a28c;
-    color: #4a145f;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f5dfb8,
+            #d8aa69
+        );
+
+    border: 1px solid #ffd79a;
+
+    color: #654631;
+
     font-family: "Courier New", monospace;
     font-size: 16px;
+
     cursor: pointer;
+
+    box-shadow:
+        0 0 10px rgba(255, 190, 100, 0.20);
 }
 
 #new-note-button:hover {
@@ -635,7 +653,8 @@ body.mode-2d .typewriter-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+
+    color: #fff0ce;
 }
 
 #close-notes-button {
@@ -643,7 +662,8 @@ body.mode-2d .typewriter-controls {
     background: none;
 
     font-size: 28px;
-    color: white;
+    color: #fff0ce;
+
     cursor: pointer;
 }
 
@@ -752,7 +772,7 @@ body.mode-2d .typewriter-controls {
 
 #note-reader-date {
     font-size: 12px;
-    color: #a18873;
+    color: #e8d2ad;
 }
 
 #note-reader-text {
@@ -820,14 +840,11 @@ body.mode-2d .typewriter-controls {
 }
 
 .note-reader-navigation button {
+    /* LA STRUCTURE */
     width: 46px;
     height: 46px;
 
-    border: 1px solid #c0a28c;
     border-radius: 50%;
-
-    background-color: #eee3cf;
-    color: #3d342d;
 
     font-family: "Courier New", monospace;
     font-size: 20px;
@@ -837,8 +854,25 @@ body.mode-2d .typewriter-controls {
     transition:
         transform 0.2s ease,
         background-color 0.2s ease;
-}
 
+    /* LE DESIGN */
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fff4d6,
+            #f2d39a 65%,
+            #d09a51
+        );
+
+    border: 1px solid #ffd799;
+
+    color: #61432e;
+
+    box-shadow:
+        0 0 8px rgba(255, 218, 156, 0.65),
+        0 0 22px rgba(255, 176, 77, 0.35),
+        inset 0 2px 4px rgba(255, 255, 255, 0.65);
+}
 #previous-note-button:hover:not(:disabled) {
     transform: translateX(-3px);
     background-color: #e5d5bb;
