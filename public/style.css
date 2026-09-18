@@ -1,7 +1,3 @@
-/* ==========================================================
-   PARTIE 1 - ALLURE GÉNÉRALE DE LA PAGE
-   ========================================================== */
-
 html,
 body {
     margin: 0;
@@ -13,10 +9,6 @@ body {
     min-height: 100dvh;
     overflow: hidden;
 }
-
-/* ----------------------------------------------------------
-   1.1 - FONDS DES MODES 2D ET 3D
-   ---------------------------------------------------------- */
 
 body::before,
 body::after {
@@ -63,7 +55,6 @@ body.mode-2d::after {
     opacity: 1;
 }
 
-/* 1.2 - Conteneur principal */
 .typewriter-app {
     width: 100%;
     height: 100dvh;
@@ -78,7 +69,6 @@ body.mode-2d::after {
         20px 20px 0px;
 }
 
-/* 1.3 - Bouton pour changer entre 2D et 3D */
 .mode-switch {
     display: flex;
     justify-content: center;
@@ -148,7 +138,6 @@ body.mode-2d::after {
     transform: translateX(28px);
 }
 
-/* 1.4 - Conteneur des deux versions */
 .typewriter-views {
     display: grid;
 
@@ -212,11 +201,6 @@ body.mode-2d .view-2d {
 
     transform: none;
 }
-
-
-/* ==========================================================
-   PARTIE 2 - VERSION 2D
-   ========================================================== */
 
 body.mode-2d .view-2d {
     width: min(760px, 94vw);
@@ -429,11 +413,6 @@ body.mode-2d .key.active {
     min-width: 140px;
 }
 
-
-/* ==========================================================
-   PARTIE 3 - VERSION 3D
-   ========================================================== */
-
 #typewriter-3d {
     width: 95vw;
     height: 100%;
@@ -445,23 +424,10 @@ body.mode-2d .key.active {
     display: block;
 }
 
-/* ==========================================================
-   PARTIE 4 - BOUTONS COMMUNS AUX DEUX VERSIONS
-   ========================================================== */
-
 .typewriter-controls {
     position: fixed;
     top: 50%;
-    /*
-       MOI : mes boutons 3D étaient encore trop loin de la machine à écrire.
-       Au lieu de leur donner une distance fixe ridicule par rapport au bord,
-       je leur donne une distance responsive avec clamp().
 
-       12vw = environ 12% de la largeur de l'écran.
-       140px = minimum, 240px = maximum.
-       Donc sur un grand écran, mes boutons viennent davantage vers la machine,
-       sans partir n'importe où sur un écran plus petit.
-    */
     right: clamp(140px, 12vw, 240px);
     transform: translateY(-50%);
 
@@ -482,13 +448,8 @@ body.mode-2d .typewriter-controls {
     margin-top: 8px;
 }
 
-/* 4.2 - Bouton Done */
 #done-button {
-    /*
-       MOI : je donne à Done une vraie taille de bouton.
-       Avant il était étroit, donc je le mets à 130px x 50px.
-       box-sizing garde exactement cette taille même avec la bordure/padding.
-    */
+
     width: 150px;
     height: 54px;
     box-sizing: border-box;
@@ -527,12 +488,8 @@ body.mode-2d .typewriter-controls {
     cursor: not-allowed;
 }
 
-/* 4.3 - Bouton New Note */
 #new-note-button {
-    /*
-       MOI : je mets New Note à la même taille que Done.
-       Comme ça, en 2D ET en 3D, mes deux boutons ont l'air cohérents.
-    */
+
     width: 150px;
     height: 54px;
     box-sizing: border-box;
@@ -566,11 +523,6 @@ body.mode-2d .typewriter-controls {
     opacity: 0.85;
 }
 
-/* ==========================================================
-   PARTIE 5 - NOTES SAUVEGARDÉES
-   ========================================================== */
-
-/* 5.1 - Bouton Notes */
 #saved-notes-button {
     position: fixed;
 
@@ -625,13 +577,11 @@ body.mode-2d .typewriter-controls {
     font-size: 11px;
 }
 
-/* 5.2 - Panneau des notes */
 #saved-notes-panel {
     position: fixed;
     top: 0;
 
     right: -450px;
-
 
     width: 420px;
 
@@ -664,7 +614,6 @@ body.mode-2d .typewriter-controls {
     overflow-y: auto;
     overflow-x: hidden;
 
-    /* MOI : je peux scroller mais je cache la barre visible */
     scrollbar-width: none;
     transition: right 0.35s ease;
     z-index: 999;
@@ -714,18 +663,6 @@ body.mode-2d .typewriter-controls {
     z-index: 2;
 }
 
-/*
-   MOI : plus haut, je mets tous les enfants du panel en z-index: 2
-   pour que mon texte et mes boutons restent visibles.
-
-   MAIS mes sparkles doivent rester derrière le contenu.
-   Donc ici je fais une exception juste pour .panel-sparkles.
-
-   En gros :
-   z-index 0 = reflets du panneau
-   z-index 1 = magie / sparkles
-   z-index 2 = mon vrai contenu
-*/
 #saved-notes-panel>.panel-sparkles {
     position: absolute;
     inset: 0;
@@ -737,15 +674,10 @@ body.mode-2d .typewriter-controls {
     right: 0;
 }
 
-/*
-   MOI : Chrome / Edge / Safari ont leur propre syntaxe pour cacher
-   la barre de scroll. Le scroll fonctionne encore normalement.
-*/
 #saved-notes-panel::-webkit-scrollbar {
     display: none;
 }
 
-/* 5.3 - Haut du panneau */
 .saved-notes-header {
     display: flex;
     justify-content: space-between;
@@ -764,25 +696,19 @@ body.mode-2d .typewriter-controls {
     cursor: pointer;
 }
 
-/* 5.4 - Filtre par date */
 .saved-notes-tools {
     margin: 20px 0;
 }
 
 #notes-date-filter {
-    /* LA STRUCTURE */
+
     width: 100%;
     padding: 12px;
     box-sizing: border-box;
 
-    /*
-       MOI : le champ date était aussi minuscule à 80%.
-       J'augmente légèrement son texte.
-    */
     font-size: 15px;
     border-radius: 15px;
 
-    /* LE DESIGN */
     background: linear-gradient(90deg,
             #f9e8c5,
             #ffebc0);
@@ -795,25 +721,6 @@ body.mode-2d .typewriter-controls {
         0 0 10px rgba(255, 205, 125, 0.45),
         0 0 25px rgba(255, 183, 80, 0.20);
 }
-
-/* ==========================================================
-   5.4 B - EFFETS MAGIQUES DU PANNEAU
-   ==========================================================
-
-   MOI : ici je veux éviter que mon panneau fasse juste "brun + blur".
-   Je veux que ça ressemble plus à un verre magique / un orbe lumineux.
-
-   Je fais donc 2 types d'effets :
-
-   1) .sparkle = les vraies petites étoiles en forme de croix.
-      Elles sont visibles et elles clignotent doucement.
-
-   2) .dust = des petits points lumineux.
-      Eux bougent à peine vers le haut, juste assez pour donner de la vie.
-
-   pointer-events: none veut dire que ces effets ne peuvent PAS bloquer
-   mes clics sur les notes ou sur les boutons.
-   ========================================================== */
 
 .panel-sparkles {
     position: absolute;
@@ -842,10 +749,6 @@ body.mode-2d .typewriter-controls {
     animation: twinkle 2.8s infinite ease-in-out;
 }
 
-/*
-   MOI : ::before et ::after dessinent la croix de l'étoile.
-   Comme ça je n'ai pas besoin de rajouter encore plus de HTML.
-*/
 .sparkle::before,
 .sparkle::after {
     content: "";
@@ -867,10 +770,6 @@ body.mode-2d .typewriter-controls {
     height: 2px;
 }
 
-/*
-   MOI : je donne différentes tailles aux étoiles.
-   Si elles avaient toutes exactement la même taille, ça ferait trop fake.
-*/
 .sparkle-small {
     width: 8px;
     height: 8px;
@@ -910,10 +809,6 @@ body.mode-2d .typewriter-controls {
     width: 10px;
 }
 
-/*
-   MOI : ça ce sont les petits points de lumière.
-   Ils sont volontairement plus discrets que les vraies étoiles.
-*/
 .dust {
     position: absolute;
     width: 4px;
@@ -944,10 +839,6 @@ body.mode-2d .typewriter-controls {
     }
 }
 
-/*
-   MOI : je fais monter les poussières juste de 8px.
-   Je veux un effet subtil, pas des confettis en panique.
-*/
 @keyframes floaty {
 
     0%,
@@ -962,10 +853,6 @@ body.mode-2d .typewriter-controls {
     }
 }
 
-/*
-   MOI : je les place à différents endroits ET je décale leurs animations.
-   Comme ça tout ne clignote pas en même temps.
-*/
 .sp1 {
     top: 52px;
     right: 38px;
@@ -1050,10 +937,6 @@ body.mode-2d .typewriter-controls {
     animation-delay: 1.9s;
 }
 
-/*
-   MOI : je rajoute juste un petit halo au titre.
-   Je veux "magique", pas "enseigne néon".
-*/
 .saved-notes-header h2 {
     font-size: 24px;
     color: #fff0ce;
@@ -1063,8 +946,6 @@ body.mode-2d .typewriter-controls {
         0 0 18px rgba(255, 188, 92, 0.12);
 }
 
-
-/* 5.5 - Liste des notes */
 #saved-notes-list {
     display: flex;
     flex-direction: column;
@@ -1073,10 +954,7 @@ body.mode-2d .typewriter-controls {
 }
 
 .saved-note {
-    /*
-       MOI : mes cartes étaient trop petites à 80% de zoom.
-       Je leur donne plus d'espace pour que le contenu respire.
-    */
+
     padding: 18px 20px;
     min-height: 70px;
     border-radius: 16px;
@@ -1115,10 +993,6 @@ body.mode-2d .typewriter-controls {
 .saved-note-text {
     margin: 0 0 8px 0;
 
-    /*
-       MOI : ça c'est le vrai contenu de ma note, donc je le rends
-       plus gros et plus foncé que les infos secondaires.
-    */
     font-size: 17px;
     line-height: 1.45;
     color: #2f2119;
@@ -1131,7 +1005,6 @@ body.mode-2d .typewriter-controls {
     color: #765438;
 }
 
-/* 5.6 - Message quand il n'y a aucune note */
 .no-notes-message {
     margin-top: 30px;
 
@@ -1141,7 +1014,6 @@ body.mode-2d .typewriter-controls {
     text-align: center;
 }
 
-/* 5.7 - Lecteur d'une note */
 #note-reader {
     padding-top: 10px;
 }
@@ -1158,18 +1030,14 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-text {
-    /*STRUCTUREEEEEE*/
+
     margin-top: 20px;
 
-    /*
-       MOI : quand j'ouvre une note, je veux que ce soit confortable
-       à lire, pas une mini fiche perdue dans le panneau.
-    */
     padding: 18px 20px;
     font-size: 17px;
     line-height: 1.6;
     border-radius: 18px;
-    /*DESIGN*/
+
     background:
         linear-gradient(145deg,
             rgba(255, 236, 205, 0.14),
@@ -1187,7 +1055,6 @@ body.mode-2d .typewriter-controls {
     color: #fff0d0;
 }
 
-/*afficher le nombre total de notes*/
 #note-reader-counter {
     font-size: 15px;
     color: #fff0ce;
@@ -1196,21 +1063,10 @@ body.mode-2d .typewriter-controls {
         0 0 8px rgba(255, 200, 120, 0.35);
 }
 
-/*
-   MOI : IMPORTANT.
-   Avant j'avais aussi .saved-note-date et .saved-note-info ici.
-   Problème : cette règle arrivait PLUS BAS dans le fichier, donc elle
-   écrasait mes nouvelles couleurs brunes (#765438) même si je les avais
-   bien écrites plus haut. CSS lit de haut en bas : à spécificité égale,
-   la dernière règle gagne.
-
-   Je garde donc seulement #note-reader-date ici.
-*/
 #note-reader-date {
     color: #e8d2ad;
 }
 
-/* 5.8 - Bouton retour */
 #back-to-list-button {
     padding: 8px 14px;
 
@@ -1235,7 +1091,6 @@ body.mode-2d .typewriter-controls {
     transform: translateX(-2px);
 }
 
-/* 5.9 - Flèches pour changer de note */
 .note-reader-navigation {
     margin-top: 30px;
 
@@ -1285,7 +1140,6 @@ body.mode-2d .typewriter-controls {
     transform: none;
 }
 
-/* 5.10 - Bouton Delete */
 #delete-note-button {
     width: 100%;
 
@@ -1316,23 +1170,9 @@ body.mode-2d .typewriter-controls {
     transform: translateY(-1px);
 }
 
-
-/* ==========================================================
-   PARTIE 6 - CLASSES UTILES
-   ========================================================== */
-
 .hidden {
     display: none !important;
 }
-
-/* ==========================================================
-   MINI PLAYER D'AMBIANCE
-   ==========================================================
-
-   MOI : le player fonctionne déjà.
-   Ici je change seulement son LOOK pour qu'il ressemble
-   au reste du site et pas à trois boutons Windows posés là 😭
-   ========================================================== */
 
 .ambience-player {
     position: fixed;
@@ -1374,11 +1214,6 @@ body.mode-2d .typewriter-controls {
     z-index: 20;
 }
 
-
-/* ==========================================================
-   TITRE / NOM DE LA MUSIQUE
-   ========================================================== */
-
 .ambience-player-title {
     display: flex;
     align-items: center;
@@ -1404,11 +1239,6 @@ body.mode-2d .typewriter-controls {
         0 0 8px rgba(255, 203, 115, 0.55);
 }
 
-
-/* ==========================================================
-   LIGNE DES BOUTONS
-   ========================================================== */
-
 .ambience-player-controls {
     display: flex;
 
@@ -1417,17 +1247,6 @@ body.mode-2d .typewriter-controls {
 
     gap: 10px;
 }
-
-
-/* ==========================================================
-   BOUTONS
-   ==========================================================
-
-   MOI : c'est ici que je retire le look blanc / carré par défaut.
-   border: none enlève la bordure HTML native.
-   appearance: none empêche le navigateur de décider lui-même
-   à quoi le bouton doit ressembler.
-   ========================================================== */
 
 .ambience-player-button {
     appearance: none;
@@ -1469,11 +1288,6 @@ body.mode-2d .typewriter-controls {
         box-shadow 0.15s ease;
 }
 
-
-/* ==========================================================
-   BOUTON PLAY / PAUSE
-   ========================================================== */
-
 .ambience-main-button {
     width: 50px;
     height: 50px;
@@ -1486,11 +1300,6 @@ body.mode-2d .typewriter-controls {
         inset 0 2px 3px rgba(255, 255, 255, 0.60);
 }
 
-
-/* ==========================================================
-   HOVER
-   ========================================================== */
-
 .ambience-player-button:hover {
     transform: translateY(-2px) scale(1.05);
 
@@ -1500,23 +1309,9 @@ body.mode-2d .typewriter-controls {
         inset 0 2px 3px rgba(255, 255, 255, 0.60);
 }
 
-
-/* ==========================================================
-   QUAND JE CLIQUE
-   ========================================================== */
-
 .ambience-player-button:active {
     transform: translateY(1px) scale(0.97);
 }
-
-/* ==========================================================
-   VOLUME DU MINI PLAYER
-   ==========================================================
-
-   MOI : je mets le volume sous mes boutons.
-   Le slider est petit et discret pour rester dans le vibe
-   du player au lieu d'avoir une énorme barre de volume.
-   ========================================================== */
 
 .ambience-volume {
     margin-top: 12px;
@@ -1528,7 +1323,6 @@ body.mode-2d .typewriter-controls {
     gap: 8px;
 }
 
-
 .ambience-volume-icon {
     color: #ffd99a;
 
@@ -1538,12 +1332,8 @@ body.mode-2d .typewriter-controls {
         0 0 7px rgba(255, 203, 115, 0.45);
 }
 
-
 #ambience-volume-slider {
-    /*
-       MOI : j'enlève le style par défaut du navigateur,
-       sinon chaque navigateur décide de faire son petit design.
-    */
+
     appearance: none;
     -webkit-appearance: none;
 
@@ -1559,12 +1349,6 @@ body.mode-2d .typewriter-controls {
 
     cursor: pointer;
 }
-
-
-/* ==========================================================
-   PETITE BOULE QU'ON DRAG
-   Chrome / Edge / Safari
-   ========================================================== */
 
 #ambience-volume-slider::-webkit-slider-thumb {
     appearance: none;
@@ -1586,15 +1370,9 @@ body.mode-2d .typewriter-controls {
     cursor: grab;
 }
 
-
 #ambience-volume-slider::-webkit-slider-thumb:active {
     cursor: grabbing;
 }
-
-
-/* ==========================================================
-   Même boule pour Firefox
-   ========================================================== */
 
 #ambience-volume-slider::-moz-range-thumb {
     width: 15px;
@@ -1613,7 +1391,6 @@ body.mode-2d .typewriter-controls {
     cursor: grab;
 }
 
-
 #ambience-volume-value {
     min-width: 34px;
 
@@ -1621,4 +1398,53 @@ body.mode-2d .typewriter-controls {
 
     font-family: "Courier New", monospace;
     font-size: 11px;
+}
+
+/* ==========================================================
+   CURSEURS PERSONNALISÉS
+   Une seule section à la fin du fichier = aucune règle cursor
+   plus basse ne vient l'écraser.
+   ========================================================== */
+
+html,
+body,
+.typewriter-app,
+.typewriter-views,
+.typewriter-view {
+    cursor: url("./images/cursor.png") 2 2, auto !important;
+}
+
+button,
+a,
+.key,
+.switch,
+.slider,
+.switch input,
+input[type="range"],
+.ambience-player-button,
+#saved-notes-button,
+#done-button,
+#new-note-button,
+#close-notes-button,
+#previous-note-button,
+#next-note-button,
+#delete-note-button,
+#back-to-list-button {
+    cursor: url("./images/cursor2.png") 14 2, pointer !important;
+}
+
+/* Le petit bouton qu'on drag sur le volume avait sa propre valeur grab/grabbing,
+   donc je l'écrase aussi pour garder la main princesse. */
+#ambience-volume-slider::-webkit-slider-thumb,
+#ambience-volume-slider::-webkit-slider-thumb:active,
+#ambience-volume-slider::-moz-range-thumb {
+    cursor: url("./images/cursor2.png") 14 2, pointer !important;
+}
+
+/* Pour les boutons désactivés, je garde le curseur princesse plutôt que
+   de revenir au curseur système "not-allowed". */
+button:disabled,
+.note-reader-navigation button:disabled,
+#done-button:disabled {
+    cursor: url("./images/cursor2.png") 14 2, pointer !important;
 }
