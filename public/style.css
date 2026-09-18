@@ -160,7 +160,7 @@ body.mode-2d::after {
     position: absolute;
     inset: 0;
 
-    background-color: #c0a28c;
+    background-color: #f0d190;
     border-radius: 30px;
 
     cursor: pointer;
@@ -186,7 +186,7 @@ body.mode-2d::after {
 }
 
 .switch input:checked+.slider {
-    background-color: #3d342d;
+    background-color: #c9bdb4;
 }
 
 .switch input:checked+.slider::before {
@@ -538,13 +538,42 @@ body.mode-2d .typewriter-controls {
 
 /* 4.2 - Bouton Done */
 #done-button {
-    padding: 10px 20px;
+    padding: 20px 10px;
     border: none;
     border-radius: 5px;
-    background-color: #3d342d;
-    color: #fff;
+   
+    color: white;
     font-size: 16px;
     cursor: pointer;
+
+    top: 20px;
+    right: 20px;
+
+    width: 70px;
+    height: 50px;
+
+    border: none;
+    border-radius: 10px;
+
+    background:
+        linear-gradient(160deg,
+            #4a4038,
+            #2f2822);
+
+
+
+    font-family: "Courier New", monospace;
+
+   
+
+    box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    
 }
 
 #done-button:disabled {
@@ -558,7 +587,7 @@ body.mode-2d .typewriter-controls {
     border: none;
     border-radius: 5px;
     background-color: #c0a28c;
-    color: #3d342d;
+    color: #4a145f;
     font-family: "Courier New", monospace;
     font-size: 16px;
     cursor: pointer;
@@ -672,6 +701,7 @@ body.mode-2d .typewriter-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: white;
 }
 
 #close-notes-button {
@@ -679,7 +709,7 @@ body.mode-2d .typewriter-controls {
     background: none;
 
     font-size: 28px;
-
+    color: white;
     cursor: pointer;
 }
 
@@ -777,7 +807,7 @@ body.mode-2d .typewriter-controls {
 
 #note-reader-text {
     margin-top: 20px;
-
+    font-family: "Courier New", monospace;
     white-space: pre-wrap;
     line-height: 1.5;
 }
