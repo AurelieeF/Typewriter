@@ -31,15 +31,15 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 container.appendChild(renderer.domElement);
 
 const ambientLight = new THREE.AmbientLight(
-    0xffffff,
-    2
+    0xfff4e0,
+    0.6
 );
 
 scene.add(ambientLight);
 
 const mainLight = new THREE.DirectionalLight(
-    0xffffff,
-    3
+    0xfff1d0,
+    1.5
 );
 
 mainLight.position.set(
@@ -61,6 +61,9 @@ let rollerObject = null;
 let paperStartY = null;
 let rollerStartRotation = null;
 let previousVisualLineCount = 1;
+
+// Taille max de la scène, utilisée pour calibrer l'animation de sortie du papier
+let sceneMaxDimension = 1;
 
 const paperCanvas = document.createElement("canvas");
 
@@ -185,18 +188,20 @@ loader.load(
                 size.z
             );
 
-   camera.position.set(
-    0.0,  //decalage droite gauche camera
-    maxDimension * 1.2, //hauteur de la camera
-    maxDimension * 1.5//distance de la camera par rapport a lobjet
-);
+        sceneMaxDimension = maxDimension;
 
-camera.lookAt(
-    0, //0=centre de lobkect
-    -0.02, //negativ camera penche vers le bas ce qui pousse object vers le haut
-    -0.15 // centre de lobject
+        camera.position.set(
+            0.0,   // décalage droite/gauche caméra
+            maxDimension * 1.2,   // hauteur de la caméra
+            maxDimension * 1.5    // distance de la caméra par rapport à l'objet
+        );
 
-);
+        camera.lookAt(
+            0,       // centre de l'objet en X
+            -0.02,   // négatif = caméra penche vers le bas, pousse l'objet vers le haut
+            -0.15    // centre de l'objet en Z
+        );
+
         paperObject =
             typewriterModel.getObjectByName(
                 "Paper"
@@ -273,6 +278,7 @@ camera.lookAt(
 
     }
 );
+
 function feedPaper(lineDifference) {
 
     if (!paperObject || paperStartY === null) {
@@ -326,9 +332,40 @@ function feedPaper(lineDifference) {
 window.feed3DPaper =
     feedPaper;
 
+// Anime le papier vers le haut, hors du cadre (appelé quand on clique Done)
+function animatePaperOut() {
+
+    if (!paperObject || paperStartY === null) {
+        return;
+    }
+
+    const startY = paperObject.position.y;
+    const targetY = startY + sceneMaxDimension * 1.5;
+
+    const duration = 500;
+    const startTime = performance.now();
+
+    function step(now) {
+
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+
+        const eased = 1 - Math.pow(1 - t, 3);
+
+        paperObject.position.y = startY + (targetY - startY) * eased;
+
+        if (t < 1) {
+            requestAnimationFrame(step);
+        }
+    }
+
+    requestAnimationFrame(step);
+}
+
+window.animate3DPaperOut = animatePaperOut;
+
 function createPaperTextSprite() {
 
-    // Bounding box LOCALE du vrai Paper Blender
     if (!paperObject.geometry.boundingBox) {
         paperObject.geometry.computeBoundingBox();
     }
@@ -351,20 +388,11 @@ function createPaperTextSprite() {
     });
 
 
-    /*
-        On détecte automatiquement l'axe le plus mince
-        du Paper.
-
-        Le Paper est essentiellement un cube très mince.
-        L'axe le plus mince = profondeur de la feuille.
-    */
-
     if (
         size.z <= size.x &&
         size.z <= size.y
     ) {
 
-        // Grande face = XY
         paperTextSprite = new THREE.Mesh(
             new THREE.PlaneGeometry(
                 size.x * 0.92,
@@ -386,7 +414,6 @@ function createPaperTextSprite() {
         size.y <= size.z
     ) {
 
-        // Grande face = XZ
         paperTextSprite = new THREE.Mesh(
             new THREE.PlaneGeometry(
                 size.x * 0.92,
@@ -408,7 +435,6 @@ function createPaperTextSprite() {
 
     else {
 
-        // Grande face = YZ
         paperTextSprite = new THREE.Mesh(
             new THREE.PlaneGeometry(
                 size.y * 0.92,
@@ -840,27 +866,27 @@ function update3DPaperText(text) {
 
 
     visualLines.forEach(
-    (line, index) => {
+        (line, index) => {
 
-        const x = leftMargin;
+            const x = leftMargin;
 
-        const y =
-            topMargin +
-            index * lineHeight;
+            const y =
+                topMargin +
+                index * lineHeight;
 
-        paperContext.strokeText(
-            line,
-            x,
-            y
-        );
+            paperContext.strokeText(
+                line,
+                x,
+                y
+            );
 
-        paperContext.fillText(
-            line,
-            x,
-            y
-        );
-    }
-);
+            paperContext.fillText(
+                line,
+                x,
+                y
+            );
+        }
+    );
 
 
     const currentVisualLineCount =

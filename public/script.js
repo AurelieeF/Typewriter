@@ -141,9 +141,6 @@ window.handleKey = handleKey;
 // SECTION 4 - UTILITAIRES CLAVIER
 // ==========================================================
 
-// Transforme seulement les caractères simples en minuscules
-// pour retrouver le bon data-key dans le HTML.
-// Ex: "A" -> "a"
 function getDataKey(key) {
 
     if (key.length === 1) {
@@ -159,22 +156,18 @@ function getDataKey(key) {
 // SECTION 5 - CLAVIER PHYSIQUE
 // ==========================================================
 
-// Quand une touche physique est pressée
 window.addEventListener("keydown", (event) => {
 
     const pressedKey = event.key;
 
-    // Cherche la touche correspondante dans le clavier HTML
     const keyElement = document.querySelector(
         `.key[data-key="${getDataKey(pressedKey)}"]`
     );
 
-    // Animation visuelle
     if (keyElement) {
         keyElement.classList.add("pressed");
     }
 
-    // Caps Lock physique
     if (pressedKey === "CapsLock") {
 
         playKeySound(pressedKey);
@@ -194,12 +187,10 @@ window.addEventListener("keydown", (event) => {
         return;
     }
 
-    // Écrit la touche
     handleKey(pressedKey);
 });
 
 
-// Quand une touche physique est relâchée
 window.addEventListener("keyup", (event) => {
 
     const releasedKey = event.key;
@@ -221,17 +212,14 @@ window.addEventListener("keyup", (event) => {
 
 keys.forEach((key) => {
 
-    // Quand la souris appuie sur une touche
     key.addEventListener("mousedown", () => {
 
         key.classList.add("pressed");
 
         const clickedKey = key.dataset.key;
 
-        // Caps Lock virtuel
         if (clickedKey === "CapsLock") {
-            playKeySound(pressedKey);
-            
+            playKeySound(clickedKey);
 
             capsLockActive = !capsLockActive;
 
@@ -245,7 +233,6 @@ keys.forEach((key) => {
             return;
         }
 
-        // Si Caps Lock est actif, transforme la lettre en majuscule
         if (capsLockActive && clickedKey.length === 1) {
             handleKey(clickedKey.toUpperCase());
         }
@@ -255,7 +242,6 @@ keys.forEach((key) => {
     });
 
 
-    // Quand la souris relâche une touche
     key.addEventListener("mouseup", () => {
         key.classList.remove("pressed");
     });
@@ -271,7 +257,6 @@ function updatePaperHeight() {
 
     const baseHeight = 50;
 
-    // Hauteur réelle occupée par le texte
     const textHeight = paperText.scrollHeight;
 
     const newHeight = baseHeight + textHeight;
@@ -294,15 +279,12 @@ doneButton.addEventListener("click", () => {
 
     const endTime = new Date();
 
-    // Durée totale
     const durationMilliseconds = endTime - startTime;
     const durationMinutes = Math.floor(durationMilliseconds / 60000);
 
-    // Affichage sur la feuille
     paperInfo.textContent =
         "Written in " + durationMinutes + " minutes.";
 
-    // Objet représentant la note complète
     const noteData = {
         text: text,
         characterCount: text.length,
@@ -311,18 +293,6 @@ doneButton.addEventListener("click", () => {
         finishedAt: endTime.toISOString(),
         durationMinutes: durationMinutes
     };
-
-    /*
-        JavaScript
-            ↓
-        noteData
-            ↓
-        POST /api/notes
-            ↓
-        Flask
-            ↓
-        Neon PostgreSQL
-    */
 
     fetch("/api/notes", {
 
@@ -344,12 +314,15 @@ doneButton.addEventListener("click", () => {
             doneButton.disabled = true;
 
             // Recharge immédiatement les notes depuis Neon
-            // Donc si le drawer est ouvert, la nouvelle note apparaît tout de suite
             loadSavedNotes();
 
+            // Animation du papier (2D + 3D)
             animatePaperToNotes();
-        });
 
+            if (window.animate3DPaperOut) {
+                window.animate3DPaperOut();
+            }
+        });
 
 });
 
@@ -404,7 +377,6 @@ function loadSavedNotes() {
 
 function displayNotes(notes) {
 
-    // Vide la liste avant de la reconstruire
     savedNotesList.innerHTML = "";
 
     if (notes.length === 0) {
@@ -435,7 +407,6 @@ function displayNotes(notes) {
             </p>
         `;
 
-        // Ouvre le lecteur quand on clique sur une note
         noteElement.addEventListener("click", () => {
             openNoteReader(note, allSavedNotes);
         });
@@ -452,20 +423,16 @@ function displayNotes(notes) {
 
 function openNoteReader(selectedNote, allNotes) {
 
-    // Garde uniquement les notes de la même journée
     currentDayNotes = allNotes.filter(note => {
         return note.date === selectedNote.date;
     });
 
-    // Trouve l'index de la note sélectionnée
     currentNoteIndex = currentDayNotes.findIndex(note => {
         return note.id === selectedNote.id;
     });
 
-    // Cache la liste
     savedNotesList.classList.add("hidden");
 
-    // Affiche le lecteur
     noteReader.classList.remove("hidden");
 
     showCurrentNote();
@@ -528,13 +495,11 @@ notesDateFilter.addEventListener("change", () => {
 
     const selectedDate = notesDateFilter.value;
 
-    // Si aucune date n'est sélectionnée, affiche tout
     if (selectedDate === "") {
         displayNotes(allSavedNotes);
         return;
     }
 
-    // Garde seulement les notes de la date choisie
     const filteredNotes = allSavedNotes.filter((note) => {
         return note.date === selectedDate;
     });
@@ -548,16 +513,12 @@ notesDateFilter.addEventListener("change", () => {
 
 function resetNote() {
 
-    // Réinitialise le texte
     text = "";
 
-    // Réactive l'écriture
     isFinished = false;
 
-    // Nouvelle heure de début
     startTime = new Date();
 
-    // Réinitialise le papier
     paperText.textContent = "";
     paperInfo.textContent = "";
     paperDate.textContent = startTime.toLocaleString();
@@ -567,17 +528,13 @@ function resetNote() {
         window.clear3DPaper();
     }
 
-    // Remet la hauteur du papier à zéro
     paper.style.height = "";
 
-    // Retire l'animation de sauvegarde
     paper.classList.remove("saving");
 
-    // Réactive Done
     doneButton.disabled = false;
 }
 
-// Quand on clique sur New Note
 newNoteButton.addEventListener("click", () => {
     resetNote();
 });
@@ -617,33 +574,25 @@ deleteNoteButton.addEventListener("click", () => {
 viewModeToggle.addEventListener("change", () => {
 
     if (viewModeToggle.checked) {
-
-        // Mode 3D
         document.body.classList.remove("mode-2d");
-
     }
     else {
-
-        // Mode 2D
         document.body.classList.add("mode-2d");
-
     }
 
 });
-
-//Creer une fonction playsound
 
 function playKeySound(key) {
 
     let sound;
 
-    if (key === " " || key ==="CapsLock") {
+    if (key === " " || key === "CapsLock") {
         sound = spaceSound;
     }
     else if (key === "Enter") {
         sound = enterSound;
     }
-    else if (key === "Backspace" ) {
+    else if (key === "Backspace") {
         sound = backspaceSound;
     }
     else {
