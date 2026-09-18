@@ -806,8 +806,9 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-text {
-    background-color: #e298ff42;
-    filter:blur();
+    background-color: #df94fda6;
+    backdrop-filter:blur();
+    border-radius: 5px;
 
     color:#d8d0c5
     margin-top: 20px;
