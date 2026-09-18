@@ -756,21 +756,34 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-text {
+    /*LA STRUCTURE */
     margin-top: 20px;
-
     padding: 12px;
-
-    border-radius: 5px;
-
-    background-color: #df94fdb6;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    color: #d8d0c5;
-    font-family: "Courier New", monospace;
+    border-radius: 16px;
 
     white-space: pre-wrap;
     line-height: 1.5;
+
+    /* LE DESIGN */
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 230, 190, 0.16),
+            rgba(150, 95, 67, 0.18)
+        );
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(255, 213, 150, 0.55);
+
+    box-shadow:
+        0 0 8px rgba(255, 190, 100, 0.20),
+        inset 0 0 15px rgba(255, 240, 210, 0.06);
+
+    color: #fff0d0;
+
+    font-family: "Courier New", monospace;
 }
 
 /* 5.8 - Bouton retour */
