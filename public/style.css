@@ -487,11 +487,9 @@ body.mode-2d .typewriter-controls {
     color: #fff0ce;
 
     background:
-        linear-gradient(
-            160deg,
+        linear-gradient(160deg,
             rgba(99, 59, 42, 0.95),
-            rgba(52, 32, 28, 0.95)
-        );
+            rgba(52, 32, 28, 0.95));
 
     border: 1px solid rgba(255, 211, 145, 0.65);
 
@@ -516,11 +514,9 @@ body.mode-2d .typewriter-controls {
     border-radius: 10px;
 
     background:
-        linear-gradient(
-            145deg,
+        linear-gradient(145deg,
             #f5dfb8,
-            #d8aa69
-        );
+            #d8aa69);
 
     border: 1px solid #ffd79a;
 
@@ -601,49 +597,101 @@ body.mode-2d .typewriter-controls {
 /* 5.2 - Panneau des notes */
 #saved-notes-panel {
     position: fixed;
-
     top: 0;
+
     right: -380px;
 
+
     width: 350px;
+
     height: 100vh;
 
     padding: 20px;
-
     box-sizing: border-box;
 
     background:
-        radial-gradient(
-            circle at 65% 25%,
-            rgba(218, 161, 124, 0.181),
-            transparent 35%
-        ),
-        linear-gradient(
-            180deg,
-            rgba(72, 43, 34, 0.62) 0%,
-            rgba(92, 57, 43, 0.54) 45%,
-            rgba(55, 34, 30, 0.65) 100%
-        );
+        radial-gradient(circle at 50% 0%,
+            rgba(255, 221, 168, 0.20),
+            transparent 22%),
+        linear-gradient(180deg,
+            rgba(76, 47, 39, 0.60) 0%,
+            rgba(92, 58, 47, 0.52) 45%,
+            rgba(58, 36, 31, 0.66) 100%);
 
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(16px);
+
+    -webkit-backdrop-filter: blur(16px);
 
     border-radius: 25px 0 0 25px;
 
-    border: 1px solid rgba(255, 211, 145, 0.65);
-
+    border: 1px solid rgba(255, 214, 150, 0.65);
     box-shadow:
-        0 0 8px rgba(255, 207, 130, 0.55),
-        0 0 24px rgba(255, 171, 79, 0.22),
-        inset 0 0 22px rgba(255, 214, 160, 0.08);
+        0 0 10px rgba(255, 210, 145, 0.55),
+        0 0 26px rgba(255, 180, 95, 0.20),
+        inset 0 0 18px rgba(255, 236, 200, 0.05);
 
     overflow-y: auto;
-
+    overflow-x: hidden;
     transition: right 0.35s ease;
-
     z-index: 999;
+
+    isolation: isolate;
+}
+#saved-notes-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 25px 0 0 25px;
+    pointer-events: none;
+    z-index: 0;
+
+    background:
+        linear-gradient(
+            115deg,
+            rgba(255, 255, 255, 0.14) 0%,
+            rgba(255, 240, 220, 0.08) 12%,
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(255, 241, 210, 0.20),
+            transparent 18%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(255, 205, 120, 0.10),
+            transparent 20%
+        );
+
+    filter: blur(6px);
 }
 
+#saved-notes-panel::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 25px 0 0 25px;
+    pointer-events: none;
+    z-index: 0;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 234, 190, 0.22),
+        inset 0 0 18px rgba(255, 211, 145, 0.08),
+        0 0 20px rgba(255, 190, 105, 0.12);
+}
+
+#saved-notes-panel > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Difference elle permet de propager */
+#saved-notes-panel > .panel-sparkles {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
 #saved-notes-panel.open {
     right: 0;
 }
@@ -680,11 +728,9 @@ body.mode-2d .typewriter-controls {
     border-radius: 15px;
 
     /* LE DESIGN */
-    background: linear-gradient(
-        90deg,
-        #f9e8c5,
-        #ffebc0
-    );
+    background: linear-gradient(90deg,
+            #f9e8c5,
+            #ffebc0);
 
     color: #654631;
 
@@ -694,6 +740,75 @@ body.mode-2d .typewriter-controls {
         0 0 10px rgba(255, 205, 125, 0.45),
         0 0 25px rgba(255, 183, 80, 0.20);
 }
+
+/*5.4 b petit bonus d effets */
+.panel-sparkles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.sparkle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(255, 247, 223, 1) 0%,
+        rgba(255, 224, 168, 0.95) 38%,
+        rgba(255, 199, 120, 0.20) 70%,
+        transparent 100%
+    );
+
+    box-shadow:
+        0 0 6px rgba(255, 234, 190, 0.8),
+        0 0 14px rgba(255, 196, 110, 0.55);
+
+    animation: twinkle 2.8s infinite ease-in-out;
+}
+
+.sparkle::before,
+.sparkle::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 236, 190, 0.95);
+    border-radius: 999px;
+}
+
+.sparkle::before {
+    width: 2px;
+    height: 18px;
+    box-shadow: 0 0 6px rgba(255, 220, 150, 0.6);
+}
+
+.sparkle::after {
+    width: 18px;
+    height: 2px;
+    box-shadow: 0 0 6px rgba(255, 220, 150, 0.6);
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.7) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.15) rotate(45deg);
+    }
+}
+.sp1 { top: 40px; right: 34px; animation-delay: 0s; }
+.sp2 { top: 120px; left: 20px; animation-delay: 0.6s; }
+.sp3 { top: 240px; right: 18px; animation-delay: 1.2s; }
+.sp4 { top: 420px; left: 28px; animation-delay: 1.8s; }
+.sp5 { bottom: 160px; right: 30px; animation-delay: 0.9s; }
+.sp6 { bottom: 70px; left: 40px; animation-delay: 1.4s; }
 
 /* 5.5 - Liste des notes */
 #saved-notes-list {
@@ -705,18 +820,22 @@ body.mode-2d .typewriter-controls {
 
 .saved-note {
     padding: 14px 16px;
+    border-radius: 14px;
 
-    border-radius: 10px;
     background:
-        linear-gradient(160deg,
-            #f5ead2,
-            #e2ae47);
+        linear-gradient(
+            145deg,
+            rgba(255, 237, 201, 0.78),
+            rgba(223, 176, 89, 0.82)
+        );
+
+    border: 1px solid rgba(255, 231, 188, 0.45);
 
     box-shadow:
-        0 3px 8px rgba(61, 52, 45, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        0 0 10px rgba(255, 194, 100, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
 
-    cursor: pointer;
+    color: #3f2a1f;
 
     transition:
         transform 0.2s ease,
@@ -725,10 +844,9 @@ body.mode-2d .typewriter-controls {
 
 .saved-note:hover {
     transform: translateY(-3px);
-
     box-shadow:
-        0 8px 16px rgba(61, 52, 45, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        0 0 18px rgba(255, 188, 92, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .saved-note-date {
@@ -776,34 +894,40 @@ body.mode-2d .typewriter-controls {
 }
 
 #note-reader-text {
-    /*LA STRUCTURE */
+    /*STRUCTUREEEEEE*/
     margin-top: 20px;
-    padding: 12px;
-    border-radius: 16px;
-
-    white-space: pre-wrap;
-    line-height: 1.5;
-
-    /* LE DESIGN */
+    padding: 14px 16px;
+    border-radius: 18px;
+    /*DESIGN*/
     background:
         linear-gradient(
             145deg,
-            rgba(255, 230, 190, 0.16),
-            rgba(150, 95, 67, 0.18)
+            rgba(255, 236, 205, 0.14),
+            rgba(169, 108, 73, 0.16)
         );
 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    border: 1px solid rgba(255, 213, 150, 0.55);
+    border: 1px solid rgba(255, 214, 150, 0.48);
 
     box-shadow:
-        0 0 8px rgba(255, 190, 100, 0.20),
-        inset 0 0 15px rgba(255, 240, 210, 0.06);
+        0 0 10px rgba(255, 198, 110, 0.16),
+        inset 0 0 12px rgba(255, 244, 220, 0.05);
 
     color: #fff0d0;
+}
+/*afficher le nombre total de notes*/
+#note-reader-counter {
+    color: #fff0ce;
 
-    font-family: "Courier New", monospace;
+    text-shadow:
+        0 0 8px rgba(255, 200, 120, 0.35);
+}
+.saved-note-date,
+.saved-note-info,
+#note-reader-date {
+    color: #e8d2ad;
 }
 
 /* 5.8 - Bouton retour */
@@ -839,40 +963,28 @@ body.mode-2d .typewriter-controls {
     justify-content: space-between;
 }
 
+.note-reader-navigation button,
+#done-button,
+#new-note-button,
+#back-to-list-button {
+    box-shadow:
+        0 0 10px rgba(255, 199, 110, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
 .note-reader-navigation button {
-    /* LA STRUCTURE */
-    width: 46px;
-    height: 46px;
-
-    border-radius: 50%;
-
-    font-family: "Courier New", monospace;
-    font-size: 20px;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        background-color 0.2s ease;
-
-    /* LE DESIGN */
     background:
         radial-gradient(
             circle at 35% 30%,
-            #fff4d6,
-            #f2d39a 65%,
-            #d09a51
+            #fff4d8 0%,
+            #f0d09b 68%,
+            #d19a52 100%
         );
 
-    border: 1px solid #ffd799;
-
-    color: #61432e;
-
-    box-shadow:
-        0 0 8px rgba(255, 218, 156, 0.65),
-        0 0 22px rgba(255, 176, 77, 0.35),
-        inset 0 2px 4px rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 220, 160, 0.75);
+    color: #5b3d2b;
 }
+
 #previous-note-button:hover:not(:disabled) {
     transform: translateX(-3px);
     background-color: #e5d5bb;

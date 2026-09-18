@@ -27,11 +27,7 @@
 
             <label class="switch">
 
-                <input
-                    type="checkbox"
-                    id="view-mode-toggle"
-                    checked
-                >
+                <input type="checkbox" id="view-mode-toggle" checked>
 
                 <span class="slider"></span>
 
@@ -53,10 +49,7 @@
                  MODE 3D
             =================================================== -->
 
-            <div
-                id="typewriter-3d"
-                class="typewriter-view view-3d"
-            ></div>
+            <div id="typewriter-3d" class="typewriter-view view-3d"></div>
 
 
             <!-- ==================================================
@@ -191,31 +184,19 @@
 
                     <div class="keyboard-row">
 
-                        <button
-                            class="key special-key caps-key"
-                            data-key="CapsLock"
-                        >
+                        <button class="key special-key caps-key" data-key="CapsLock">
                             CapsLk
                         </button>
 
-                        <button
-                            class="key special-key space-key"
-                            data-key=" "
-                        >
+                        <button class="key special-key space-key" data-key=" ">
                             Space
                         </button>
 
-                        <button
-                            class="key special-key enter-key"
-                            data-key="Enter"
-                        >
+                        <button class="key special-key enter-key" data-key="Enter">
                             Enter
                         </button>
 
-                        <button
-                            class="key special-key backspace-key"
-                            data-key="Backspace"
-                        >
+                        <button class="key special-key backspace-key" data-key="Backspace">
                             Backspace
                         </button>
 
@@ -269,6 +250,15 @@
     =================================================== -->
 
     <aside id="saved-notes-panel">
+        <!--But est dajouter des effets interactifs pour rentre ca plus magique-->
+        <div class="panel-sparkles">
+            <span class="sparkle sp1"></span>
+            <span class="sparkle sp2"></span>
+            <span class="sparkle sp3"></span>
+            <span class="sparkle sp4"></span>
+            <span class="sparkle sp5"></span>
+            <span class="sparkle sp6"></span>
+        </div>
 
 
         <div class="saved-notes-header">
@@ -286,10 +276,7 @@
 
         <div class="saved-notes-tools">
 
-            <input
-                type="date"
-                id="notes-date-filter"
-            >
+            <input type="date" id="notes-date-filter">
 
         </div>
 
@@ -305,10 +292,7 @@
              NOTE READER
         =================================================== -->
 
-        <div
-            id="note-reader"
-            class="hidden"
-        >
+        <div id="note-reader" class="hidden">
 
 
             <div class="note-reader-header">
@@ -373,10 +357,7 @@
 
     <script src="script.js"></script>
 
-    <script
-        type="module"
-        src="three-scene.js"
-    ></script>
+    <script type="module" src="three-scene.js"></script>
 
 
 </body>
