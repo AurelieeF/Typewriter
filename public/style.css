@@ -1448,3 +1448,8 @@ button:disabled,
 #done-button:disabled {
     cursor: url("./images/cursor2.png") 14 2, pointer !important;
 }
+
+/* CURSOR TRAIL */
+.cursor-trail-dot {
+
+}
