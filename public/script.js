@@ -576,13 +576,29 @@ deleteNoteButton.addEventListener("click", () => {
 // SECTION 17 - MODE 2D / 3D
 // ==========================================================
 
+// ==========================================================
+// SECTION 17 - MODE 2D / 3D
+// ==========================================================
+
 viewModeToggle.addEventListener("change", () => {
 
     if (viewModeToggle.checked) {
+
         document.body.classList.remove("mode-2d");
+        requestAnimationFrame(() => {
+
+            window.dispatchEvent(
+                new Event("resize")
+            );
+
+        });
+
     }
+
     else {
+
         document.body.classList.add("mode-2d");
+
     }
 
 });
